@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <title>Voting</title>
+</head>
+<body>
+    <table class="table table-sm">
+        <tr>
+            <td><pre>題目
+            <%= q %></pre></td>
+        </tr>
+        <% for(var i = 0; i < a.length; i++){ %>
+        <tr>
+            <td> <%= i %> </td>
+            <td> <%= a[i] %> </td>
+            <td></td>
+        </tr>
+        <% } %>
+    </table>
+</body>
+</html>

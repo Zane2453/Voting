@@ -1,0 +1,12 @@
+{
+	"name": "vote",
+	"private": true,
+	"dependencies": {
+		"express": "*",
+		"shortid": "",
+		"socket.io": "",
+		"ejs": "",
+		"sqlite3": "",
+		"sequelize": ""
+	}
+}

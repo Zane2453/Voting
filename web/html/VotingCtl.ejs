@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/VotingCtl.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="../js/VotingCtl.js"></script>
+    <title>Add question</title>
+</head>
+<body>
+	<div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <textarea id="question" class="form-control" rows="4" placeholder="輸入題目"></textarea>
+                    <input class="form-control option" placeholder="輸入選項1" style="border-color: <%= option1Color %>; color: <%= option1Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項2" style="border-color: <%= option2Color %>; color: <%= option2Color %> "/>
+                    <input class="form-control option" placeholder="輸入選項3" style="border-color: <%= option3Color %>; color: <%= option3Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項4" style="border-color: <%= option4Color %>; color: <%= option4Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項5" style="border-color: <%= option5Color %>; color: <%= option5Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項6" style="border-color: <%= option6Color %>; color: <%= option6Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項7" style="border-color: <%= option7Color %>; color: <%= option7Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項8" style="border-color: <%= option8Color %>; color: <%= option8Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項9" style="border-color: <%= option9Color %>; color: <%= option9Color %>"/>
+                    <input class="form-control option" placeholder="輸入選項10" style="border-color: <%= option10Color %>; color: <%= option10Color %>"/>
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <button id="submit" class="btn btn-info btn-block">送出</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+	</div>
+</body>
+</html>

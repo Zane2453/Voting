@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/DashBoard.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="../js/qrcode.min.js"></script>
+    <script src="../js/DashBoard.js"></script>
+    <title>DashBoard</title>
+</head>
+<body>
+    <div id="qrcode"></div>
+    <div id="question">
+        <p id="description">問題: <%= q %></p>
+        <div id="total"></div>
+        <div id="options">
+            <% for(var i = 0; i < a.length; i++){ %>
+            <p><%= a[i] %></p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
