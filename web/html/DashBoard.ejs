@@ -11,14 +11,22 @@
     <title>DashBoard</title>
 </head>
 <body>
-    <div id="qrcode"></div>
-    <div id="question">
-        <p id="description">問題: <%= q %></p>
-        <div id="total"></div>
-        <div id="options">
-            <% for(var i = 0; i < a.length; i++){ %>
-            <p><%= a[i] %></p>
-            <% } %>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div id="qrcode"></div>
+                <div id="question">
+                    <p id="description">問題: <%= q %></p>
+                    <div id="total"></div>
+                    <div id="options">
+                        <% for(var i = 0; i < a.length; i++){ %>
+                        <p><%= a[i] %></p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
         </div>
     </div>
 </body>

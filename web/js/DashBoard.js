@@ -24,13 +24,21 @@ $(document).ready(function() {
                 console.log(e);
             },
             success: function (data) {
-                $("#total").html("total: " + data.total);
+                $("#total").html("Total: " + data.total);
                 var str = "";
                 for(var i = 0; i < data.ratio.length; i++){
-                    str += "<p>" + data.ratio[i].a +  ": " +
-                        (data.ratio[i].count/data.total).toString() + "</p>";
+                    if(data.total != 0) {
+                        str += "<p class='a'>" + data.ratio[i].a + ": " +
+                            (Math.round(parseFloat(data.ratio[i].count / data.total) * 100)).toString() + "\%</p>";
+                    }
+                    else{
+                        str += "<p class='a'>" + data.ratio[i].a + ": 0" + "\%</p>";
+                    }
                 }
                 $("#options").html(str);
+                $(".a").each(function(i){
+                    $(this).css("color", data.ratio[i].color);
+                });
                 console.log(data);
             }
         });

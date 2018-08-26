@@ -12,7 +12,10 @@ $(document).ready(function(){
                if (temp.length == 0)
                    return;
                else
-                   options.push($(this).val());
+                   options.push({
+                       description: $(this).val(),
+                       color: $(this).css("color")
+                   });
            });
            question = $("#question").val();
            if(options.length > 1){
@@ -20,7 +23,6 @@ $(document).ready(function(){
                $.ajax({
                    type: "POST",
                    url: "postQ",
-                   type: "POST",
                    cache: false,
                    // dataType: 'json',
                    data: JSON.stringify({id:qId, question: question, options: options}),
@@ -29,7 +31,7 @@ $(document).ready(function(){
                        location.reload();
                        console.log(e);
                    },
-                   success: function (data) {
+                   success: function () {
                        window.location = location.href + "/" +qId;
                    }
                });

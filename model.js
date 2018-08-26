@@ -31,6 +31,9 @@ const answer = sequelize.define('answer', {
     },
     count: {
         type: Sequelize.INTEGER
+    },
+    color:{
+        type: Sequelize.STRING
     }
 });
 

@@ -21,30 +21,29 @@ app.use(express.static("./web"));
 app.use(bodyParser.json());
 
 app.get('/getRatio/*', function(req, res){
-    var url = req.originalUrl.substr(1).split("/").pop().substr(0,16);
-    models.question.findById(url).then(function(q) {
-        if(q != null){
-            models.answer.findAll({
-                where:{
-                    questionId: url
-                }
-            }).then(function(a){
-                var ratio = [],
-                    total = 0,
-                    qRatio;
-                a.forEach(function(answer){
-                    total += answer.count;
-                    ratio.push({
-                        a: answer.option,
-                        count: answer.count
-                    });
+    var id = req.originalUrl.substr(1).split("/").pop().substr(0,16);
+    models.answer.findAll({
+        where:{
+            questionId: id
+        }
+    }).then(function(a){
+        var ratio = [],
+            total = 0,
+            qRatio;
+        if(a != null) {
+            a.forEach(function (answer) {
+                total += answer.count;
+                ratio.push({
+                    a: answer.option,
+                    color: answer.color,
+                    count: answer.count
                 });
-                qRatio = {
-                    ratio: ratio,
-                    total: total
-                };
-                page.getRatio(req, res, qRatio);
             });
+            qRatio = {
+                ratio: ratio,
+                total: total
+            };
+            page.getRatio(req, res, qRatio);
         }
         else
             page.getBadRequest(req, res);
@@ -61,7 +60,8 @@ app.post('/postQ', function(req, res){
            req.body.options.length != 0){ // check options is not empty
            for(var i = 0; i < req.body.options.length; i++)
                answers.push({
-                   option: req.body.options[i],
+                   option: req.body.options[i].description,
+                   color: req.body.options[i].color,
                    count: 0
                });
            models.question.create({
@@ -79,18 +79,35 @@ app.post('/postQ', function(req, res){
        }
     });
 });
+app.post('/postA', function(req, res){
+    var id = req.body.id,
+        color = req.body.color;
+    models.answer.findOne({
+        where:{
+            color: color,
+            questionId: id
+        }
+    }).then(function(a){
+        if(a != null){
+            a.increment(['count'],{ by :1});
+            page.getSuccess(req, res);
+        }
+        else
+            page.getBadRequest(req, res);
+    });
 
+});
 app.get('/ctl', function(req, res){
     page.getVotingCtlPage(req, res);
 });
 
 app.get('/ctl/*', function(req, res){
-    var url = req.originalUrl.substr(1).split("/").pop().substr(0,16);
-    models.question.findById(url).then(function(q) {
+    var id = req.originalUrl.substr(1).split("/").pop().substr(0,16);
+    models.question.findById(id).then(function(q) {
         if(q != null){
             models.answer.findAll({
                 where:{
-                    questionId: url
+                    questionId: id
                 }
             }).then(function(a){
                 var options = [];
@@ -120,7 +137,10 @@ app.get('/*', function(req, res) {
             }).then(function(a){
                 var options = [];
                 a.forEach(function(answer){
-                    options.push(answer.option);
+                    options.push({
+                        description: answer.option,
+                        color: answer.color
+                    });
                 });
                 page.getVotingPage(req, res, {
                     q: q.description,
