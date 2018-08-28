@@ -2,13 +2,19 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function() {
-    var id = location.pathname.split("/").pop().substr(0,16),
-        lo = location.origin,
-        url;
-    if(lo.charAt(lo.length-1) != "/")
-        url = location.origin + "/" + id;
-    else
-        url = location.origin + id;
+    var component = location.pathname.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(component[i] != "")
+            break;
+    console.log(component[i]);
+    var id = component[i].substr(0,16),
+        url = "";
+    component = location.origin.split("/");
+    for(var i = 0; i < component.length; i++)
+        if (component[i] != "")
+            url = url + component[i] + "/";
+    url += id;
+    console.log(url);
     var qrcode = new QRCode("qrcode", {
         text: url,
         width: 256,

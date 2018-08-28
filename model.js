@@ -27,6 +27,9 @@ const question = sequelize.define('question', {
         type: Sequelize.STRING,
         primaryKey: true
     },
+    no:{
+        type: Sequelize.INTEGER
+    },
     description: {
         type: Sequelize.STRING
     }

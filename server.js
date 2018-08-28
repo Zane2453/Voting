@@ -66,17 +66,22 @@ app.post('/postQ', function(req, res){
                    color: req.body.options[i].color,
                    count: 0
                });
-           models.question.create({
-               id: id,
-               description: description,
-               answers: answers
-           }, {
-               include: [models.answer]
-           }).then(function(){
-               var d = dai(id, answers);
-               daList.push(d);
-               d.register();
-               page.getSuccess(req, res);
+
+           models.question.count().then(function(c){
+              var q = {
+                  id: id,
+                  no: c+1,
+                  description: description,
+                  answers: answers
+              };
+              models.question.create(q, {
+                  include: [models.answer]
+              }).then(function(){
+                  var d = dai(id, q.no, answers);
+                  daList.push(d);
+                  d.register();
+                  page.getSuccess(req, res);
+              });
            });
        }
        else{
@@ -110,7 +115,12 @@ app.get('/ctl', function(req, res){
 });
 
 app.get('/ctl/*', function(req, res){
-    var id = req.originalUrl.substr(1).split("/").pop().substr(0,16);
+
+    var component = req.originalUrl.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(component[i] != "")
+            break;
+    var id = component[i].substr(0,16);
     models.question.findById(id).then(function(q) {
         if(q != null){
             models.answer.findAll({
@@ -124,6 +134,7 @@ app.get('/ctl/*', function(req, res){
                 });
                 page.getDashBoardPage(req, res, {
                     q: q.description,
+                    no: q.no,
                     a: options
                 });
             });

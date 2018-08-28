@@ -32,7 +32,15 @@ $(document).ready(function(){
                        console.log(e);
                    },
                    success: function () {
-                       window.location = location.href + "/" +qId;
+                       var component = location.href.split("/");
+                       while(true){
+                           if(component[component.length-1] == "")
+                               component.pop();
+                           else
+                               break;
+                       }
+                       component = component.join("/");
+                       window.location = component + "/" +qId;
                    }
                });
            }

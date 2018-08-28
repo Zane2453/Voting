@@ -50,7 +50,11 @@ Page.prototype = {
                 else {
                     contents = contents.toString('utf8');
                     res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, {q: question.q, a: question.a}));
+                    res.end(ejs.render(contents, {
+                        q: question.q,
+                        no: question.no,
+                        a: question.a
+                    }));
                 }
             }
         );
