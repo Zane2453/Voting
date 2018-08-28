@@ -11,3 +11,4 @@ exports.color = {
     option9Color: "mediumaquamarine",
     option10Color: "olive"
 };
+exports.IoTalkIP = "http://140.113.199.199:9999";

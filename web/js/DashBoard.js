@@ -2,9 +2,13 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function() {
-    var id = location.pathname.split("/").pop().substr(0,16);
-    var url = location.origin + "/"
-        + id;
+    var id = location.pathname.split("/").pop().substr(0,16),
+        lo = location.origin,
+        url;
+    if(lo.charAt(lo.length-1) != "/")
+        url = location.origin + "/" + id;
+    else
+        url = location.origin + id;
     var qrcode = new QRCode("qrcode", {
         text: url,
         width: 256,

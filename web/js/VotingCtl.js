@@ -22,7 +22,7 @@ $(document).ready(function(){
                $('#submit').prop('disabled', true);
                $.ajax({
                    type: "POST",
-                   url: "postQ",
+                   url: "/postQ",
                    cache: false,
                    // dataType: 'json',
                    data: JSON.stringify({id:qId, question: question, options: options}),

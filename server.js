@@ -7,7 +7,9 @@ var express = require('express'),
     fs = require('fs'),
     bodyParser = require('body-parser'),
     page = require('./page').page,
-    models = require('./model').models;
+    models = require('./model').models,
+    dai = require('./dai').dai,
+    daList = [];
 
 //create tables
 models.answer.sync({force: false}).then(function(){
@@ -71,6 +73,9 @@ app.post('/postQ', function(req, res){
            }, {
                include: [models.answer]
            }).then(function(){
+               var d = dai(id, answers);
+               daList.push(d);
+               d.register();
                page.getSuccess(req, res);
            });
        }
@@ -90,6 +95,9 @@ app.post('/postA', function(req, res){
     }).then(function(a){
         if(a != null){
             a.increment(['count'],{ by :1});
+            for(var i = 0; i < daList.length; i++)
+                if(daList[i].mac == id)
+                    daList[i].push(a);
             page.getSuccess(req, res);
         }
         else
