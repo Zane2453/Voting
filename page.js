@@ -3,7 +3,7 @@ var fs = require('fs'),
     config = require('./config'),
     votingPagePath = __dirname + "/web/html/Voting.ejs",
     votingControlPagePath = __dirname + "/web/html/VotingCtl.ejs",
-    dashBoardPagePath = __dirname + "/web/html/dashBoard.ejs";
+    dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs";
 
 var Page = function () {};
 

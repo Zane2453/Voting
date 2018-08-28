@@ -8,7 +8,7 @@ var dai = function (mac, no, answers) {
         IDFList = [];
 
         for(var i = 1; i <= answers.length; i++)
-            IDFList.push("Option" + i.toString());
+            IDFList.push("Button" + i.toString());
 
         var deregister = function(){
             dan.deregister();
@@ -24,7 +24,7 @@ var dai = function (mac, no, answers) {
             };
             var pull = function(ODFName, data){
                 if(ODFName == "Control" && data[0] == "SET_DF_STATUS")
-                    setTimeout(setAliases, 1000);
+                    setTimeout(setAliases, 2000);
             };
             dan.init(pull, config.IoTalkIP, mac, {
                 'dm_name': 'VotingMachine',
