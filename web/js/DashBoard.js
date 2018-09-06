@@ -10,10 +10,10 @@ $(document).ready(function() {
     var id = component[i].substr(0,16),
         url = "";
     component = location.origin.split("/");
-    for(var i = 0; i < component.length; i++)
+    for(var i = 1; i < component.length; i++)
         if (component[i] != "")
             url = url + component[i] + "/";
-    url += id;
+    url = "http://" + url + id;
     console.log(url);
     var qrcode = new QRCode("qrcode", {
         text: url,
