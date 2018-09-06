@@ -14,24 +14,88 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-4">
-                <div class="form-group">
-                    <textarea id="question" class="form-control" rows="4" placeholder="輸入題目"></textarea>
-                    <input class="form-control option" placeholder="輸入選項1" style="border-color: <%= option1Color %>; color: <%= option1Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項2" style="border-color: <%= option2Color %>; color: <%= option2Color %> "/>
-                    <input class="form-control option" placeholder="輸入選項3" style="border-color: <%= option3Color %>; color: <%= option3Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項4" style="border-color: <%= option4Color %>; color: <%= option4Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項5" style="border-color: <%= option5Color %>; color: <%= option5Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項6" style="border-color: <%= option6Color %>; color: <%= option6Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項7" style="border-color: <%= option7Color %>; color: <%= option7Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項8" style="border-color: <%= option8Color %>; color: <%= option8Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項9" style="border-color: <%= option9Color %>; color: <%= option9Color %>"/>
-                    <input class="form-control option" placeholder="輸入選項10" style="border-color: <%= option10Color %>; color: <%= option10Color %>"/>
+                    <div class="form-group row" id="top-question">
+                        <label class="col-sm-3 col-form-label">Question</label>
+                        <div class="col-sm-9">
+                            <textarea id="question" class="form-control" rows="4"></textarea>
+                        </div>
+                    </div>
+                  
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.1</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option1Color %>; color: <%= option1Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.2</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option2Color %>; color: <%= option2Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.3</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option3Color %>; color: <%= option3Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.4</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option4Color %>; color: <%= option4Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.5</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option5Color %>; color: <%= option5Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.6</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option6Color %>; color: <%= option6Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.7</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option7Color %>; color: <%= option7Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.8</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option8Color %>; color: <%= option8Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.9</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option9Color %>; color: <%= option9Color %>"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">option.10</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" style="border-color: <%= option10Color %>; color: <%= option10Color %>"/>
+                        </div>
+                    </div>
+                    
                     <div class="row">
-                        <div class="col-md-4 text-center">
+                        <div class="col-md-12 text-center">
                             <button id="submit" class="btn btn-info btn-block">送出</button>
                         </div>
                     </div>
-                </div>
             </div>
             <div class="col-md-4"></div>
         </div>
