@@ -64,6 +64,7 @@ $(document).ready(function(){
                         });
                     }(i));
                 }
+                $("button").prop('disabled', true);
                 $(".badge").css("display", "block");
             }
         });
