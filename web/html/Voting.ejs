@@ -20,7 +20,7 @@
                 </div>
                 <% for(var i = 0; i < a.length; i++){ %>
                 <div>
-                    <button type="button" class="btn" style="background-color: <%= a[i].color %>">
+                    <button type="button" class="btn" style="background-color: <%= a[i].color %>" data-datac="<%= a[i].description %>" >
                         <%= a[i].description %>
                         <span class="badge badge-light" style="display:none">52%</span>
                     </button>

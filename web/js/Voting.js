@@ -72,9 +72,10 @@ $(document).ready(function(){
     else{ //user fist time answer this question
         $("button").click(function(e){
             //store user answer
-            var text = $(this).text().split('5')[0];
+            var text = $(this).data('datac');
             var res = encodeURIComponent(text);
-            console.log("user choose answer:/",res, "/")
+            console.log("user choose answer:/", text, "/")
+            console.log("encode: ", res);
 
             $("button").prop('disabled', true);
             $.ajax({
