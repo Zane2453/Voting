@@ -37,7 +37,7 @@ $(document).ready(function(){
     if(answer != ""){
         already_done = 1;
         console.log("find cookie: ", answer);
-        $("h5").text("答案: " + answer);
+        $("h5").text("你的答案: " + answer);
     }
     else{
         already_done = 0;
@@ -100,7 +100,7 @@ $(document).ready(function(){
                             //add this result to cookie
                             setCookie(id, res, 30);
                             console.log("save cookie: ", document.cookie);
-                            $("h5").text("答案: " + text);
+                            $("h5").text("你的答案: " + text);
 
                             for(var i = 0; i < data.ratio.length; i++){
                                 (function(index){
