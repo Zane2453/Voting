@@ -7,6 +7,10 @@
 		"socket.io": "",
 		"ejs": "",
 		"sqlite3": "",
-		"sequelize": ""
+		"sequelize": "",
+		"passport": "",
+		"passport-google-oauth": "",
+		"express-session": "",
+		"cookie-parser": ""
 	}
 }

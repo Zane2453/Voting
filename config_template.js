@@ -1,4 +1,4 @@
-exports.port = 1356;
+exports.port = 80;
 exports.color = {
     option1Color: "red",
     option2Color: "orange",
@@ -12,3 +12,5 @@ exports.color = {
     option10Color: "olive"
 };
 exports.IoTalkIP = "http://140.113.199.199:9999";
+exports.googleClientID = "";
+exports.googleClientSecret = ""

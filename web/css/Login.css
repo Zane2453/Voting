@@ -1,0 +1,28 @@
+@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css);
+@import url(http://fonts.googleapis.com/css?family=Titillium+Web&subset=latin,latin-ext);
+
+.container{
+    margin-top: 20px;
+}
+body{
+    background-color: #fff8dc;
+    font-family: 'Titillium Web', sans-serif;
+}
+.onl_login .onl_socialButtons a {
+    color: white;
+    opacity:0.9;
+}
+.onl_login .onl_socialButtons a:hover {
+    color: white;
+    opacity:1;
+}
+.onl_login .onl_socialButtons .onl_btn-facebook {
+    margin-top: 10px;
+    background: #3b5998;
+    border-color:#172d5e;
+}
+.onl_login .onl_socialButtons .onl_btn-google-plus {
+    margin-top: 10px;
+    background: #c32f10;
+    border-color:#6b1301;
+}

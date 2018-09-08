@@ -4,7 +4,8 @@
 $(document).ready(function(){
    var qId = _uuid().substring(0,16);
    $("#submit").click(function(){
-       var question = $("#question").val();
+       var question = $("#question").val(),
+           anonymous = !$('#anonymous').is(":checked");
        if(question.trim().length != 0){
            var options = [];
            $(".option").each(function(){
@@ -25,7 +26,7 @@ $(document).ready(function(){
                    url: "/postQ",
                    cache: false,
                    // dataType: 'json',
-                   data: JSON.stringify({id:qId, question: question, options: options}),
+                   data: JSON.stringify({id:qId, question: question, options: options, anonymous: anonymous}),
                    contentType: "application/json",
                    error: function(e){
                        location.reload();

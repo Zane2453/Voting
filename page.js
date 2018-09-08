@@ -3,7 +3,8 @@ var fs = require('fs'),
     config = require('./config'),
     votingPagePath = __dirname + "/web/html/Voting.ejs",
     votingControlPagePath = __dirname + "/web/html/VotingCtl.ejs",
-    dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs";
+    dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs",
+    loginPagePath = __dirname + "/web/html/Login.ejs";
 
 var Page = function () {};
 
@@ -55,6 +56,19 @@ Page.prototype = {
                         no: question.no,
                         a: question.a
                     }));
+                }
+            }
+        );
+    },
+    getLoginPage : function (req, res) {
+        fs.readFile(loginPagePath,
+            function (err, contents) {
+                if (err)
+                    console.log(err);
+                else {
+                    contents = contents.toString('utf8');
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.end(contents);
                 }
             }
         );
