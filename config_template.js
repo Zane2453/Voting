@@ -13,4 +13,4 @@ exports.color = {
 };
 exports.IoTalkIP = "http://140.113.199.199:9999";
 exports.googleClientID = "";
-exports.googleClientSecret = ""
+exports.googleClientSecret = "";
