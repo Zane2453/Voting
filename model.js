@@ -9,7 +9,7 @@ var Sequelize = require('sequelize'),
                 collate: 'utf8_general_ci'
             }
         },
-        logging: false,
+       // logging: false,
         host: 'localhost',
         dialect: 'sqlite',
         pool: {
@@ -63,7 +63,7 @@ const user = sequelize.define('user', {
 });
 const vote = sequelize.define('vote', {
     id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         primaryKey: true
     }
 });

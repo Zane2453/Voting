@@ -101,8 +101,12 @@ Page.prototype = {
     },
     getBadRequest: function(req, res){
         res.writeHead(400, {"Content-Type": "text/html"});
-        res.end("fail!");
-    }
+        res.end("bad request!");
+    },
+    getPermissionDenied: function(req, res){
+        res.writeHead(403, {"Content-Type": "text/html"});
+        res.end("permission denied!");
+    },
 };
 
 exports.page = new Page();

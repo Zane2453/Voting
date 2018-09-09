@@ -71,7 +71,7 @@ passport.use(new facebookStrategy({
 		clientSecret: config.facebookAPPSecret,
 		callbackURL: '/auth/facebook/callback'
 	},
- 	createUser
+	createUser
 ));
 
 app.get('/getRatio/*', function(req, res){
@@ -144,24 +144,56 @@ app.post('/postQ', function(req, res){
 });
 app.post('/postA', function(req, res){
 	var id = req.body.id,
-		color = req.body.color;
-	models.answer.findOne({
-		where:{
-			color: color,
-			questionId: id
-		}
-	}).then(function(a){
-		if(a != null){
-			a.increment(['count'],{ by :1});
-			for(var i = 0; i < daList.length; i++)
-				if(daList[i].mac == id)
-					daList[i].push(a);
-			page.getSuccess(req, res);
+		color = req.body.color,
+		login = (req.user != undefined);
+	models.question.findById(id).then(function(q){
+		if(q){
+			models.answer.findOne({
+				where:{
+					color: color,
+					questionId: id
+				}
+			}).then(function(a){
+				if(a){
+					if(!q.anonymous && login){
+						models.vote.findOne({
+							questionId: id,
+							userId: req.user.id
+						}).then(function(v){
+							if(v == null){
+								a.increment(['count'],{ by :1});
+								for(var i = 0; i < daList.length; i++)
+									if(daList[i].mac == id)
+										daList[i].push(a);
+								models.vote.create({
+									userId: req.user.id,
+									questionId: id,
+									answerId: a.id
+								}).then(function(){
+									page.getSuccess(req, res);
+								});
+						   	}
+						   	else
+						   		page.getSuccess(req, res);
+						})
+					}
+					else if(!q.anonymous && !login)
+						page.getPermissionDenied(req, res);
+					else if(q.anonymous){
+						a.increment(['count'],{ by :1});
+						for(var i = 0; i < daList.length; i++)
+							if(daList[i].mac == id)
+								daList[i].push(a);
+						page.getSuccess(req, res);
+					}
+				}
+				else
+					page.getBadRequest(req, res);
+			});
 		}
 		else
 			page.getBadRequest(req, res);
 	});
-
 });
 app.get('/', function(req, res){
 	models.question.findAll().then(function(qList){
@@ -216,7 +248,7 @@ app.get('/auth/google/callback',
 	}
 );
 app.get('/auth/facebook/callback',
-  	passport.authenticate('facebook', { failureRedirect: '/login' }),
+	passport.authenticate('facebook', { failureRedirect: '/login' }),
 	function(req, res) {
 		res.redirect(req.session.returnTo || '/');
 		delete req.session.returnTo;
