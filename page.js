@@ -4,7 +4,8 @@ var fs = require('fs'),
     votingPagePath = __dirname + "/web/html/Voting.ejs",
     votingControlPagePath = __dirname + "/web/html/VotingCtl.ejs",
     dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs",
-    loginPagePath = __dirname + "/web/html/Login.ejs";
+    loginPagePath = __dirname + "/web/html/Login.ejs",
+    questionListPagePath = __dirname + "/web/html/QuestionList.ejs";
 
 var Page = function () {};
 
@@ -69,6 +70,19 @@ Page.prototype = {
                     contents = contents.toString('utf8');
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.end(contents);
+                }
+            }
+        );
+    },
+    getQuestionListPage : function (req, res, qList) {
+        fs.readFile(questionListPagePath,
+            function (err, contents) {
+                if (err)
+                    console.log(err);
+                else {
+                    contents = contents.toString('utf8');
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.end(ejs.render(contents, {qList: qList}));
                 }
             }
         );

@@ -13,7 +13,8 @@ var express = require('express'),
 	dai = require('./dai').dai,
 	daList = [],
 	passport = require('passport'),
-	googleStrategy = require('passport-google-oauth').OAuth2Strategy;
+	googleStrategy = require('passport-google-oauth').OAuth2Strategy,
+	facebookStrategy = require('passport-facebook').Strategy;
 
 //create tables
 models.answer.sync({force: false}).then(function(){});
@@ -40,27 +41,37 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+var createUser = function (accessToken, refreshToken, profile, done){
+	models.user.findById(profile.id).then(function(u){
+		if(u == null){
+			u = {
+				id: profile.id,
+				name: profile.displayName,
+				provider: profile.provider
+			};
+			models.user.create(u).then(function(){
+				return done(null, u);
+			});
+		}
+		else
+			return done(null, u);
+	});
+}
+
 passport.use(new googleStrategy({
 		clientID: config.googleClientID,
 		clientSecret: config.googleClientSecret,
 		callbackURL: '/auth/google/callback'
 	},
-	function(accessToken, refreshToken, profile, done) {
-		models.user.findById(profile.id).then(function(u){
-			if(u == null){
-				u = {
-					id: profile.id,
-					name: profile.displayName,
-					provider: profile.provider
-				};
-				models.user.create(u).then(function(){
-					return done(null, u);
-				});
-			}
-			else
-				return done(null, u);
-		});
-	}
+	createUser
+));
+
+passport.use(new facebookStrategy({
+		clientID: config.facebookAPPID,
+		clientSecret: config.facebookAPPSecret,
+		callbackURL: '/auth/facebook/callback'
+	},
+ 	createUser
 ));
 
 app.get('/getRatio/*', function(req, res){
@@ -92,7 +103,6 @@ app.get('/getRatio/*', function(req, res){
 			page.getBadRequest(req, res);
 	});
 });
-
 app.post('/postQ', function(req, res){
 	var id = req.body.id,
 		description = req.body.question,
@@ -153,6 +163,12 @@ app.post('/postA', function(req, res){
 	});
 
 });
+app.get('/', function(req, res){
+	models.question.findAll().then(function(qList){
+		page.getQuestionListPage(req, res, qList);
+	});
+});
+
 app.get('/ctl', function(req, res){
 	page.getVotingCtlPage(req, res);
 });
@@ -190,11 +206,18 @@ app.get('/ctl/*', function(req, res){
 app.get('/auth/google', passport.authenticate('google',
 	{ scope: ['https://www.googleapis.com/auth/plus.login'] })
 );
+app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get('/auth/google/callback',
 	passport.authenticate('google', { failureRedirect: '/login' }),
 	function(req, res) {
-		console.log(req.session.returnTo+"================");
+		res.redirect(req.session.returnTo || '/');
+		delete req.session.returnTo;
+	}
+);
+app.get('/auth/facebook/callback',
+  	passport.authenticate('facebook', { failureRedirect: '/login' }),
+	function(req, res) {
 		res.redirect(req.session.returnTo || '/');
 		delete req.session.returnTo;
 	}

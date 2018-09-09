@@ -10,6 +10,7 @@
 		"sequelize": "",
 		"passport": "",
 		"passport-google-oauth": "",
+		"passport-facebook": "",
 		"express-session": "",
 		"cookie-parser": ""
 	}
