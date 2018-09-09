@@ -15,6 +15,8 @@ Voting
 4. Install Voting Server packages  
 	+ cd Vote/  
 	+ npm install  
-
+## Config file
+1. Rename config_template.js to config.js
+2. Fill in Oauth information (e.g. google client id, secret)
 ## How to start
-1. node server.js
+1. sudo node server.js
