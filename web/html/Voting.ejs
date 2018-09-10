@@ -31,8 +31,11 @@
                     </div>
                 </div>
                 <div>
+                	<% if (n) { %>
+                    <h6 id="name"><%= n %></h6>
+                    <% } %>
                     <h4>題目: <%= q %></h4>
-                    <h5>你的答案: 尚未選擇</h5>
+                    <h5 id="chooseAswer">你的答案: 尚未選擇</h5>
                 </div>
                 <% for(var i = 0; i < a.length; i++){ %>
                 <div>
@@ -42,6 +45,10 @@
                     </button>
                 </div>
                 <% } %>
+                <!-- <% if (p) { %>
+                <image src="<%= p %>">
+                <% } %>
+ -->               
             </div>
             <div class="col-md-4"></div>
         </div>

@@ -36,8 +36,7 @@ $(document).ready(function(){
     answer = getCookie(id);
     if(answer != ""){
         already_done = 1;
-        console.log("find cookie: ", answer);
-        $("h5").text("你的答案: " + answer);
+        $("#chooseAswer").text("你的答案: " + answer);
     }
     else{
         already_done = 0;

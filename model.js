@@ -57,6 +57,9 @@ const user = sequelize.define('user', {
     name: {
         type: Sequelize.STRING
     },
+    photo:{
+        type: Sequelize.STRING
+    },
     provider:{
         type: Sequelize.STRING
     }

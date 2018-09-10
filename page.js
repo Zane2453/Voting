@@ -11,13 +11,7 @@ var Page = function () {};
 
 Page.prototype = {
     
-    getVotingPage : function (req, res, question) {
-        /*
-            question = {
-                q: "",
-                a: []
-            }
-        */
+    getVotingPage : function (req, res, data) {
         fs.readFile(votingPagePath,
             function (err, contents) {
                 if (err)
@@ -25,8 +19,7 @@ Page.prototype = {
                 else {
                     contents = contents.toString('utf8');
                     res.writeHead(200, {"Content-Type": "text/html"});
-                    console.log(question);
-                    res.end(ejs.render(contents, {q: question.q, a: question.a}));
+                    res.end(ejs.render(contents, data));
                 }
             }
         );
