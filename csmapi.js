@@ -21,7 +21,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode == 200) {
+                if (!err && res.statusCode == 200) {
                     if(callback)
                         callback(true);
                 }
