@@ -4,7 +4,7 @@ exports.color = {
     option2Color: "orange",
     option3Color: "darkkhaki",
     option4Color: "green",
-    option6Color: "blue",
+    option5Color: "blue",
     option6Color: "indigo",
     option7Color: "purple",
     option8Color: "fuchsia",
