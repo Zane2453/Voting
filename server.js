@@ -157,8 +157,10 @@ app.post('/postA', function(req, res){
 				if(a){
 					if(!q.anonymous && login){
 						models.vote.findOne({
-							questionId: id,
-							userId: req.user.id
+							where:{
+								questionId: id,
+								userId: req.user.id
+							}
 						}).then(function(v){
 							if(v == null){
 								a.increment(['count'],{ by :1});
