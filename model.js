@@ -9,6 +9,7 @@ var Sequelize = require('sequelize'),
                 collate: 'utf8_general_ci'
             }
         },
+       // logging: false,
         host: 'localhost',
         dialect: 'sqlite',
         pool: {
@@ -32,6 +33,9 @@ const question = sequelize.define('question', {
     },
     description: {
         type: Sequelize.STRING
+    },
+    anonymous: {
+        type: Sequelize.BOOLEAN
     }
 });
 const answer = sequelize.define('answer', {
@@ -45,13 +49,36 @@ const answer = sequelize.define('answer', {
         type: Sequelize.STRING
     }
 });
+const user = sequelize.define('user', {
+    id: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    },
+    name: {
+        type: Sequelize.STRING
+    },
+    provider:{
+        type: Sequelize.STRING
+    }
+});
+const vote = sequelize.define('vote', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    }
+});
 
 question.hasMany(answer);
+vote.belongsTo(user);
+vote.belongsTo(question);
+vote.belongsTo(answer);
 
 var models = {
     orm: sequelize,
     question: question,
-    answer: answer
+    answer: answer,
+    user: user,
+    vote: vote
 };
 
 exports.models = models;
