@@ -282,9 +282,7 @@ app.get('/*', function(req, res) {
                     });
                     page.getVotingPage(req, res, {
                         q: q.description,
-                        a: options,
-                        n: req.user.name,
-                        p: req.user.photo
+                        a: options
                     });
                 });
             }
