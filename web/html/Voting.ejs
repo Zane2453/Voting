@@ -7,6 +7,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="../js/Voting.js"></script>
+    <script>
+        <% if (typeof va != 'undefined') { %>
+            var va = "<%= va %>";
+        <% } else { %>
+        var va = undefined;
+        <% } %>
+        var anonymous = ("<%= anonymous %>" === "true");
+    </script>
     <title>Voting</title>
 </head>
 <body>
@@ -31,24 +39,24 @@
                     </div>
                 </div>
                 <div>
-                	<% if (typeof n != 'undefined') { %>
-                    <h6 id="name"><%= n %></h6>
-                    <% } %>
                     <h4>題目: <%= q %></h4>
-                    <h5 id="chooseAswer">你的答案: 尚未選擇</h5>
+                	<% if (typeof n != 'undefined') { %>
+                        <h6 id="name"><%= n %></h6>
+                    <% } %>
+                    <% if (typeof va != 'undefined') { %>
+                        <h5 id="chooseAswer">你的答案: <%= va %></h5>
+                    <% } else { %>
+                        <h5 id="chooseAswer">你的答案: 尚未選擇</h5>
+                    <% } %>
                 </div>
-                <% for(var i = 0; i < a.length; i++){ %>
-                <div>
-                    <button type="button" class="btn" style="background-color: <%= a[i].color %>" data-datac="<%= a[i].description %>" >
-                        <%= a[i].description %>
-                        <span class="badge badge-light" style="display:none">52%</span>
-                    </button>
-                </div>
+                <% for(var i = 0; i < o.length; i++){ %>
+                    <div>
+                        <button type="button" class="btn" style="background-color: <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>
+                            <%= o[i].description %>
+                            <span class="badge badge-light" style="display:none">52%</span>
+                        </button>
+                    </div>
                 <% } %>
-                <!-- <% if (typeof p != 'undefined') { %>
-                <image src="<%= p %>">
-                <% } %>
- -->               
             </div>
             <div class="col-md-4"></div>
         </div>

@@ -177,7 +177,7 @@ app.post('/postA', function(req, res){
                                 });
                             }
                             else
-                                page.getSuccess(req, res);
+                                page.getBadRequest(req, res);
                         })
                     }
                     else if(!q.anonymous && !login)
@@ -282,7 +282,8 @@ app.get('/*', function(req, res) {
                     });
                     page.getVotingPage(req, res, {
                         q: q.description,
-                        a: options
+                        anonymous: q.anonymous,
+                        o: options
                     });
                 });
             }
@@ -300,12 +301,46 @@ app.get('/*', function(req, res) {
                                 color: answer.color
                             });
                         });
-                        page.getVotingPage(req, res, {
-                            q: q.description,
-                            a: options, 
-                            n: req.user.name,
-                            p: req.user.photo
-                        });
+
+                        if(!q.anonymous) {
+                            models.vote.findOne({
+                                where: {
+                                    questionId: id,
+                                    userId: req.user.id
+                                }
+                            }).then(function (v) {
+                                if(v) {
+                                    models.answer.findById(v.answerId).then(function (va) {
+                                        page.getVotingPage(req, res, {
+                                            q: q.description,
+                                            anonymous: q.anonymous,
+                                            o: options,
+                                            va: va.option,
+                                            n: req.user.name,
+                                            p: req.user.photo
+                                        })
+                                    });
+                                }
+                                else{
+                                    page.getVotingPage(req, res, {
+                                        q: q.description,
+                                        anonymous: q.anonymous,
+                                        o: options,
+                                        n: req.user.name,
+                                        p: req.user.photo
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            page.getVotingPage(req, res, {
+                                q: q.description,
+                                anonymous: q.anonymous,
+                                o: options,
+                                n: req.user.name,
+                                p: req.user.photo
+                            });
+                        }
                     });
                 }
                 else{
