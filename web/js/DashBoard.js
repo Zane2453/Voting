@@ -13,7 +13,7 @@ $(document).ready(function() {
     for(var i = 1; i < component.length; i++)
         if (component[i] != "")
             url = url + component[i] + "/";
-    url = "http://" + url + id;
+    url = "https://" + url + id;
     console.log(url);
     var qrcode = new QRCode("qrcode", {
         text: url,
