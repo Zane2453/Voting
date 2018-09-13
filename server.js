@@ -62,7 +62,7 @@ var createUser = function (accessToken, refreshToken, profile, done){
 passport.use(new googleStrategy({
         clientID: config.googleClientID,
         clientSecret: config.googleClientSecret,
-        callbackURL: '/auth/google/callback'
+        callbackURL: config.googleCallbackURL
     },
     createUser
 ));
@@ -70,7 +70,7 @@ passport.use(new googleStrategy({
 passport.use(new facebookStrategy({
         clientID: config.facebookAPPID,
         clientSecret: config.facebookAPPSecret,
-        callbackURL: '/auth/facebook/callback'
+        callbackURL: config.facebookCallbackURL
     },
     createUser
 ));
