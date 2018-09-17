@@ -47,7 +47,7 @@ var createUser = function (accessToken, refreshToken, profile, done){
             u = {
                 id: profile.id,
                 name: profile.displayName,
-                photo: profile._json.image.url,
+                //photo: profile._json.image.url,
                 provider: profile.provider
             };
             models.user.create(u).then(function(){
