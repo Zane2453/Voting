@@ -8,7 +8,7 @@ var dai = function (mac, no, answers) {
         IDFList = [];
 
         for(var i = 1; i <= answers.length; i++)
-            IDFList.push("Button" + i.toString());
+            IDFList.push("Option" + i.toString());
 
         var deregister = function(){
             dan.deregister();
@@ -17,8 +17,8 @@ var dai = function (mac, no, answers) {
 
             var setAliases = function(){
                 for(var i = 0; i < IDFList.length; i++) {
-                    console.log("alias:" + answers[i].option);
                     dan.set_alias(IDFList[i], answers[i].option);
+                    console.log(mac , " set alias : " + answers[i].option);
                 }
 
             };
@@ -26,7 +26,7 @@ var dai = function (mac, no, answers) {
                 if(ODFName == "Control" && data[0] == "SET_DF_STATUS")
                     setTimeout(setAliases, 2000);
             };
-            dan.init(pull, config.IoTalkIP, mac, {
+            dan.init(pull, config.IotTalkURL, mac, {
                 'dm_name': 'VotingMachine',
                 'd_name': no.toString() + ".Voting",
                 'u_name': 'yb',
@@ -34,7 +34,7 @@ var dai = function (mac, no, answers) {
                 'df_list': IDFList
 
             }, function (result) {
-                console.log('register:', result);
+                console.log(mac , ' has successfully registered on : ', result);
                 //deregister when app is closing
                 process.on('exit', dan.deregister);
                 //catches ctrl+c event
