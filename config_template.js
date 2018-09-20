@@ -11,7 +11,7 @@ exports.color = {
     option9Color: "mediumaquamarine",
     option10Color: "olive"
 };
-exports.IoTalkIP = "http://140.113.199.199:9999";
+exports.IotTalkURL = "http://140.113.199.199:9999";
 exports.googleClientID = "";
 exports.googleClientSecret = "";
 exports.googleCallbackURL = "";
