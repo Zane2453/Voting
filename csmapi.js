@@ -22,13 +22,11 @@ var csmapi = (function () {
         request(options, function(err, res, body){
             if(callback){
                 if (!err && res.statusCode == 200) {
-                    if(callback)
-                        callback(true, res.password);
+                    callback(true, body.password);
+                    console.log(mac_addr, ' registed: ', body.password);
                 }
                 else{
-                    if(callback){
-                        callback(false, '');
-                    }
+                    callback(false, '');
                     console.log(body);
                 }
             }
