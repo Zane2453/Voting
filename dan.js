@@ -16,6 +16,7 @@ var dan = (function () {
     var _df_timestamp = {};
     var _suspended = true;
     var _ctl_timestamp = '';
+    var _password = '';
 
     function init (pull, endpoint, mac_addr, profile, callback) {
         _pull = pull;
@@ -33,16 +34,16 @@ var dan = (function () {
 
     function register (endpoint, profile, callback) {
         if(profile['d_name'] == undefined)
-            profile['d_name'] =
-                profile['dm_name'] + _mac_addr.slice(_mac_addr.length - 5);
+            profile['d_name'] = profile['dm_name'] + _mac_addr.slice(_mac_addr.length - 5);
         _profile = profile;
         csmapi.set_endpoint(endpoint);
 
         var retry_count = 0;
-        function register_callback (result) {
+        function register_callback (result, password = '') {
             if (result) {
                 //if (!_registered) {
                 _registered = true;
+                _password = password;
                 _df_list = profile['df_list'].slice();
                 for (var i = 0; i < _df_list.length; i++) {
                     _df_selected[_df_list[i]] = false;
@@ -87,7 +88,7 @@ var dan = (function () {
             pull_odf(0);
         }
 
-        csmapi.pull(_mac_addr, '__Ctl_O__', pull_ctl_callback);
+        csmapi.pull(_mac_addr, _password, '__Ctl_O__', pull_ctl_callback);
     }
 
     function pull_odf (index) {
@@ -117,7 +118,8 @@ var dan = (function () {
 
             pull_odf(index + 1);
         }
-        csmapi.pull(_mac_addr, _df_name, pull_odf_callback);
+
+        csmapi.pull(_mac_addr, _password, _df_name, pull_odf_callback);
     }
 
     function handle_command_message (data) {
@@ -127,12 +129,12 @@ var dan = (function () {
                 break;
             case 'SUSPEND':
                 _suspended = true;
-                console.log("suspended");
+                console.log(_mac_addr, " suspended");
                 break;
             case 'SET_DF_STATUS':
                 flags = data[1]['cmd_params'][0]
                 if (flags.length != _df_list.length) {
-                    console.log(flags, _df_list);
+                    console.log(_mac_addr, " ", flags, " " , _df_list);
                     return false;
                 }
 
@@ -161,7 +163,7 @@ var dan = (function () {
         }
         _df_is_odf[idf_name] = false;
         if (idf_name == '__Ctl_I__' || _df_selected[idf_name]) {
-            csmapi.push(_mac_addr, idf_name, data, callback);
+            csmapi.push(_mac_addr, _password, idf_name, data, callback);
         }
     }
 
@@ -169,12 +171,15 @@ var dan = (function () {
         _registered = false;
         csmapi.deregister(_mac_addr, callback);
     }
+
     function get_alias(df_name, callback){
         csmapi.get_alias(_mac_addr, df_name, callback);
     }
+
     function set_alias(df_name, alias){
         csmapi.set_alias(_mac_addr, df_name, alias);
     }
+
     return {
         'init': init,
         'register': register,
@@ -184,4 +189,5 @@ var dan = (function () {
         'set_alias' : set_alias,
     };
 });
+
 exports.dan = dan;

@@ -9,7 +9,7 @@ var Sequelize = require('sequelize'),
                 collate: 'utf8_general_ci'
             }
         },
-       // logging: false,
+        logging: false,
         host: 'localhost',
         dialect: 'sqlite',
         pool: {

@@ -41,13 +41,13 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-var createUser = function (accessToken, refreshToken, profile, done){
+var createUserGoogle = function (accessToken, refreshToken, profile, done){
     models.user.findById(profile.id).then(function(u){
         if(u == null){
             u = {
                 id: profile.id,
                 name: profile.displayName,
-                //photo: profile._json.image.url,
+                photo: profile._json.image.url,
                 provider: profile.provider
             };
             models.user.create(u).then(function(){
@@ -59,20 +59,41 @@ var createUser = function (accessToken, refreshToken, profile, done){
     });
 }
 
+var createUserFacebook = function (accessToken, refreshToken, profile, done){
+    models.user.findById(profile.id).then(function(u){
+        if(u == null){
+            u = {
+                id: profile.id,
+                name: profile.displayName,
+                photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
+                provider: profile.provider
+            };
+            models.user.create(u).then(function(){
+                return done(null, u);
+            });
+        }
+        else
+            return done(null, u);
+    });
+}
+
+
 passport.use(new googleStrategy({
         clientID: config.googleClientID,
         clientSecret: config.googleClientSecret,
         callbackURL: config.googleCallbackURL
     },
-    createUser
+    createUserGoogle
 ));
 
 passport.use(new facebookStrategy({
         clientID: config.facebookAPPID,
         clientSecret: config.facebookAPPSecret,
-        callbackURL: config.facebookCallbackURL
+        callbackURL: config.facebookCallbackURL,
+        profileFields: ['id', 'name', 'displayName', 
+            'photos', 'hometown', 'profileUrl', 'friends']
     },
-    createUser
+    createUserFacebook
 ));
 
 app.get('/getRatio/*', function(req, res){
