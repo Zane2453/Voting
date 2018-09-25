@@ -21,7 +21,7 @@ Voting
 ## How to start Voting Server
 1. sudo node server.js
 ## Set join function on IotTalk
-```
+```python
 def run(*args):
     total = sum(args)    
     return [round(i/total, 2) for i in args]
