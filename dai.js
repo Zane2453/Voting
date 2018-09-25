@@ -52,7 +52,7 @@ var dai = function (mac, no, answers) {
         var push = function(answer){
             for(var i = 0; i < answers.length; i++)
                 if(answers[i].option == answer.option)
-                    dan.push(IDFList[i], [1]);
+                    dan.push(IDFList[i], [answer.count+1]);
         };
         var getMac = function(){
             return mac;
