@@ -18,5 +18,11 @@ Voting
 ## Config file
 1. Rename config_template.js to config.js
 2. Fill in Oauth information (e.g. google client id, secret)
-## How to start
+## How to start Voting Server
 1. sudo node server.js
+## Set join function on IotTalk
+```
+def run(*args):
+    total = sum(args)    
+    return [round(i/total, 2) for i in args]
+```
