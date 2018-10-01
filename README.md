@@ -23,6 +23,6 @@ Voting
 ## Set join function on IotTalk
 ```python
 def run(*args):
-    total = sum(args)    
-    return [round(i/total, 2) for i in args]
+    total = sum(args)
+    return [ int(round(i / total, 2) * RANGE_YOU_WANT) for i in args] if total != 0 else [0] * len(args)
 ```
