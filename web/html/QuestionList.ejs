@@ -15,7 +15,9 @@
         	<div class="col-md-4">
         		<% for(var i = 0; i < qList.length; i++){ %>
 					<div class="alert  alert-info" role="alert">
-	 					<a class="alert-link" href=<%= qList[i].id %>> <%= qList[i].no %>. <%= qList[i].description %></a>
+	 					<a class="alert-link" href="/ctl/<%= qList[i].id %>">
+                            <%= qList[i].no %>. <%= qList[i].description %>
+                        </a>
 	 				</div>
 	 			<% } %>
 	 		</div>
