@@ -24,7 +24,7 @@ models.vote.sync({force: false}).then(function(){});
 
 app.use(express.static('./web'));
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(expressSession({
     secret: 'keyboard cat',
     resave: true,
@@ -129,6 +129,7 @@ app.post('/postQ', function(req, res){
     var id = req.body.id,
         description = req.body.question,
         anonymous = req.body.anonymous,
+        image = req.body.image,
         answers = [];
     models.question.findById(id).then(function(object){
        if(object == null && //check id is not exist
@@ -147,6 +148,7 @@ app.post('/postQ', function(req, res){
                   no: c+1,
                   description: description,
                   anonymous: anonymous,
+                  image: image,
                   answers: answers
               };
               models.question.create(q, {
@@ -250,6 +252,7 @@ app.get('/ctl/*', function(req, res){
                 page.getDashBoardPage(req, res, {
                     q: q.description,
                     no: q.no,
+                    image: q.image,
                     a: options
                 });
             });
