@@ -36,6 +36,9 @@ const question = sequelize.define('question', {
     },
     anonymous: {
         type: Sequelize.BOOLEAN
+    },
+    image: {
+        type: Sequelize.STRING
     }
 });
 const answer = sequelize.define('answer', {
