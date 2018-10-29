@@ -87,31 +87,30 @@ var getImageBase64str = function(input) {
             $('#thumbnail').attr( "style", "display:block" );
             $('#thumbnail_row').attr( "style", "display:block" );
             
-            var width, height, 
+            var width, 
+                height, 
                 image = new Image();
 
             image.src = e.target.result;
-            console.log(image.src);
-            console.log(image.width);
-            
-            //resize img
-            if(image.width > 300){
-                width = 300;
-                height = (width / image.width) * image.height;
-                var canvas = $('<canvas width="' + width + '" height="' + height + '"></canvas>')[0];
-                var ctx = canvas.getContext('2d');
-                ctx.drawImage(image, 0, 0, width, height);
-                
-                //set compressed img to tmp textarea storage
-                var imagedata = canvas.toDataURL();
-                $('#base64TextArea').val(imagedata);
-                console.log(imagedata);
-            }
-            else{
-                //set original img to tmp textarea storage
-                $('#base64TextArea').val(image.src);
-                console.log(image.src);
-            }
+            image.onload = function(){
+                if(image.width > 600){
+                    width = 600;
+                    height = (width / image.width) * image.height;
+                    var canvas = $('<canvas width="' + width + '" height="' + height + '"></canvas>')[0];
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(image, 0, 0, width, height);
+                    
+                    //set compressed img to tmp textarea storage
+                    var imagedata = canvas.toDataURL();
+                    $('#base64TextArea').val(imagedata);
+                    //console.log(imagedata);
+                }
+                else{
+                    //set original img to tmp textarea storage
+                    $('#base64TextArea').val(image.src);
+                    //console.log(image.src);
+                }
+            };
         };
         FR.readAsDataURL(input.files[0]);
     }
