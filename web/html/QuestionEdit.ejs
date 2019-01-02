@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/VotingCtl.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/QuestionEdit.js"></script>
+    <title>Edit question</title>
+</head>
+<body>
+	<div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">記名投票</label>
+                    <div class="col-sm-9">
+                        <% if(anonymous){ %>
+                        <input id="anonymous" type="checkbox" class="form-control"        >
+                        <% }else{ %>
+                        <input id="anonymous" type="checkbox" class="form-control"       checked>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="form-group row" id="top-question">
+                    <label class="col-sm-3 col-form-label">問題</label>
+                    <div class="col-sm-9">
+                        <textarea id="question" class="form-control" rows="4"><%= q %></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">說明圖片&lt;optional&gt; </label>
+                    <div class="col-sm-9">
+                        <input id="uploadImage" accept="image/*"  type="file">
+                    </div>
+                    <% if(image != "none"){ %>
+                        <img id="previewImage" src="<%= image %>">
+                    <% } %>
+                </div>
+
+                <div id="thumbnail_row" class="form-group row" style='display:none'>
+                    <div class="col-sm-12">
+                        <textarea id="base64TextArea" maxlength="200" style='display:none'></textarea>
+                        <img id="thumbnail" src="" style='display:none' align="middle">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.1</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option1Color %>; color: <%= option1Color %>" value="<%= a[0] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.2</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option2Color %>; color: <%= option2Color %>" value="<%= a[1] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.3</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option3Color %>; color: <%= option3Color %>" value="<%= a[2] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.4</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option4Color %>; color: <%= option4Color %>" value="<%= a[3] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.5</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option5Color %>; color: <%= option5Color %>" value="<%= a[4] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.6</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option6Color %>; color: <%= option6Color %>" value="<%= a[5] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.7</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option7Color %>; color: <%= option7Color %>" value="<%= a[6] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.8</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option8Color %>; color: <%= option8Color %>" value="<%= a[7] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.9</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option9Color %>; color: <%= option9Color %>" value="<%= a[8] %>"/>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">選項.10</label>
+                    <div class="col-sm-9">
+                        <input class="form-control option" style="border-color: <%= option10Color %>; color: <%= option10Color %>" value="<%= a[9] %>"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button id="submit" class="btn btn-info btn-block">送出</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+	</div>
+</body>
+</html>

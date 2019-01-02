@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/QuestionList.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="../js/AdminQuestionList.js"></script>
+    <title>Voting</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="alert  alert-success" role="alert">
+                    <a class="alert-link" href="/ctl/">  &#43; 新增問題</a>
+                </div>
+
+                <% if(qList.length == 0){ %>
+                    <div class="alert  alert-danger" role="alert">
+                        <a class="alert-link">There is no Question now</a>
+                    </div>
+                <% } %>
+
+                <table class="table">
+                    <% for(var i = 0; i < qList.length; i++){ %>
+                        <tr>
+                            <td width="70%">
+                                <div class="alert  alert-info" role="alert">
+                                    <a class="alert-link" href="/ctl/<%= qList[i].id %>">
+                                        <%= qList[i].no %>. <%= qList[i].description %>
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-secondary edit"><a href="/edit/<%= qList[i].id %>">編輯</a></button>
+                                <button class="btn btn-outline-danger delete">刪除</button>
+                            </td>
+                        </tr>
+                    <% } %>
+                </table>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+</body>
+</html>
