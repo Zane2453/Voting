@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('.delete').on('click', function(){
         var self = this;
-        var question_id = $(this).parent().parent().find('a').attr('href').split("/")[2];
+        var question_id = $(this).parent().parent().find('a').attr('href').split("/")[3];
 
         console.log(question_id);
 
@@ -22,7 +22,7 @@ $(document).ready(function(){
                 },
                 success: function(data){
                     //remove this human from table
-                    $(self).parent().parent().remove();
+                    $(self).parent().parent().parent().parent().remove();
 
                     alert("刪除成功!!");
                 }
