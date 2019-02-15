@@ -36,9 +36,10 @@ $(document).ready(function(){
                 $('#submit').prop('disabled', true);
 
                 //get base64str
-                var base64ImgStr = $('#base64TextArea').val() || $('previewImage').attr('src');
+                var base64ImgStr = $('#base64TextArea').val() || $('#previewImage').attr('src');
                 if(base64ImgStr == "" || base64ImgStr === undefined){
                     base64ImgStr = "none";
+                    console.log("img none");
                 }
 
                 $.ajax({
