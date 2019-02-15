@@ -1,7 +1,7 @@
 /**
  * Created by kuan on 2018/8/27.
  */
-var dai = function (mac, no, answers) {
+var dai = function (mac, answers) {
 
     var dan = require('./dan').dan(),
         config = require('./config'),
@@ -30,7 +30,7 @@ var dai = function (mac, no, answers) {
             };
             dan.init(pull, config.IotTalkURL, mac, {
                 'dm_name': 'VotingMachine',
-                'd_name': no.toString() + ".Voting",
+                'd_name': "Voting." + mac,
                 'u_name': 'yb',
                 'is_sim': false,
                 'df_list': IDFList

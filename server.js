@@ -173,7 +173,7 @@ app.post('/updateQ', function(req, res){
                   models.question.update(q, {
                     where: {id: id}
                   }).then(function(){
-                      //var d = dai(id, q.no, answers);
+                      //var d = dai(id, answers);
                       //daList.push(d);
                       //d.register();
                       page.getSuccess(req, res);
@@ -205,25 +205,21 @@ app.post('/postQ', function(req, res){
                    count: 0
                });
 
-           models.question.max('no').then(function(max_no_q){
-              max_no_q = max_no_q || 0;
-              var q = {
-                  id: id,
-                  no: max_no_q + 1,
-                  description: description,
-                  anonymous: anonymous,
-                  image: image,
-                  answers: answers
-              };
-              models.question.create(q, {
-                  include: [models.answer]
-              }).then(function(){
-                  //var d = dai(id, q.no, answers);
-                  //daList.push(d);
-                  //d.register();
-                  page.getSuccess(req, res);
-              });
-           });
+          var q = {
+              id: id,
+              description: description,
+              anonymous: anonymous,
+              image: image,
+              answers: answers
+          };
+          models.question.create(q, {
+              include: [models.answer]
+          }).then(function(){
+              //var d = dai(id, answers);
+              //daList.push(d);
+              //d.register();
+              page.getSuccess(req, res);
+          });
        }
        else{
            page.getBadRequest(req, res);
@@ -321,7 +317,6 @@ app.get('/admin/edit/*', auth, function(req, res){
                 });
                 page.getQuestionEditPage(req, res, {
                     q: q.description,
-                    no: q.no,
                     image: q.image,
                     a: options,
                     anonymous: q.anonymous
@@ -374,7 +369,6 @@ app.get('/admin/ctl/*', auth, function(req, res){
                 });
                 page.getDashBoardPage(req, res, {
                     q: q.description,
-                    no: q.no,
                     image: q.image,
                     a: options
                 }, true);
@@ -405,7 +399,6 @@ app.get('/ctl/*', function(req, res){
                 });
                 page.getDashBoardPage(req, res, {
                     q: q.description,
-                    no: q.no,
                     image: q.image,
                     a: options
                 });

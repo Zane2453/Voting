@@ -25,6 +25,7 @@ $(document).ready(function(){
                     $(self).parent().parent().parent().parent().remove();
 
                     alert("刪除成功!!");
+                    location.reload();
                 }
             });
         }

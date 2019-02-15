@@ -26,7 +26,7 @@
                 <% for(var i = 0; i < qList.length; i++){ %>
 					<div class="alert  alert-info" role="alert">
 	 					<a class="alert-link" href="/ctl/<%= qList[i].id %>">
-                            <%= qList[i].no %>. <%= qList[i].description %>
+                            <%= i+1 %>. <%= qList[i].description %>
                         </a>
 	 				</div>
 	 			<% } %>

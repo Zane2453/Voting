@@ -49,7 +49,6 @@ Page.prototype = {
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.end(ejs.render(contents, {
                         q: question.q,
-                        no: question.no,
                         image: question.image,
                         a: question.a,
                         isadmin: isadmin
