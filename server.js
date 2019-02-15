@@ -24,7 +24,7 @@ var auth = function(req, res, next){
         res.sendStatus(401);
         return;
     }
-    if(user.name === 'iottalk' && user.pass === 'iot2018'){
+    if(user.name === 'iottalk' && user.pass === 'iot2019'){
         next();
     } 
     else{
@@ -205,10 +205,11 @@ app.post('/postQ', function(req, res){
                    count: 0
                });
 
-           models.question.count().then(function(c){
+           models.question.max('no').then(function(max_no_q){
+              max_no_q = max_no_q || 0;
               var q = {
                   id: id,
-                  no: c+1,
+                  no: max_no_q + 1,
                   description: description,
                   anonymous: anonymous,
                   image: image,
@@ -297,7 +298,7 @@ app.get('/', function(req, res){
     });
 });
 
-app.get('/edit/*', function(req, res){
+app.get('/admin/edit/*', auth, function(req, res){
     var component = req.originalUrl.split("/");
     for(var i = component.length-1; i >= 0 ; i--)
         if(component[i] != "")
@@ -310,9 +311,13 @@ app.get('/edit/*', function(req, res){
                     questionId: id
                 }
             }).then(function(a){
-                var options = [];
+                var options = [null, null, null, null, null, null, null, null, null, null];
                 a.forEach(function(answer){
-                    options.push(answer.option);
+                    config.RGBcolor.forEach(function(color, idx){
+                        if(color == answer.color){
+                            options[idx] = answer.option;
+                        }
+                    });
                 });
                 page.getQuestionEditPage(req, res, {
                     q: q.description,
@@ -326,6 +331,10 @@ app.get('/edit/*', function(req, res){
         else
             page.getPageNotFound(req, res);
     });
+});
+
+app.get('/admin/ctl', auth, function(req, res){
+    page.getVotingCtlPage(req, res);
 });
 
 app.get('/ctl', function(req, res){
@@ -342,6 +351,37 @@ app.post('/QuestionDelete', function(req, res){
         //send response
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end("OK");
+    });
+});
+
+app.get('/admin/ctl/*', auth, function(req, res){
+
+    var component = req.originalUrl.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(component[i] != "")
+            break;
+    var id = component[i].substr(0,16);
+    models.question.findById(id).then(function(q) {
+        if(q != null){
+            models.answer.findAll({
+                where:{
+                    questionId: id
+                }
+            }).then(function(a){
+                var options = [];
+                a.forEach(function(answer){
+                    options.push(answer.option);
+                });
+                page.getDashBoardPage(req, res, {
+                    q: q.description,
+                    no: q.no,
+                    image: q.image,
+                    a: options
+                }, true);
+            });
+        }
+        else
+            page.getPageNotFound(req, res);
     });
 });
 
