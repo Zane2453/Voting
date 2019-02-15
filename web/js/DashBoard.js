@@ -29,11 +29,6 @@ $(document).ready(function() {
         $("#image").attr("src", image);
     }
 
-    //homebtn
-    $("#home").click(function(){
-        window.location = location.origin;
-    });
-
     //update voting status per second
     setInterval(function(){
         $.ajax({
