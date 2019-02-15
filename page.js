@@ -39,7 +39,7 @@ Page.prototype = {
             }
         );   
     },
-    getDashBoardPage : function (req, res, question) {
+    getDashBoardPage : function (req, res, question, isadmin=false) {
         fs.readFile(dashBoardPagePath,
             function (err, contents) {
                 if (err)
@@ -51,7 +51,8 @@ Page.prototype = {
                         q: question.q,
                         no: question.no,
                         image: question.image,
-                        a: question.a
+                        a: question.a,
+                        isadmin: isadmin
                     }));
                 }
             }
