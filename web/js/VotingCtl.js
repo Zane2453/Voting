@@ -2,7 +2,7 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function(){
-   var qId = _uuid().substring(0,16);
+   var qId = _uuid();
    $("#submit").click(function(){
        var question = $("#question").val(),
            anonymous = !$('#anonymous').is(":checked");

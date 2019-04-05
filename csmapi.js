@@ -23,7 +23,7 @@ var csmapi = (function () {
             if(callback){
                 if (!err && res.statusCode == 200) {
                     callback(true, body.password);
-                    console.log(mac_addr, ' registed: ', body.password);
+                    //console.log(mac_addr, ' registed: ', body.password);
                 }
                 else{
                     callback(false, '');

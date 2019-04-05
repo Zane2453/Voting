@@ -7,7 +7,7 @@ $(document).ready(function() {
         if(component[i] != "")
             break;
     console.log(component[i]);
-    var id = component[i].substr(0,16),
+    var id = component[i].substr(0),
         url = "";
     component = location.origin.split("/");
     for(var i = 1; i < component.length; i++)

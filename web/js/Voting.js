@@ -53,7 +53,7 @@ var setRatio = function(id){
 };
 
 $(document).ready(function(){
-    var id = location.pathname.split("/").pop().substr(0,16),
+    var id = location.pathname.split("/").pop(),
         answer = getCookie(id);
     if((answer != "" && (anonymous == true)) ||
         (va != undefined && (anonymous == false)) ) {
