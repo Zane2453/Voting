@@ -1,10 +1,7 @@
 var express = require('express'),
     app = express(),
     http = require('http').createServer(app),
-    shortid = require('shortid'),
     config = require('./config'),
-    io = require('socket.io')(http),
-    fs = require('fs'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
@@ -57,7 +54,7 @@ var createUserGoogle = function (accessToken, refreshToken, profile, done){
         else
             return done(null, u);
     });
-}
+};
 
 var createUserFacebook = function (accessToken, refreshToken, profile, done){
     models.user.findById(profile.id).then(function(u){
@@ -75,7 +72,7 @@ var createUserFacebook = function (accessToken, refreshToken, profile, done){
         else
             return done(null, u);
     });
-}
+};
 
 
 passport.use(new googleStrategy({
