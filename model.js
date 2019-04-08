@@ -19,7 +19,7 @@ var Sequelize = require('sequelize'),
             idle: 10000
         },
         // SQLite only
-        storage: './questionaire.sqlite',
+        storage: './questionnaire.sqlite',
         // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
         operatorsAliases: false
     });

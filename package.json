@@ -2,17 +2,14 @@
 	"name": "vote",
 	"private": true,
 	"dependencies": {
-		"basic-auth": "^2.0.1",
-		"cookie-parser": "",
-		"ejs": "",
 		"express": "*",
-		"express-session": "",
+		"ejs": "",
+		"sqlite3": "",
+		"sequelize": "4.38",
 		"passport": "",
-		"passport-facebook": "",
 		"passport-google-oauth": "",
-		"sequelize": "4.38.0",
-		"shortid": "",
-		"socket.io": "",
-		"sqlite3": ""
+		"passport-facebook": "",
+		"express-session": "",
+		"cookie-parser": ""
 	}
 }
