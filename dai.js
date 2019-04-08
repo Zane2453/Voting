@@ -1,9 +1,9 @@
 /**
  * Created by kuan on 2018/8/27.
  */
+
 var dai = function (mac, no, answers) {
     var config = require('./config');
-
     if(config.IoTtalkVersion == 1) {
         var dan = require('./dan').dan(),
             IDFList = [];
@@ -22,14 +22,15 @@ var dai = function (mac, no, answers) {
                     console.log(mac, ' set alias : ' + answers[i].option);
                 }
             };
-
             var pull = function (ODFName, data) {
                 if (ODFName == 'Control' && data[0] == 'SET_DF_STATUS')
                     setTimeout(setAliases, 2000);
+                    pushRaw();
+                }
             };
             dan.init(pull, config.IoTtalkURL, mac, {
                 'dm_name': 'VotingMachine',
-                'd_name': no.toString() + ".Voting",
+                'd_name': "Voting." + mac,
                 'u_name': 'yb',
                 'is_sim': false,
                 'df_list': IDFList
@@ -47,7 +48,6 @@ var dai = function (mac, no, answers) {
                 process.on('uncaughtException', dan.deregister);
             });
         };
-
         var push = function (answer) {
             for (var i = 0; i < answers.length; i++)
                 if (answers[i].option == answer.option)
