@@ -11,13 +11,21 @@
         <% if (typeof va != 'undefined') { %>
             var va = "<%= va %>";
         <% } else { %>
-        var va = undefined;
+            var va = undefined;
         <% } %>
         var anonymous = ("<%= anonymous %>" === "true");
     </script>
     <title>Voting</title>
 </head>
 <body>
+    <script>
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://vote-4.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
     <div class="container">
         <div class="row">
             <div class="col-md-4"></div>
@@ -40,7 +48,7 @@
                 </div>
                 <div>
                     <h4>題目: <%= q %></h4>
-                	<% if (typeof n != 'undefined') { %>
+                    <% if (typeof n != 'undefined') { %>
                         <h6 id="name"><%= n %></h6>
                     <% } %>
                     <% if (typeof va != 'undefined') { %>
@@ -57,6 +65,7 @@
                         </button>
                     </div>
                 <% } %>
+                <div id="disqus_thread"></div>
             </div>
             <div class="col-md-4"></div>
         </div>
