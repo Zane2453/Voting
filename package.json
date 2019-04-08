@@ -10,6 +10,8 @@
 		"passport-google-oauth": "",
 		"passport-facebook": "",
 		"express-session": "",
-		"cookie-parser": ""
+		"cookie-parser": "",
+		"mqtt": "^2.18.8",
+		"superagent": "^4.1.0"
 	}
 }

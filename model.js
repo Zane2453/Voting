@@ -29,7 +29,7 @@ const question = sequelize.define('question', {
         primaryKey: true
     },
     no:{
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
     },
     description: {
         type: Sequelize.STRING

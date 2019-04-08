@@ -2,18 +2,15 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function(){
-    var qId = _uuid().substring(0,16);
-
-    //initial value for base64TextArea
-    $('#base64TextArea').val("");
-
-    //load picture handler
-    $("#uploadImage").change(function(){
-        getImageBase64str( this );
-    });
-
+   var qId = _uuid();
     //submit btn
     $("#submit").click(function(){
+       //initial value for base64TextArea
+       $('#base64TextArea').val("");
+       //load picture handler
+       $("#uploadImage").change(function(){
+           getImageBase64str( this );
+       });
        var question = $("#question").val(),
            anonymous = !$('#anonymous').is(":checked");
        if(question.trim().length != 0){

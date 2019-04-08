@@ -2,8 +2,12 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function() {
-    //prepare url
-    var id = getLocationId(),
+    var component = location.pathname.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(component[i] != "")
+            break;
+    console.log(component[i]);
+    var id = component[i].substr(0),
         url = "";
     component = location.origin.split("/");
     for(var i = 1; i < component.length; i++)

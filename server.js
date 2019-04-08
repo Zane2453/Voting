@@ -37,6 +37,12 @@ models.question.sync({force: false}).then(function(){});
 models.user.sync({force: false}).then(function(){});
 models.vote.sync({force: false}).then(function(){});
 
+//to-do
+//register all questions in the DB
+
+
+
+
 app.use(express.static('./web'));
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -131,7 +137,7 @@ passport.use(new facebookStrategy({
 ));
 
 app.get('/getRatio/*', function(req, res){
-    var id = req.originalUrl.substr(1).split("/").pop().substr(0,16);
+    var id = req.originalUrl.substr(1).split("/").pop().substr(0,36);
     models.answer.findAll({
         where:{
             questionId: id
@@ -401,7 +407,7 @@ app.get('/ctl/*', function(req, res){
     for(var i = component.length-1; i >= 0 ; i--)
         if(component[i] != "")
             break;
-    var id = component[i].substr(0,16);
+    var id = component[i];
     models.question.findById(id).then(function(q) {
         if(q != null){
             models.answer.findAll({
@@ -450,7 +456,7 @@ app.get('/login', function(req, res){
 });
 
 app.get('/*', function(req, res) {
-    var id = req.originalUrl.substr(1,16),
+    var id = req.originalUrl.substr(1),
         login = (req.user != undefined);
     models.question.findById(id).then(function(q){
         if(q != null){

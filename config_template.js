@@ -23,7 +23,8 @@ exports.RGBcolor = [
     "rgb(102, 205, 170)",
     "rgb(128, 128, 0)"
 ];
-exports.IotTalkURL = "http://140.113.199.199:9999";
+exports.IoTtalkVersion = "";
+exports.IoTtalkURL = "";
 exports.googleClientID = "";
 exports.googleClientSecret = "";
 exports.googleCallbackURL = "";
