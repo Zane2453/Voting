@@ -2,12 +2,8 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function() {
-    var component = location.pathname.split("/");
-    for(var i = component.length-1; i >= 0 ; i--)
-        if(component[i] != "")
-            break;
-    console.log(component[i]);
-    var id = component[i].substr(0,16),
+    //prepare url
+    var id = getLocationId(),
         url = "";
     component = location.origin.split("/");
     for(var i = 1; i < component.length; i++)
@@ -15,6 +11,8 @@ $(document).ready(function() {
             url = url + component[i] + "/";
     url = "https://" + url + id;
     console.log(url);
+    
+    //create QRcode
     var qrcode = new QRCode("qrcode", {
         text: url,
         width: 256,
@@ -23,6 +21,15 @@ $(document).ready(function() {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
     });
+
+    //show voting image
+    //console.log(image);
+    if(image != "none"){
+        $("#image_area").attr( "style", "display:block" );
+        $("#image").attr("src", image);
+    }
+
+    //update voting status per second
     setInterval(function(){
         $.ajax({
             type: "GET",

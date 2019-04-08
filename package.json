@@ -3,11 +3,9 @@
 	"private": true,
 	"dependencies": {
 		"express": "*",
-		"shortid": "",
-		"socket.io": "",
 		"ejs": "",
 		"sqlite3": "",
-		"sequelize": "",
+		"sequelize": "4.38",
 		"passport": "",
 		"passport-google-oauth": "",
 		"passport-facebook": "",

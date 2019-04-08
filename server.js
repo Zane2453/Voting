@@ -1,20 +1,35 @@
 var express = require('express'),
     app = express(),
     http = require('http').createServer(app),
-    shortid = require('shortid'),
     config = require('./config'),
-    io = require('socket.io')(http),
-    fs = require('fs'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
     page = require('./page').page,
+    basicAuth = require('basic-auth'),
     models = require('./model').models,
     dai = require('./dai').dai,
     daList = [],
     passport = require('passport'),
     googleStrategy = require('passport-google-oauth').OAuth2Strategy,
     facebookStrategy = require('passport-facebook').Strategy;
+
+var auth = function(req, res, next){
+    var user = basicAuth(req);
+    if(!user || !user.name || !user.pass){
+        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+        res.sendStatus(401);
+        return;
+    }
+    if(user.name === 'iottalk' && user.pass === 'iot2019'){
+        next();
+    } 
+    else{
+        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+        res.sendStatus(401);
+        return;
+    }
+}
 
 //create tables
 models.answer.sync({force: false}).then(function(){});
@@ -24,7 +39,7 @@ models.vote.sync({force: false}).then(function(){});
 
 app.use(express.static('./web'));
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(expressSession({
     secret: 'keyboard cat',
     resave: true,
@@ -57,7 +72,26 @@ var createUserGoogle = function (accessToken, refreshToken, profile, done){
         else
             return done(null, u);
     });
-}
+};
+
+var createUserFacebook = function (accessToken, refreshToken, profile, done){
+    models.user.findById(profile.id).then(function(u){
+        if(u == null){
+            u = {
+                id: profile.id,
+                name: profile.displayName,
+                photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
+                provider: profile.provider
+            };
+            models.user.create(u).then(function(){
+                return done(null, u);
+            });
+        }
+        else
+            return done(null, u);
+    });
+};
+
 
 var createUserFacebook = function (accessToken, refreshToken, profile, done){
     models.user.findById(profile.id).then(function(u){
@@ -125,10 +159,56 @@ app.get('/getRatio/*', function(req, res){
             page.getBadRequest(req, res);
     });
 });
+
+app.post('/updateQ', function(req, res){
+    var id = req.body.id,
+        description = req.body.question,
+        anonymous = req.body.anonymous,
+        image = req.body.image,
+        answers = [];
+    models.question.findById(id).then(function(object){
+       if(object != null && //check id is not exist
+           id.trim().length != 0 && //check id is not empty
+           req.body.options.length != 0){ // check options is not empty
+           for(var i = 0; i < req.body.options.length; i++)
+               answers.push({
+                   option: req.body.options[i].description,
+                   color: req.body.options[i].color,
+                   count: 0,
+                   questionId: id
+               });
+
+           models.answer.destroy({ where: { questionId: id},
+            force: true}).then(function(){
+              models.answer.bulkCreate(answers).then(function(){
+                  var q = {
+                      description: description,
+                      anonymous: anonymous,
+                      image: image
+                  };
+                  models.question.update(q, {
+                    where: {id: id}
+                  }).then(function(){
+                      //var d = dai(id, answers);
+                      //daList.push(d);
+                      //d.register();
+                      page.getSuccess(req, res);
+                  });
+               });
+            });
+
+       }
+       else{
+           page.getBadRequest(req, res);
+       }
+    });
+});
+
 app.post('/postQ', function(req, res){
     var id = req.body.id,
         description = req.body.question,
         anonymous = req.body.anonymous,
+        image = req.body.image,
         answers = [];
     models.question.findById(id).then(function(object){
        if(object == null && //check id is not exist
@@ -141,23 +221,21 @@ app.post('/postQ', function(req, res){
                    count: 0
                });
 
-           models.question.count().then(function(c){
-              var q = {
-                  id: id,
-                  no: c+1,
-                  description: description,
-                  anonymous: anonymous,
-                  answers: answers
-              };
-              models.question.create(q, {
-                  include: [models.answer]
-              }).then(function(){
-                  var d = dai(id, q.no, answers);
-                  daList.push(d);
-                  d.register();
-                  page.getSuccess(req, res);
-              });
-           });
+          var q = {
+              id: id,
+              description: description,
+              anonymous: anonymous,
+              image: image,
+              answers: answers
+          };
+          models.question.create(q, {
+              include: [models.answer]
+          }).then(function(){
+              //var d = dai(id, answers);
+              //daList.push(d);
+              //d.register();
+              page.getSuccess(req, res);
+          });
        }
        else{
            page.getBadRequest(req, res);
@@ -219,14 +297,102 @@ app.post('/postA', function(req, res){
             page.getBadRequest(req, res);
     });
 });
+
+app.get('/admin', auth, function(req, res){
+    models.question.findAll().then(function(qList){
+        page.getAdminQuestionListPage(req, res, qList);
+    });
+});
+
 app.get('/', function(req, res){
     models.question.findAll().then(function(qList){
         page.getQuestionListPage(req, res, qList);
     });
 });
 
+app.get('/admin/edit/*', auth, function(req, res){
+    var component = req.originalUrl.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(component[i] != "")
+            break;
+    var id = component[i].substr(0,16);
+    models.question.findById(id).then(function(q) {
+        if(q != null){
+            models.answer.findAll({
+                where:{
+                    questionId: id
+                }
+            }).then(function(a){
+                var options = [null, null, null, null, null, null, null, null, null, null];
+                a.forEach(function(answer){
+                    config.RGBcolor.forEach(function(color, idx){
+                        if(color == answer.color){
+                            options[idx] = answer.option;
+                        }
+                    });
+                });
+                page.getQuestionEditPage(req, res, {
+                    q: q.description,
+                    image: q.image,
+                    a: options,
+                    anonymous: q.anonymous
+                });
+            });
+        }
+        else
+            page.getPageNotFound(req, res);
+    });
+});
+
+app.get('/admin/ctl', auth, function(req, res){
+    page.getVotingCtlPage(req, res);
+});
+
 app.get('/ctl', function(req, res){
     page.getVotingCtlPage(req, res);
+});
+
+app.post('/QuestionDelete', function(req, res){
+    var delete_id = req.body.delete_id;
+
+    models.question.destroy({
+        where: { id: delete_id }, 
+        force:true 
+    }).then(function(){
+        //send response
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end("OK");
+    });
+});
+
+app.get('/admin/ctl/*', auth, function(req, res){
+
+    var component = req.originalUrl.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(component[i] != "")
+            break;
+    var id = component[i].substr(0,16);
+    models.question.findById(id).then(function(q) {
+        if(q != null){
+            models.answer.findAll({
+                where:{
+                    questionId: id
+                }
+            }).then(function(a){
+                var options = [];
+                a.forEach(function(answer){
+                    options.push(answer.option);
+                });
+                page.getDashBoardPage(req, res, {
+                    q: q.description,
+                    image: q.image,
+                    a: options
+                }, true);
+            });
+        }
+        else
+            page.getPageNotFound(req, res);
+    });
 });
 
 app.get('/ctl/*', function(req, res){
@@ -249,7 +415,7 @@ app.get('/ctl/*', function(req, res){
                 });
                 page.getDashBoardPage(req, res, {
                     q: q.description,
-                    no: q.no,
+                    image: q.image,
                     a: options
                 });
             });

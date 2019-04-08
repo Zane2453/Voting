@@ -5,7 +5,9 @@ var fs = require('fs'),
     votingControlPagePath = __dirname + "/web/html/VotingCtl.ejs",
     dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs",
     loginPagePath = __dirname + "/web/html/Login.ejs",
-    questionListPagePath = __dirname + "/web/html/QuestionList.ejs";
+    questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
+    AdminquestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
+    QuestionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs";
 
 var Page = function () {};
 
@@ -37,7 +39,7 @@ Page.prototype = {
             }
         );   
     },
-    getDashBoardPage : function (req, res, question) {
+    getDashBoardPage : function (req, res, question, isadmin=false) {
         fs.readFile(dashBoardPagePath,
             function (err, contents) {
                 if (err)
@@ -47,8 +49,9 @@ Page.prototype = {
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.end(ejs.render(contents, {
                         q: question.q,
-                        no: question.no,
-                        a: question.a
+                        image: question.image,
+                        a: question.a,
+                        isadmin: isadmin
                     }));
                 }
             }
@@ -69,6 +72,33 @@ Page.prototype = {
     },
     getQuestionListPage : function (req, res, qList) {
         fs.readFile(questionListPagePath,
+            function (err, contents) {
+                if (err)
+                    console.log(err);
+                else {
+                    contents = contents.toString('utf8');
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.end(ejs.render(contents, {qList: qList}));
+                }
+            }
+        );
+    },
+    getQuestionEditPage : function (req, res, question) {
+        var obj = Object.assign({},config.color, question);
+        fs.readFile(QuestionEditPagePath,
+            function (err, contents) {
+                if (err)
+                    console.log(err);
+                else {
+                    contents = contents.toString('utf8');
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.end(ejs.render(contents, obj));
+                }
+            }
+        );   
+    },
+    getAdminQuestionListPage : function (req, res, qList) {
+        fs.readFile(AdminquestionListPagePath,
             function (err, contents) {
                 if (err)
                     console.log(err);

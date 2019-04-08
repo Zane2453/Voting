@@ -19,7 +19,7 @@ var Sequelize = require('sequelize'),
             idle: 10000
         },
         // SQLite only
-        storage: './questionaire.sqlite',
+        storage: './questionnaire.sqlite',
         // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
         operatorsAliases: false
     });
@@ -36,6 +36,9 @@ const question = sequelize.define('question', {
     },
     anonymous: {
         type: Sequelize.BOOLEAN
+    },
+    image: {
+        type: Sequelize.STRING
     }
 });
 const answer = sequelize.define('answer', {
