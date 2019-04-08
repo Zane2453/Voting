@@ -23,8 +23,10 @@ var dai = function (mac, no, answers) {
 
             };
             var pull = function(ODFName, data){
-                if(ODFName == "Control" && data[0] == "SET_DF_STATUS")
+                if(ODFName == "Control" && data[0] == "SET_DF_STATUS"){
                     setTimeout(setAliases, 2000);
+                    pushRaw();
+                }
             };
             dan.init(pull, config.IotTalkURL, mac, {
                 'dm_name': 'VotingMachine',
@@ -50,10 +52,19 @@ var dai = function (mac, no, answers) {
 
         };
         var push = function(answer){
-            for(var i = 0; i < answers.length; i++)
-                if(answers[i].option == answer.option)
-                    dan.push(IDFList[i], [1]);
+            for(var i = 0; i < answers.length; i++){
+                if(answers[i].option == answer.option){
+                    dan.push(IDFList[i], [answer.count+1]);
+                    console.log(mac, ' ', IDFList[i], ' push:', answer.count+1);
+                }
+            }
         };
+        var pushRaw = function(){
+            for(var i in answers){
+                dan.push(IDFList[i], [answers[i].count]);
+            }
+            console.log(mac, " pushRaw");
+        }
         var getMac = function(){
             return mac;
         };

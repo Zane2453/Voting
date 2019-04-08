@@ -48,6 +48,7 @@ Page.prototype = {
                     res.end(ejs.render(contents, {
                         q: question.q,
                         no: question.no,
+                        image: question.image,
                         a: question.a
                     }));
                 }

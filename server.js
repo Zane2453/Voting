@@ -21,7 +21,7 @@ models.vote.sync({force: false}).then(function(){});
 
 app.use(express.static('./web'));
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(expressSession({
     secret: 'keyboard cat',
     resave: true,
@@ -75,6 +75,25 @@ var createUserFacebook = function (accessToken, refreshToken, profile, done){
 };
 
 
+var createUserFacebook = function (accessToken, refreshToken, profile, done){
+    models.user.findById(profile.id).then(function(u){
+        if(u == null){
+            u = {
+                id: profile.id,
+                name: profile.displayName,
+                photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
+                provider: profile.provider
+            };
+            models.user.create(u).then(function(){
+                return done(null, u);
+            });
+        }
+        else
+            return done(null, u);
+    });
+}
+
+
 passport.use(new googleStrategy({
         clientID: config.googleClientID,
         clientSecret: config.googleClientSecret,
@@ -126,6 +145,7 @@ app.post('/postQ', function(req, res){
     var id = req.body.id,
         description = req.body.question,
         anonymous = req.body.anonymous,
+        image = req.body.image,
         answers = [];
     models.question.findById(id).then(function(object){
        if(object == null && //check id is not exist
@@ -144,6 +164,7 @@ app.post('/postQ', function(req, res){
                   no: c+1,
                   description: description,
                   anonymous: anonymous,
+                  image: image,
                   answers: answers
               };
               models.question.create(q, {
@@ -247,6 +268,7 @@ app.get('/ctl/*', function(req, res){
                 page.getDashBoardPage(req, res, {
                     q: q.description,
                     no: q.no,
+                    image: q.image,
                     a: options
                 });
             });

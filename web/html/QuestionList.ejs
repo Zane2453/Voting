@@ -13,9 +13,21 @@
         <div class="row">
         	<div class="col-md-4"></div>
         	<div class="col-md-4">
-        		<% for(var i = 0; i < qList.length; i++){ %>
+                <div class="alert  alert-success" role="alert">
+                    <a class="alert-link" href="/ctl/">  &#43; 新增問題</a>
+                </div>
+
+        		<% if(qList.length == 0){ %>
+                    <div class="alert  alert-danger" role="alert">
+                        <a class="alert-link">There is no Question now</a>
+                    </div>
+                <% } %>
+
+                <% for(var i = 0; i < qList.length; i++){ %>
 					<div class="alert  alert-info" role="alert">
-	 					<a class="alert-link" href=<%= qList[i].id %>> <%= qList[i].no %>. <%= qList[i].description %></a>
+	 					<a class="alert-link" href="/ctl/<%= qList[i].id %>">
+                            <%= qList[i].no %>. <%= qList[i].description %>
+                        </a>
 	 				</div>
 	 			<% } %>
 	 		</div>
