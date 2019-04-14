@@ -1,28 +1,16 @@
 exports.port = 80;
 exports.color = {
-    option1Color: "red",
-    option2Color: "orange",
-    option3Color: "darkkhaki",
-    option4Color: "green",
-    option5Color: "blue",
-    option6Color: "indigo",
-    option7Color: "purple",
-    option8Color: "fuchsia",
-    option9Color: "mediumaquamarine",
-    option10Color: "olive"
+        option1Color: "rgb(255, 0, 0)",
+        option2Color: "rgb(255, 165, 0)",
+        option3Color: "rgb(189, 183, 107)",
+        option4Color: "rgb(0, 128, 0)",
+        option5Color: "rgb(0, 0, 255)",
+        option6Color: "rgb(75, 0, 130)",
+        option7Color: "rgb(128, 0, 128)",
+        option8Color: "rgb(255, 0, 255)",
+        option9Color: "rgb(102, 205, 170)",
+        option10Color: "rgb(128, 128, 0)"
 };
-exports.RGBcolor = [
-    "rgb(255, 0, 0)",
-    "rgb(255, 165, 0)",
-    "rgb(189, 183, 107)",
-    "rgb(0, 128, 0)",
-    "rgb(0, 0, 255)",
-    "rgb(75, 0, 130)",
-    "rgb(128, 0, 128)",
-    "rgb(255, 0, 255)",
-    "rgb(102, 205, 170)",
-    "rgb(128, 128, 0)"
-];
 exports.IoTtalkVersion = "";
 exports.IoTtalkURL = "";
 exports.googleClientID = "";
