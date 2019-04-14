@@ -1,6 +1,7 @@
 /**
  * Created by kuan on 2018/8/25.
  */
+// http://docs.sequelizejs.com/manual/tutorial/querying.html
 var Sequelize = require('sequelize'),
     sequelize = new Sequelize('questionaire', null, null, {
         define: {
@@ -20,16 +21,16 @@ var Sequelize = require('sequelize'),
         },
         // SQLite only
         storage: './questionnaire.sqlite',
-        // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
         operatorsAliases: false
     });
 const question = sequelize.define('question', {
     id:{
-        type: Sequelize.STRING,
-        primaryKey: true
-    },
-    no:{
         type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    uuid:{
+        type: Sequelize.STRING
     },
     description: {
         type: Sequelize.STRING

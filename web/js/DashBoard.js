@@ -2,23 +2,10 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function() {
-    var component = location.pathname.split("/");
-    for(var i = component.length-1; i >= 0 ; i--)
-        if(component[i] != "")
-            break;
-    console.log(component[i]);
-    var id = component[i].substr(0),
-        url = "";
-    component = location.origin.split("/");
-    for(var i = 1; i < component.length; i++)
-        if (component[i] != "")
-            url = url + component[i] + "/";
-    url = "https://" + url + id;
-    console.log(url);
-    
+
     //create QRcode
     var qrcode = new QRCode("qrcode", {
-        text: url,
+        text: location.href.replace(/dashboard/i,'vote'),
         width: 256,
         height: 256,
         colorDark: "#000000",
@@ -37,7 +24,7 @@ $(document).ready(function() {
     setInterval(function(){
         $.ajax({
             type: "GET",
-            url: location.origin + "/getRatio/" + id,
+            url: location.origin + "/getR/" + getQuestionId(),
             cache: false,
             dataType: 'json',
             contentType: "application/json",

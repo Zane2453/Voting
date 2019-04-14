@@ -6,6 +6,7 @@
 		"ejs": "",
 		"sqlite3": "",
 		"sequelize": "4.38",
+		"basic-auth": "",
 		"passport": "",
 		"passport-google-oauth": "",
 		"passport-facebook": "",

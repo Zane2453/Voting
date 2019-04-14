@@ -14,7 +14,7 @@
         	<div class="col-md-4"></div>
         	<div class="col-md-4">
                 <div class="alert  alert-success" role="alert">
-                    <a class="alert-link" href="/ctl/">  &#43; 新增問題</a>
+                    <a class="alert-link" href="/create/">  &#43; 新增問題</a>
                 </div>
 
         		<% if(qList.length == 0){ %>
@@ -25,7 +25,7 @@
 
                 <% for(var i = 0; i < qList.length; i++){ %>
 					<div class="alert  alert-info" role="alert">
-	 					<a class="alert-link" href="/ctl/<%= qList[i].id %>">
+	 					<a class="alert-link" href="/dashboard/<%= qList[i].id %>">
                             <%= i+1 %>. <%= qList[i].description %>
                         </a>
 	 				</div>

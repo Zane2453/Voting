@@ -15,7 +15,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="alert  alert-success" role="alert">
-                    <a class="alert-link" href="/admin/ctl/">  &#43; 新增問題</a>
+                    <a class="alert-link" href="/create/">  &#43; 新增問題</a>
                 </div>
 
                 <% if(qList.length == 0){ %>
@@ -29,7 +29,7 @@
                         <tr>
                             <td width="80%">
                                 <div class="alert  alert-info" role="alert">
-                                    <a class="alert-link" href="/admin/ctl/<%= qList[i].id %>">
+                                    <a class="alert-link" href="/dashboard/<%= qList[i].id %>">
                                         <%= i+1 %>. <%= qList[i].description %>
                                     </a>
                                 </div>
@@ -38,6 +38,9 @@
                                 <div style="display: inline-block;">
                                     <div class="alert  alert-primary" role="alert">
                                         <a class="alert-link edit" href="/admin/edit/<%= qList[i].id %>">編輯</a>
+                                    </div>
+                                    <div class="alert  alert-secondary" role="alert">
+                                        <a class="alert-link register" href="">連接</a>
                                     </div>
                                     <div class="alert  alert-danger" role="alert">
                                         <a class="alert-link delete" href="#">刪除</a>

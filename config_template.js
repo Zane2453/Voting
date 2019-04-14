@@ -31,3 +31,6 @@ exports.googleCallbackURL = "";
 exports.facebookAPPID = "";
 exports.facebookAPPSecret = "";
 exports.facebookCallbackURL = "";
+exports.adminAccount = "";
+exports.adminPassword = "";
+exports.useDisqus = false;

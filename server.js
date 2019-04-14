@@ -1,35 +1,21 @@
-var express = require('express'),
+let express = require('express'),
     app = express(),
     http = require('http').createServer(app),
     config = require('./config'),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
-    page = require('./page').page,
+    response = require('./response').response,
     basicAuth = require('basic-auth'),
     models = require('./model').models,
     dai = require('./dai').dai,
     daList = [],
     passport = require('passport'),
     googleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    facebookStrategy = require('passport-facebook').Strategy;
+    facebookStrategy = require('passport-facebook').Strategy,
+    genUUID = require('./uuid');
 
-var auth = function(req, res, next){
-    var user = basicAuth(req);
-    if(!user || !user.name || !user.pass){
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        res.sendStatus(401);
-        return;
-    }
-    if(user.name === 'iottalk' && user.pass === 'iot2019'){
-        next();
-    } 
-    else{
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        res.sendStatus(401);
-        return;
-    }
-}
+http.listen((process.env.PORT || config.port), '0.0.0.0');
 
 //create tables
 models.answer.sync({force: false}).then(function(){});
@@ -41,91 +27,47 @@ models.vote.sync({force: false}).then(function(){});
 //register all questions in the DB
 
 
-
-
 app.use(express.static('./web'));
 app.use(cookieParser());
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({}));
 app.use(expressSession({
-    secret: 'keyboard cat',
+    secret: genUUID.default(),
     resave: true,
     saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
-
 passport.deserializeUser(function(user, done) {
   done(null, user);
 });
-
-var createUserGoogle = function (accessToken, refreshToken, profile, done){
-    models.user.findById(profile.id).then(function(u){
-        if(u == null){
-            u = {
-                id: profile.id,
-                name: profile.displayName,
-                photo: profile._json.image.url,
-                provider: profile.provider
-            };
-            models.user.create(u).then(function(){
-                return done(null, u);
-            });
-        }
-        else
-            return done(null, u);
-    });
-};
-
-var createUserFacebook = function (accessToken, refreshToken, profile, done){
-    models.user.findById(profile.id).then(function(u){
-        if(u == null){
-            u = {
-                id: profile.id,
-                name: profile.displayName,
-                photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
-                provider: profile.provider
-            };
-            models.user.create(u).then(function(){
-                return done(null, u);
-            });
-        }
-        else
-            return done(null, u);
-    });
-};
-
-
-var createUserFacebook = function (accessToken, refreshToken, profile, done){
-    models.user.findById(profile.id).then(function(u){
-        if(u == null){
-            u = {
-                id: profile.id,
-                name: profile.displayName,
-                photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
-                provider: profile.provider
-            };
-            models.user.create(u).then(function(){
-                return done(null, u);
-            });
-        }
-        else
-            return done(null, u);
-    });
-}
-
-
+// Google user create
 passport.use(new googleStrategy({
         clientID: config.googleClientID,
         clientSecret: config.googleClientSecret,
         callbackURL: config.googleCallbackURL
     },
-    createUserGoogle
+    function (accessToken, refreshToken, profile, done){
+        models.user.findById(profile.id).then(function(u){
+            if(u == null){
+                u = {
+                    id: profile.id,
+                    name: profile.displayName,
+                    photo: profile._json.image.url,
+                    provider: profile.provider
+                };
+                models.user.create(u).then(function(){
+                    return done(null, u);
+                });
+            }
+            else
+                return done(null, u);
+        });
+    }
 ));
-
+// Facebook user create
 passport.use(new facebookStrategy({
         clientID: config.facebookAPPID,
         clientSecret: config.facebookAPPSecret,
@@ -133,309 +75,392 @@ passport.use(new facebookStrategy({
         profileFields: ['id', 'name', 'displayName', 
             'photos', 'hometown', 'profileUrl', 'friends']
     },
-    createUserFacebook
+    function (accessToken, refreshToken, profile, done){
+        models.user.findById(profile.id).then(function(u){
+            if(u == null){
+                u = {
+                    id: profile.id,
+                    name: profile.displayName,
+                    photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
+                    provider: profile.provider
+                };
+                models.user.create(u).then(function(){
+                    return done(null, u);
+                });
+            }
+            else
+                return done(null, u);
+        });
+    }
 ));
 
-app.get('/getRatio/*', function(req, res){
-    var id = req.originalUrl.substr(1).split("/").pop().substr(0,36);
-    models.answer.findAll({
-        where:{
-            questionId: id
-        }
-    }).then(function(a){
-        var ratio = [],
-            total = 0,
-            qRatio;
-        if(a != null) {
-            a.forEach(function (answer) {
-                total += answer.count;
-                ratio.push({
-                    a: answer.option,
-                    color: answer.color,
-                    count: answer.count
-                });
-            });
-            qRatio = {
-                ratio: ratio,
-                total: total
-            };
-            page.getRatio(req, res, qRatio);
-        }
-        else
-            page.getBadRequest(req, res);
-    });
-});
+// admin API/Page basic auth
+let bAuth = function(req, res, next){
+    var user = basicAuth(req);
+    if(!user || !user.name || !user.pass){
+        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+        res.sendStatus(401);
+        return;
+    }
+    if(user.name === config.adminAccount && user.pass === config.adminPassword){
+        next();
+    }
+    else{
+        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+        res.sendStatus(401);
+    }
+};
 
-app.post('/updateQ', function(req, res){
-    var id = req.body.id,
-        description = req.body.question,
-        anonymous = req.body.anonymous,
-        image = req.body.image,
-        answers = [];
-    models.question.findById(id).then(function(object){
-       if(object != null && //check id is not exist
-           id.trim().length != 0 && //check id is not empty
-           req.body.options.length != 0){ // check options is not empty
-           for(var i = 0; i < req.body.options.length; i++)
-               answers.push({
-                   option: req.body.options[i].description,
-                   color: req.body.options[i].color,
-                   count: 0,
-                   questionId: id
-               });
-
-           models.answer.destroy({ where: { questionId: id},
-            force: true}).then(function(){
-              models.answer.bulkCreate(answers).then(function(){
-                  var q = {
-                      description: description,
-                      anonymous: anonymous,
-                      image: image
-                  };
-                  models.question.update(q, {
-                    where: {id: id}
-                  }).then(function(){
-                      //var d = dai(id, answers);
-                      //daList.push(d);
-                      //d.register();
-                      page.getSuccess(req, res);
-                  });
-               });
-            });
-
-       }
-       else{
-           page.getBadRequest(req, res);
-       }
-    });
-});
-
-app.post('/postQ', function(req, res){
-    var id = req.body.id,
-        description = req.body.question,
-        anonymous = req.body.anonymous,
-        image = req.body.image,
-        answers = [];
-    models.question.findById(id).then(function(object){
-       if(object == null && //check id is not exist
-           id.trim().length != 0 && //check id is not empty
-           req.body.options.length != 0){ // check options is not empty
-           for(var i = 0; i < req.body.options.length; i++)
-               answers.push({
-                   option: req.body.options[i].description,
-                   color: req.body.options[i].color,
-                   count: 0
-               });
-
-          var q = {
-              id: id,
-              description: description,
-              anonymous: anonymous,
-              image: image,
-              answers: answers
-          };
-          models.question.create(q, {
-              include: [models.answer]
-          }).then(function(){
-              //var d = dai(id, answers);
-              //daList.push(d);
-              //d.register();
-              page.getSuccess(req, res);
-          });
-       }
-       else{
-           page.getBadRequest(req, res);
-       }
-    });
-});
-app.post('/postA', function(req, res){
-    var id = req.body.id,
-        color = req.body.color,
-        login = (req.user != undefined);
-    models.question.findById(id).then(function(q){
-        if(q){
-            models.answer.findOne({
-                where:{
-                    color: color,
-                    questionId: id
-                }
-            }).then(function(a){
-                if(a){
-                    if(!q.anonymous && login){
-                        models.vote.findOne({
-                            where:{
-                                questionId: id,
-                                userId: req.user.id
-                            }
-                        }).then(function(v){
-                            if(v == null){
-                                a.increment(['count'],{ by :1});
-                                for(var i = 0; i < daList.length; i++)
-                                    if(daList[i].mac == id)
-                                        daList[i].push(a);
-                                models.vote.create({
-                                    userId: req.user.id,
-                                    questionId: id,
-                                    answerId: a.id
-                                }).then(function(){
-                                    page.getSuccess(req, res);
-                                });
-                            }
-                            else
-                                page.getBadRequest(req, res);
-                        })
-                    }
-                    else if(!q.anonymous && !login)
-                        page.getPermissionDenied(req, res);
-                    else if(q.anonymous){
-                        a.increment(['count'],{ by :1});
-                        for(var i = 0; i < daList.length; i++)
-                            if(daList[i].mac == id)
-                                daList[i].push(a);
-                        page.getSuccess(req, res);
-                    }
-                }
-                else
-                    page.getBadRequest(req, res);
-            });
-        }
-        else
-            page.getBadRequest(req, res);
-    });
-});
-
-app.get('/admin', auth, function(req, res){
-    models.question.findAll().then(function(qList){
-        page.getAdminQuestionListPage(req, res, qList);
-    });
-});
-
-app.get('/', function(req, res){
-    models.question.findAll().then(function(qList){
-        page.getQuestionListPage(req, res, qList);
-    });
-});
-
-app.get('/admin/edit/*', auth, function(req, res){
-    var component = req.originalUrl.split("/");
-    for(var i = component.length-1; i >= 0 ; i--)
-        if(component[i] != "")
-            break;
-    var id = component[i].substr(0,16);
-    models.question.findById(id).then(function(q) {
-        if(q != null){
-            models.answer.findAll({
-                where:{
-                    questionId: id
-                }
-            }).then(function(a){
-                var options = [null, null, null, null, null, null, null, null, null, null];
-                a.forEach(function(answer){
-                    config.RGBcolor.forEach(function(color, idx){
-                        if(color == answer.color){
-                            options[idx] = answer.option;
-                        }
+// RESTful API
+let getR = function(req, res){
+        models.answer.findAll({
+            where:{
+                questionId: req.params.id
+            }
+        }).then(function(a){
+            var ratio = [],
+                total = 0,
+                qRatio;
+            if(a != null) {
+                a.forEach(function (answer) {
+                    total += answer.count;
+                    ratio.push({
+                        a: answer.option,
+                        color: answer.color,
+                        count: answer.count
                     });
                 });
-                page.getQuestionEditPage(req, res, {
-                    q: q.description,
-                    image: q.image,
-                    a: options,
-                    anonymous: q.anonymous
+                qRatio = {
+                    ratio: ratio,
+                    total: total
+                };
+                response.getRatio(res, qRatio);
+            }
+            else
+                response.getBadRequest(res);
+        });
+    },
+    postQ = function(req, res){
+        if(req.body.options.length !== 0){
+            var answers = [];
+            for(var i = 0; i < req.body.options.length; i++)
+                answers.push({
+                    option: req.body.options[i].description,
+                    color: req.body.options[i].color,
+                    count: 0
                 });
+            var q = {
+                description: req.body.question,
+                anonymous: req.body.anonymous,
+                uuid: genUUID.default(),
+                image: req.body.image,
+                answers: answers
+            };
+            models.question.create(q, {
+                include: [models.answer]
+            }).then(function(q){
+                var d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+                daList.push(d);
+                d.register();
+                response.getCreated(res, q.dataValues.id);
             });
         }
-        else
-            page.getPageNotFound(req, res);
-    });
-});
+        else{
+            response.getBadRequest(res);
+        }
+    },
+    postA = function(req, res){
+        var id = req.body.id,
+            color = req.body.color,
+            login = (req.user !== undefined);
+        models.question.findById(id).then(function(q){
+            if(q){
+                models.answer.findOne({
+                    where:{
+                        color: color,
+                        questionId: id
+                    }
+                }).then(function(a){
+                    if(a){
+                        if(!q.anonymous && login){
+                            models.vote.findOne({
+                                where:{
+                                    questionId: id,
+                                    userId: req.user.id
+                                }
+                            }).then(function(v){
+                                if(v == null){
+                                    a.increment(['count'],{ by :1});
+                                    for(var i = 0; i < daList.length; i++)
+                                        if(daList[i].mac === q.uuid)
+                                            daList[i].push(a);
+                                    models.vote.create({
+                                        userId: req.user.id,
+                                        questionId: id,
+                                        answerId: a.id
+                                    }).then(function(){
+                                        response.getSuccess(res);
+                                    });
+                                }
+                                else
+                                    response.getBadRequest(res);
+                            })
+                        }
+                        else if(!q.anonymous && !login)
+                            response.getPermissionDenied(res);
+                        else if(q.anonymous){
+                            a.increment(['count'],{ by :1});
+                            for(var i = 0; i < daList.length; i++)
+                                if(daList[i].mac === q.uuid)
+                                    daList[i].push(a);
+                            response.getSuccess(res);
+                        }
+                    }
+                    else
+                        response.getBadRequest(res);
+                });
+            }
+            else
+                response.getBadRequest(res);
+        });
+    },
+    updateQ = function(req, res){
+        var id = req.body.id,
+            description = req.body.question,
+            anonymous = req.body.anonymous,
+            image = req.body.image,
+            answers = [];
+        models.question.findById(id).then(function(q){
+            if(q != null && //check id is not exist
+                id.trim().length !== 0 && //check id is not empty
+                req.body.options.length !== 0){ // check options is not empty
+                for(var i = 0; i < req.body.options.length; i++)
+                    answers.push({
+                        option: req.body.options[i].description,
+                        color: req.body.options[i].color,
+                        count: 0,
+                        questionId: id
+                    });
 
-app.get('/admin/ctl', auth, function(req, res){
-    page.getVotingCtlPage(req, res);
-});
+                models.answer.destroy({ where: { questionId: id},
+                    force: true}).then(function(){
+                    models.answer.bulkCreate(answers).then(function(){
+                        var updateInfo = {
+                            description: description,
+                            anonymous: anonymous,
+                            image: image
+                        };
+                        models.question.update(updateInfo, {
+                            where: {id: id}
+                        }).then(function(){
+                            var d = dai(id, q.uuid, answers);
+                            daList.push(d);
+                            d.register();
+                            response.getSuccess(res);
+                        });
+                    });
+                });
 
-app.get('/ctl', function(req, res){
-    page.getVotingCtlPage(req, res);
-});
+            }
+            else{
+                response.getBadRequest(res);
+            }
+        });
+    },
+    deleteQ = function(req, res){
+        var id = req.body.id;
+        models.question.destroy({
+            where: { id: id },
+            force:true
+        }).then(function(){
+            response.getSuccess(res);
+        });
+    };
+app.get('/getR/:id([0-9]+)', getR);
+app.post('/postQ', postQ);
+app.post('/postA', postA);
+app.post('/admin/updateQ', bAuth, updateQ);
+app.post('/admin/deleteQ', bAuth, deleteQ);
 
-app.post('/QuestionDelete', function(req, res){
-    var delete_id = req.body.delete_id;
-
-    models.question.destroy({
-        where: { id: delete_id }, 
-        force:true 
-    }).then(function(){
-        //send response
-        res.writeHead(200, {"Content-Type": "text/html"});
-        res.end("OK");
-    });
-});
-
-app.get('/admin/ctl/*', auth, function(req, res){
-
-    var component = req.originalUrl.split("/");
-    for(var i = component.length-1; i >= 0 ; i--)
-        if(component[i] != "")
-            break;
-    var id = component[i].substr(0,16);
-    models.question.findById(id).then(function(q) {
-        if(q != null){
-            models.answer.findAll({
-                where:{
-                    questionId: id
+// Page route
+let index = function(req, res){
+        models.question.findAll().then(function(qList){
+            response.getQuestionListPage(res, qList);
+        });
+    },
+    create = function(req, res){
+        response.getVotingCreatePage(res);
+    },
+    dashboard = function(req, res){
+        models.question.findById(req.params.id).then(function(q) {
+            if(q != null){
+                models.answer.findAll({
+                    where:{
+                        questionId: req.params.id
+                    }
+                }).then(function(a){
+                    var options = [];
+                    a.forEach(function(answer){
+                        options.push(answer.option);
+                    });
+                    response.getDashBoardPage(res, {
+                        id: req.params.id,
+                        q: q.description,
+                        image: q.image,
+                        a: options
+                    });
+                });
+            }
+            else
+                response.getPageNotFound(res);
+        });
+    },
+    login = function(req, res){
+        response.getLoginPage(res);
+    },
+    vote = function(req, res) {
+        var id = req.params.id,
+            login = (req.user !== undefined);
+        models.question.findById(id).then(function(q){
+            if(q != null){
+                if(q.anonymous){
+                    models.answer.findAll({
+                        where: {
+                            questionId: id
+                        }
+                    }).then(function (a) {
+                        var options = [];
+                        a.forEach(function (answer) {
+                            options.push({
+                                description: answer.option,
+                                color: answer.color
+                            });
+                        });
+                        response.getVotingPage(res, {
+                            q: q.description,
+                            anonymous: q.anonymous,
+                            o: options,
+                            useDisqus: config.useDisqus
+                        });
+                    });
                 }
-            }).then(function(a){
-                var options = [];
-                a.forEach(function(answer){
-                    options.push(answer.option);
-                });
-                page.getDashBoardPage(req, res, {
-                    q: q.description,
-                    image: q.image,
-                    a: options
-                }, true);
-            });
-        }
-        else
-            page.getPageNotFound(req, res);
-    });
-});
+                else{
+                    if(login){
+                        models.answer.findAll({
+                            where: {
+                                questionId: id
+                            }
+                        }).then(function (a) {
+                            var options = [];
+                            a.forEach(function (answer) {
+                                options.push({
+                                    description: answer.option,
+                                    color: answer.color
+                                });
+                            });
 
-app.get('/ctl/*', function(req, res){
-
-    var component = req.originalUrl.split("/");
-    for(var i = component.length-1; i >= 0 ; i--)
-        if(component[i] != "")
-            break;
-    var id = component[i];
-    models.question.findById(id).then(function(q) {
-        if(q != null){
-            models.answer.findAll({
-                where:{
-                    questionId: id
+                            if(!q.anonymous) {
+                                models.vote.findOne({
+                                    where: {
+                                        questionId: id,
+                                        userId: req.user.id
+                                    }
+                                }).then(function (v) {
+                                    if(v) {
+                                        models.answer.findById(v.answerId).then(function (va) {
+                                            response.getVotingPage(res, {
+                                                q: q.description,
+                                                anonymous: q.anonymous,
+                                                o: options,
+                                                va: va.option,
+                                                n: req.user.name,
+                                                p: req.user.photo,
+                                                useDisqus: config.useDisqus
+                                            })
+                                        });
+                                    }
+                                    else{
+                                        response.getVotingPage(res, {
+                                            q: q.description,
+                                            anonymous: q.anonymous,
+                                            o: options,
+                                            n: req.user.name,
+                                            p: req.user.photo,
+                                            useDisqus: config.useDisqus
+                                        });
+                                    }
+                                });
+                            }
+                            else {
+                                response.getVotingPage(res, {
+                                    q: q.description,
+                                    anonymous: q.anonymous,
+                                    o: options,
+                                    n: req.user.name,
+                                    p: req.user.photo,
+                                    useDisqus: config.useDisqus
+                                });
+                            }
+                        });
+                    }
+                    else{
+                        req.session.returnTo = req.path;
+                        res.redirect('/login');
+                    }
                 }
-            }).then(function(a){
-                var options = [];
-                a.forEach(function(answer){
-                    options.push(answer.option);
+            }
+            else
+                response.getPageNotFound(res);
+        });
+    },
+    admin = function(req, res){
+        models.question.findAll().then(function(qList){
+            response.getAdminQuestionListPage(res, qList);
+        });
+    },
+    adminEdit = function(req, res){
+        models.question.findById(req.params.id).then(function(q) {
+            if(q != null){
+                models.answer.findAll({
+                    where:{
+                        questionId: req.params.id
+                    }
+                }).then(function(a){
+                    var options = new Array(10);
+                    options.fill(null);
+                    a.forEach(function(answer){
+                        var color = Object.keys(config.color);
+                        color.forEach(function(color, idx){
+                            if(color[idx] === answer.color){
+                                options[idx] = answer.option;
+                            }
+                        });
+                    });
+                    response.getQuestionEditPage(res, {
+                        q: q.description,
+                        image: q.image,
+                        a: options,
+                        anonymous: q.anonymous
+                    });
                 });
-                page.getDashBoardPage(req, res, {
-                    q: q.description,
-                    image: q.image,
-                    a: options
-                });
-            });
-        }
-        else
-            page.getPageNotFound(req, res);
-    });
-});
+            }
+            else
+                response.getPageNotFound(res);
+        });
+    };
+app.get('^/index(/){0,1}$|^/$', index);
+app.get('^/create(/){0,1}$', create);
+app.get('^/dashboard/:id([0-9]+)(/){0,1}$', dashboard);
+app.get('^/login(/){0,1}$', login);
+app.get('^/vote/:id([0-9]+)(/){0,1}$', vote);
+app.get('^/admin(/){0,1}$', bAuth, admin);
+app.get('^/admin/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
 
+//OAuth
 app.get('/auth/google', passport.authenticate('google',
     { scope: ['profile', 'email'] })
 );
 app.get('/auth/facebook', passport.authenticate('facebook'));
-
 app.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/login' }),
     function(req, res) {
@@ -451,101 +476,3 @@ app.get('/auth/facebook/callback',
     }
 );
 
-app.get('/login', function(req, res){
-    page.getLoginPage(req, res);
-});
-
-app.get('/*', function(req, res) {
-    var id = req.originalUrl.substr(1),
-        login = (req.user != undefined);
-    models.question.findById(id).then(function(q){
-        if(q != null){
-            if(q.anonymous){
-                models.answer.findAll({
-                        where: {
-                            questionId: id
-                        }
-                }).then(function (a) {
-                    var options = [];
-                    a.forEach(function (answer) {
-                        options.push({
-                            description: answer.option,
-                            color: answer.color
-                        });
-                    });
-                    page.getVotingPage(req, res, {
-                        q: q.description,
-                        anonymous: q.anonymous,
-                        o: options
-                    });
-                });
-            }
-            else{
-                if(login){
-                    models.answer.findAll({
-                        where: {
-                            questionId: id
-                        }
-                    }).then(function (a) {
-                        var options = [];
-                        a.forEach(function (answer) {
-                            options.push({
-                                description: answer.option,
-                                color: answer.color
-                            });
-                        });
-
-                        if(!q.anonymous) {
-                            models.vote.findOne({
-                                where: {
-                                    questionId: id,
-                                    userId: req.user.id
-                                }
-                            }).then(function (v) {
-                                if(v) {
-                                    models.answer.findById(v.answerId).then(function (va) {
-                                        page.getVotingPage(req, res, {
-                                            q: q.description,
-                                            anonymous: q.anonymous,
-                                            o: options,
-                                            va: va.option,
-                                            n: req.user.name,
-                                            p: req.user.photo
-                                        })
-                                    });
-                                }
-                                else{
-                                    page.getVotingPage(req, res, {
-                                        q: q.description,
-                                        anonymous: q.anonymous,
-                                        o: options,
-                                        n: req.user.name,
-                                        p: req.user.photo
-                                    });
-                                }
-                            });
-                        }
-                        else {
-                            page.getVotingPage(req, res, {
-                                q: q.description,
-                                anonymous: q.anonymous,
-                                o: options,
-                                n: req.user.name,
-                                p: req.user.photo
-                            });
-                        }
-                    });
-                }
-                else{
-                    req.session.returnTo = req.path;
-                    res.redirect('login');
-                }
-            }
-        }
-        else
-            page.getPageNotFound(req, res);
-    });
-});
-
-
-http.listen((process.env.PORT || config.port), '0.0.0.0');

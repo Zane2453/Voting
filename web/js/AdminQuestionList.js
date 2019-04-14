@@ -9,11 +9,11 @@ $(document).ready(function(){
             //ajax
             $.ajax({
                 type: "POST",
-                url: location.origin + "/QuestionDelete",
+                url: location.origin + "/admin/deleteQ",
                 cache: false,
                 data: JSON.stringify(
                 {
-                    delete_id : question_id
+                    id : question_id
                 }),
                 contentType: "application/json",
                 error: function(e){
@@ -23,8 +23,6 @@ $(document).ready(function(){
                 success: function(data){
                     //remove this human from table
                     $(self).parent().parent().parent().parent().remove();
-
-                    alert("刪除成功!!");
                     location.reload();
                 }
             });
@@ -32,14 +30,5 @@ $(document).ready(function(){
         else{
             return false;
         }
-    });
-
-    $('.edit').on('click', function(){
-        var question_id = $(this).parent().parent().find('a').attr('href').split("/")[2],
-            edit_url = location.origin;
-
-        console.log(question_id);
-
-        window.location.replace("http://stackoverflow.com");
     });
 });

@@ -2,18 +2,18 @@ var fs = require('fs'),
     ejs = require('ejs'),
     config = require('./config'),
     votingPagePath = __dirname + "/web/html/Voting.ejs",
-    votingControlPagePath = __dirname + "/web/html/VotingCtl.ejs",
+    votingCreatePagePath = __dirname + "/web/html/VotingCreate.ejs",
     dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs",
     loginPagePath = __dirname + "/web/html/Login.ejs",
     questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
-    AdminquestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
-    QuestionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs";
+    adminQuestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
+    questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs";
 
-var Page = function () {};
+var Response = function () {};
 
-Page.prototype = {
+Response.prototype = {
     
-    getVotingPage : function (req, res, data) {
+    getVotingPage : function (res, data) {
         fs.readFile(votingPagePath,
             function (err, contents) {
                 if (err)
@@ -21,13 +21,14 @@ Page.prototype = {
                 else {
                     contents = contents.toString('utf8');
                     res.writeHead(200, {"Content-Type": "text/html"});
+                    console.log(data);
                     res.end(ejs.render(contents, data));
                 }
             }
         );
     },
-    getVotingCtlPage : function (req, res) {
-        fs.readFile(votingControlPagePath,
+    getVotingCreatePage : function (res) {
+        fs.readFile(votingCreatePagePath,
             function (err, contents) {
                 if (err)
                     console.log(err);
@@ -39,7 +40,7 @@ Page.prototype = {
             }
         );   
     },
-    getDashBoardPage : function (req, res, question, isadmin=false) {
+    getDashBoardPage : function (res, question, isadmin=false) {
         fs.readFile(dashBoardPagePath,
             function (err, contents) {
                 if (err)
@@ -48,6 +49,7 @@ Page.prototype = {
                     contents = contents.toString('utf8');
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.end(ejs.render(contents, {
+                        id: question.id,
                         q: question.q,
                         image: question.image,
                         a: question.a,
@@ -57,7 +59,7 @@ Page.prototype = {
             }
         );
     },
-    getLoginPage : function (req, res) {
+    getLoginPage : function (res) {
         fs.readFile(loginPagePath,
             function (err, contents) {
                 if (err)
@@ -70,7 +72,7 @@ Page.prototype = {
             }
         );
     },
-    getQuestionListPage : function (req, res, qList) {
+    getQuestionListPage : function (res, qList) {
         fs.readFile(questionListPagePath,
             function (err, contents) {
                 if (err)
@@ -83,22 +85,8 @@ Page.prototype = {
             }
         );
     },
-    getQuestionEditPage : function (req, res, question) {
-        var obj = Object.assign({},config.color, question);
-        fs.readFile(QuestionEditPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, obj));
-                }
-            }
-        );   
-    },
-    getAdminQuestionListPage : function (req, res, qList) {
-        fs.readFile(AdminquestionListPagePath,
+    getAdminQuestionListPage : function (res, qList) {
+        fs.readFile(adminQuestionListPagePath,
             function (err, contents) {
                 if (err)
                     console.log(err);
@@ -110,28 +98,46 @@ Page.prototype = {
             }
         );
     },
-    getSuccess: function(req, res){
+    getQuestionEditPage : function (res, question) {
+        var obj = Object.assign({},config.color, question);
+        fs.readFile(questionEditPagePath,
+            function (err, contents) {
+                if (err)
+                    console.log(err);
+                else {
+                    contents = contents.toString('utf8');
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.end(ejs.render(contents, obj));
+                }
+            }
+        );
+    },
+    getSuccess: function(res){
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end("success!");
     },
-    getRatio: function(req, res, data){
+    getCreated: function(res, id){
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(JSON.stringify(id));
+    },
+    getRatio: function(res, data){
         res.writeHead(200, {"Content-Type": "application/json"});
         res.end(JSON.stringify(data));
     },
-    getPageNotFound: function (req, res) {
+    getPageNotFound: function (res) {
         res.writeHead(404, {"Content-Type": "text/html"});
         res.end("page not found!");
     },
-    getBadRequest: function(req, res){
+    getBadRequest: function(res){
         res.writeHead(400, {"Content-Type": "text/html"});
         res.end("bad request!");
     },
-    getPermissionDenied: function(req, res){
+    getPermissionDenied: function(res){
         res.writeHead(403, {"Content-Type": "text/html"});
         res.end("permission denied!");
     },
 };
 
-exports.page = new Page();
+exports.response = new Response();
 
 

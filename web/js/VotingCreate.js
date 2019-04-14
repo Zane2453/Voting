@@ -2,15 +2,14 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function(){
-   var qId = _uuid();
+    //initial value for base64TextArea
+    $('#base64TextArea').val("");
+    //load picture handler
+    $("#uploadImage").change(function(){
+        getImageBase64str( this );
+    });
     //submit btn
     $("#submit").click(function(){
-       //initial value for base64TextArea
-       $('#base64TextArea').val("");
-       //load picture handler
-       $("#uploadImage").change(function(){
-           getImageBase64str( this );
-       });
        var question = $("#question").val(),
            anonymous = !$('#anonymous').is(":checked");
        if(question.trim().length != 0){
@@ -42,7 +41,6 @@ $(document).ready(function(){
                     // dataType: 'json',
                     data: JSON.stringify(
                     {
-                        id : qId, 
                         question : question, 
                         options : options, 
                         anonymous : anonymous, 
@@ -53,16 +51,8 @@ $(document).ready(function(){
                         location.reload();
                         console.log(e);
                     },
-                    success: function () {
-                        var component = location.href.split("/");
-                        while(true){
-                           if(component[component.length-1] == "")
-                               component.pop();
-                           else
-                               break;
-                        }
-                        component = component.join("/");
-                        window.location = component + "/" +qId;
+                    success: function (id) {
+                        window.location = "/dashboard/" + id;
                     }
                 });
            }
@@ -96,7 +86,7 @@ var getImageBase64str = function(input) {
                     var canvas = $('<canvas width="' + width + '" height="' + height + '"></canvas>')[0];
                     var ctx = canvas.getContext('2d');
                     ctx.drawImage(image, 0, 0, width, height);
-                    
+
                     //set compressed img to tmp textarea storage
                     var imagedata = canvas.toDataURL();
                     $('#base64TextArea').val(imagedata);
@@ -119,17 +109,4 @@ var getImageBase64str = function(input) {
         //flush base64str in textarea
         $('#base64TextArea').val("");
     }
-}
-
-var _uuid = function() {
-    var d = Date.now();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now(); //use high-precision timer if available
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
 };
-

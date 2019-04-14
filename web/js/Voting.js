@@ -29,7 +29,7 @@ var getCookie = function(cname) {
 var setRatio = function(id){
     $.ajax({
         type: "GET",
-        url: location.origin + "/getRatio/" + id,
+        url: location.origin + "/getR/" + id,
         cache: false,
         dataType: 'json',
         contentType: "application/json",
@@ -53,7 +53,7 @@ var setRatio = function(id){
 };
 
 $(document).ready(function(){
-    var id = location.pathname.split("/").pop(),
+    var id = getQuestionId();
         answer = getCookie(id);
     if((answer != "" && (anonymous == true)) ||
         (va != undefined && (anonymous == false)) ) {

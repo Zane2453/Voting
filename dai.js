@@ -2,7 +2,7 @@
  * Created by kuan on 2018/8/27.
  */
 
-var dai = function (mac, no, answers) {
+var dai = function (no, mac, answers) {
     var config = require('./config');
     if(config.IoTtalkVersion == 1) {
         var dan = require('./dan').dan(),
@@ -30,7 +30,7 @@ var dai = function (mac, no, answers) {
             };
             dan.init(pull, config.IoTtalkURL, mac, {
                 'dm_name': 'VotingMachine',
-                'd_name': "Voting." + mac,
+                'd_name': no + ".Voting",
                 'u_name': 'yb',
                 'is_sim': false,
                 'df_list': IDFList
@@ -47,7 +47,7 @@ var dai = function (mac, no, answers) {
                 //catches uncaught exceptions
                 process.on('uncaughtException', dan.deregister);
             });
-        };
+
         var push = function (answer) {
             for (var i = 0; i < answers.length; i++)
                 if (answers[i].option == answer.option)
@@ -81,7 +81,7 @@ var dai = function (mac, no, answers) {
                 'on_signal': on_signal,
                 'on_data': on_data,
                 'idf_list': IDFList,
-                'name': no.toString() + ".Voting",
+                'name': no + ".Voting",
                 'profile': {
                     'model': 'VotingMachine',
                 },
@@ -114,6 +114,7 @@ var dai = function (mac, no, answers) {
         'mac': mac
     }
 };
+
 
 exports.dai = dai;
 

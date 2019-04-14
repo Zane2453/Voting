@@ -2,8 +2,6 @@
  * Created by kuan on 2018/8/25.
  */
 $(document).ready(function(){
-    var qId = getLocationId();
-
     //initial value for base64TextArea
     $('#base64TextArea').val("");
 
@@ -44,12 +42,12 @@ $(document).ready(function(){
 
                 $.ajax({
                     type: "POST",
-                    url: "/updateQ",
+                    url: "/admin/updateQ",
                     cache: false,
                     // dataType: 'json',
                     data: JSON.stringify(
                     {
-                        id : qId, 
+                        id : getQuestionId(),
                         question : question, 
                         options : options, 
                         anonymous : anonymous, 
@@ -61,16 +59,8 @@ $(document).ready(function(){
                         console.log(e);
                     },
                     success: function () {
-                        var component = location.href.split("/");
-                        while(true){
-                           if(component[component.length-1] == "")
-                               component.pop();
-                           else
-                               break;
-                        }
-                        component[component.length - 2] = 'ctl'
-                        component = component.join("/");
-                        window.location = component;
+
+                        window.location = "/dashboard/" + getQuestionId();
                     }
                 });
            }
@@ -127,17 +117,4 @@ var getImageBase64str = function(input) {
         //flush base64str in textarea
         $('#base64TextArea').val("");
     }
-}
-
-var _uuid = function() {
-    var d = Date.now();
-    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
-        d += performance.now(); //use high-precision timer if available
-    }
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = (d + Math.random() * 16) % 16 | 0;
-        d = Math.floor(d / 16);
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
 };
-
