@@ -136,6 +136,10 @@ Response.prototype = {
         res.writeHead(403, {"Content-Type": "text/html"});
         res.end("permission denied!");
     },
+    getConflict: function(res){
+        res.writeHead(409, {"Content-Type": "text/html"});
+        res.end("conflict!");
+    },
 };
 
 exports.response = new Response();

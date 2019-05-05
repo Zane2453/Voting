@@ -113,169 +113,175 @@ let bAuth = function(req, res, next){
 
 // RESTful API
 let getR = function(req, res){
-        models.answer.findAll({
-            where:{
-                questionId: req.params.id
-            }
-        }).then(function(a){
-            var ratio = [],
-                total = 0,
-                qRatio;
-            if(a != null) {
-                a.forEach(function (answer) {
-                    total += answer.count;
-                    ratio.push({
-                        a: answer.option,
-                        color: answer.color,
-                        count: answer.count
+        let queryObj = { questionId: req.params.id };
+        models.answer.findAll({ where: queryObj })
+            .then((a) => {
+                let ratio = [],
+                    total = 0,
+                    qRatio;
+                if(a != null) {
+                    a.forEach(function (answer) {
+                        total += answer.count;
+                        ratio.push({
+                            a: answer.option,
+                            color: answer.color,
+                            count: answer.count
+                        });
                     });
-                });
-                qRatio = {
-                    ratio: ratio,
-                    total: total
-                };
-                response.getRatio(res, qRatio);
-            }
-            else
-                response.getBadRequest(res);
+                    qRatio = {
+                        ratio: ratio,
+                        total: total
+                    };
+                    response.getRatio(res, qRatio);
+                }
+                else
+                    response.getBadRequest(res);
         });
     },
     postQ = function(req, res){
         if(req.body.options.length !== 0){
-            var answers = [];
-            for(var i = 0; i < req.body.options.length; i++)
+            let answers = [];
+            for(let i = 0; i < req.body.options.length; i++)
                 answers.push({
                     option: req.body.options[i].description,
                     color: req.body.options[i].color,
                     count: 0
                 });
-            var q = {
+            let q = {
                 description: req.body.question,
                 anonymous: req.body.anonymous,
                 uuid: genUUID.default(),
                 image: req.body.image,
                 answers: answers
             };
-            models.question.create(q, {
-                include: [models.answer]
-            }).then(function(q){
-                var d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
-                daList.push(d);
-                d.register();
-                response.getCreated(res, q.dataValues.id);
-            });
-        }
-        else{
-            response.getBadRequest(res);
-        }
-    },
-    postA = function(req, res){
-        var id = req.body.id,
-            color = req.body.color,
-            login = (req.user !== undefined);
-        models.question.findById(id).then(function(q){
-            if(q){
-                models.answer.findOne({
-                    where:{
-                        color: color,
-                        questionId: id
-                    }
-                }).then(function(a){
-                    if(a){
-                        if(!q.anonymous && login){
-                            models.vote.findOne({
-                                where:{
-                                    questionId: id,
-                                    userId: req.user.id
-                                }
-                            }).then(function(v){
-                                if(v == null){
-                                    a.increment(['count'],{ by :1});
-                                    for(var i = 0; i < daList.length; i++)
-                                        if(daList[i].mac === q.uuid)
-                                            daList[i].push(a);
-                                    models.vote.create({
-                                        userId: req.user.id,
-                                        questionId: id,
-                                        answerId: a.id
-                                    }).then(function(){
-                                        response.getSuccess(res);
-                                    });
-                                }
-                                else
-                                    response.getBadRequest(res);
-                            })
-                        }
-                        else if(!q.anonymous && !login)
-                            response.getPermissionDenied(res);
-                        else if(q.anonymous){
-                            a.increment(['count'],{ by :1});
-                            for(var i = 0; i < daList.length; i++)
-                                if(daList[i].mac === q.uuid)
-                                    daList[i].push(a);
-                            response.getSuccess(res);
-                        }
-                    }
-                    else
-                        response.getBadRequest(res);
+            models.question.create(q, { include: [models.answer] })
+                .then((q) => {
+                    let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+                    daList.push(d);
+                    d.register();
+                    response.getCreated(res, q.dataValues.id);
                 });
-            }
-            else
-                response.getBadRequest(res);
-        });
+        }
+        else
+            response.getBadRequest(res);
+    },
+    postA = function (req, res) {
+        let id = req.body.id,
+            color = req.body.color,
+            login = (req.user !== undefined),
+            queryObj,
+            question,
+            answer;
+        models.question.findById(id)
+            .then((q) => {
+                question = q;
+                if (q){
+                    queryObj = { color: color, questionId: id };
+                    return models.answer.findOne({ where: queryObj });
+                }
+                else
+                    return Promise.reject(400);
+            })
+            .then((a) => {
+                if (a) {
+                    answer = a;
+                    if (!question.anonymous && login) {
+                        queryObj = { questionId: id, userId: req.user.id };
+                        return models.vote.findOne({ where: queryObj });
+                    } else if (!question.anonymous && !login) {
+                        return Promise.reject(401);
+                    } else if (question.anonymous) {
+                        a.increment(['count'], {by: 1});
+                        for (let i = 0; i < daList.length; i++)
+                            if (daList[i].mac === question.uuid)
+                                daList[i].push(a);
+                        return Promise.reject(200);
+                    }
+                }
+                else
+                    return Promise.reject(400);
+            })
+            .then((v) => {
+                if (v == null){
+                    answer.increment(['count'],{ by :1});
+                    for(var i = 0; i < daList.length; i++)
+                        if(daList[i].mac === question.uuid)
+                            daList[i].push(answer);
+                    models.vote.create({
+                        userId: req.user.id,
+                        questionId: id,
+                        answerId: answer.id
+                    });
+                    response.getSuccess(res);
+                }
+                else
+                    return Promise.reject(409);
+            })
+            .catch(function(code){
+                if(code == 200)
+                    response.getSuccess(res);
+                else if(code == 401)
+                    response.getPermissionDenied(res);
+                else if(code == 404)
+                    response.getBadRequest(res);
+                else if(code == 409)
+                    response.getConflict(res);
+            });
     },
     updateQ = function(req, res){
-        var id = req.body.id,
+        let id = req.body.id,
             description = req.body.question,
             anonymous = req.body.anonymous,
             image = req.body.image,
             answers = [];
-        models.question.findById(id).then(function(q){
-            if(q != null && //check id is not exist
-                id.trim().length !== 0 && //check id is not empty
-                req.body.options.length !== 0){ // check options is not empty
-                for(var i = 0; i < req.body.options.length; i++)
-                    answers.push({
-                        option: req.body.options[i].description,
-                        color: req.body.options[i].color,
-                        count: 0,
-                        questionId: id
-                    });
-
-                models.answer.destroy({ where: { questionId: id},
-                    force: true}).then(function(){
-                    models.answer.bulkCreate(answers).then(function(){
-                        var updateInfo = {
-                            description: description,
-                            anonymous: anonymous,
-                            image: image
-                        };
-                        models.question.update(updateInfo, {
-                            where: {id: id}
-                        }).then(function(){
-                            var d = dai(id, q.uuid, answers);
-                            daList.push(d);
-                            d.register();
-                            response.getSuccess(res);
+        models.question.findById(id)
+            .then((q) => {
+                if (q != null && //check id is not exist
+                    id.trim().length !== 0 && //check id is not empty
+                    req.body.options.length !== 0) { // check options is not empty
+                    for (var i = 0; i < req.body.options.length; i++)
+                        answers.push({
+                            option: req.body.options[i].description,
+                            color: req.body.options[i].color,
+                            count: 0,
+                            questionId: id
                         });
-                    });
-                });
-
-            }
-            else{
-                response.getBadRequest(res);
-            }
-        });
+                }
+                else
+                    Promise.reject(403);
+            })
+            .then(() => {
+                return models.answer.destroy({ where: { questionId: id}, force: true});
+            })
+            .then(() => {
+                return models.answer.bulkCreate(answers);
+            })
+            .then(() => {
+                let updateInfo = {
+                    description: description,
+                    anonymous: anonymous,
+                    image: image
+                };
+                return models.question.update(updateInfo, { where: {id: id} });
+            })
+            .then(() => {
+                let d = dai(id, q.uuid, answers);
+                daList.push(d);
+                d.register();
+                response.getSuccess(res);
+            })
+            .catch(() => {
+                    response.getBadRequest(res);
+            });
     },
     deleteQ = function(req, res){
-        var id = req.body.id;
-        models.question.destroy({
-            where: { id: id },
-            force:true
-        }).then(function(){
-            response.getSuccess(res);
-        });
+        let id = req.body.id;
+        models.question.destroy({ where: { id: id }, force:true })
+            .then(() => {
+                response.getSuccess(res);
+            });
     };
+
 app.get('/getR/:id([0-9]+)', getR);
 app.post('/postQ', postQ);
 app.post('/postA', postA);
@@ -429,9 +435,9 @@ let index = function(req, res){
                     var options = new Array(10);
                     options.fill(null);
                     a.forEach(function(answer){
-                        var color = Object.keys(config.color);
-                        color.forEach(function(color, idx){
-                            if(color[idx] === answer.color){
+                        var color = Object.values(config.color);
+                        color.forEach(function(c, idx){
+                            if(c === answer.color){
                                 options[idx] = answer.option;
                             }
                         });

@@ -2,28 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d2f59e85-dd25-415b-9eb9-d0d69ea68a06" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config_template.js" beforeDir="false" afterPath="$PROJECT_DIR$/config_template.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dai.js" beforeDir="false" afterPath="$PROJECT_DIR$/dai.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/response.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/css/DashBoard.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/css/DashBoard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/css/VotingCtl.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/css/VotingCreate.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/html/AdminQuestionList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/web/html/AdminQuestionList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/html/DashBoard.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/web/html/DashBoard.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/html/QuestionEdit.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/web/html/QuestionEdit.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/html/QuestionList.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/web/html/QuestionList.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/html/Voting.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/web/html/Voting.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/html/VotingCtl.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/web/html/VotingCreate.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/js/AdminQuestionList.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/AdminQuestionList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/js/DashBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/DashBoard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/js/QuestionEdit.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/QuestionEdit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/js/Voting.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/Voting.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/js/VotingCtl.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/VotingCreate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/js/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/utils.js" afterDir="false" />
     </list>
     <ignored path="vote.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -44,32 +23,71 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="420" column="34" selection-start-line="420" selection-start-column="34" selection-end-line="420" selection-end-column="34" />
+            <state relative-caret-position="562">
+              <caret line="251" column="12" selection-start-line="251" selection-start-column="12" selection-end-line="251" selection-end-column="12" />
               <folding>
-                <element signature="e#2919#3062#0" />
-                <element signature="e#2617#3067#0" />
-                <element signature="e#3124#3381#0" />
-                <element signature="e#2951#3454#0" />
-                <element signature="e#3139#3621#0" />
-                <element signature="e#3642#4333#0" />
-                <element signature="e#5915#6799#0" />
-                <element signature="e#6831#8981#0" />
-                <element signature="e#7664#9338#0" />
-                <element signature="e#8969#9161#0" />
-                <element signature="e#9328#9336#0" />
-                <element signature="e#10459#10501#0" />
-                <element signature="e#10535#11234#0" />
-                <element signature="e#11559#11594#0" />
-                <element signature="e#11633#15505#0" />
-                <element signature="e#16304#16438#0" />
-                <element signature="e#15383#16438#0" />
-                <element signature="e#12154#12249#0" />
-                <element signature="e#12191#12286#0" />
+                <element signature="e#3642#4514#0" />
+                <element signature="e#4546#5539#0" />
+                <element signature="e#4514#5394#0" />
+                <element signature="e#4822#5045#0" />
+                <element signature="e#5219#5442#0" />
+                <element signature="e#5497#7934#0" />
+                <element signature="e#5738#6161#0" />
+                <element signature="e#6056#6778#0" />
+                <element signature="e#6510#6699#0" />
+                <element signature="e#7605#7910#0" />
+                <element signature="e#9209#9349#0" />
+                <element signature="e#9474#9643#0" />
+                <element signature="e#9615#9818#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/html/QuestionEdit.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="495">
+              <caret line="68" column="66" lean-forward="true" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
+              <folding>
+                <element signature="n#div#0;n#div#4;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#div#4;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#div#6;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/html/QuestionList.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="281">
+              <caret line="17" column="22" lean-forward="true" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/html/VotingCreate.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="647">
+              <caret line="53" column="66" lean-forward="true" selection-start-line="53" selection-start-column="66" selection-end-line="53" selection-end-column="66" />
+              <folding>
+                <element signature="n#style#0;n#div#3;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#div#5;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config_template.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="456">
+              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
             </state>
           </provider>
         </entry>
@@ -78,34 +96,7 @@
         <entry file="file://$PROJECT_DIR$/web/js/AdminQuestionList.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="513">
-              <caret line="27" column="15" lean-forward="true" selection-start-line="27" selection-start-column="15" selection-end-line="27" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/html/AdminQuestionList.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="443">
-              <caret line="36" column="32" lean-forward="true" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/css/Voting.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/css/DashBoard.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="23" column="1" lean-forward="true" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+              <caret line="27" column="15" selection-start-line="27" selection-start-column="15" selection-end-line="27" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -113,8 +104,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/response.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="37" column="61" selection-start-line="37" selection-start-column="56" selection-end-line="37" selection-end-column="61" />
+            <state relative-caret-position="135">
+              <caret line="90" column="24" lean-forward="true" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -122,26 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="20" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dan2.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2098">
-              <caret line="157" column="14" selection-start-line="157" selection-start-column="6" selection-end-line="157" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/html/DashBoard.ejs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-72">
-              <caret line="21" column="33" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="33" />
+            <state relative-caret-position="323">
+              <caret line="17" column="56" lean-forward="true" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
             </state>
           </provider>
         </entry>
@@ -188,7 +161,6 @@
       <find>ctl</find>
       <find>req</find>
       <find>genUUID</find>
-      <find>getQuestionEditPage</find>
       <find>getAdminQuestionListPage</find>
       <find>edit</find>
       <find>create</find>
@@ -198,6 +170,7 @@
       <find>color</find>
       <find>option9Color</find>
       <find>rgb</find>
+      <find>getQuestionEditPage</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -230,7 +203,6 @@
         <option value="$PROJECT_DIR$/web/js/VotingCtl.js" />
         <option value="$PROJECT_DIR$/page.js" />
         <option value="$PROJECT_DIR$/web/html/Login.ejs" />
-        <option value="$PROJECT_DIR$/response.js" />
         <option value="$PROJECT_DIR$/web/html/QuestionEdit.ejs" />
         <option value="$PROJECT_DIR$/web/html/QuestionList.ejs" />
         <option value="$PROJECT_DIR$/web/js/Voting.js" />
@@ -239,10 +211,11 @@
         <option value="$PROJECT_DIR$/web/js/QuestionEdit.js" />
         <option value="$PROJECT_DIR$/web/html/VotingCreate.ejs" />
         <option value="$PROJECT_DIR$/web/js/VotingCreate.js" />
-        <option value="$PROJECT_DIR$/config.js" />
         <option value="$PROJECT_DIR$/web/css/DashBoard.css" />
-        <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/web/html/AdminQuestionList.ejs" />
+        <option value="$PROJECT_DIR$/response.js" />
+        <option value="$PROJECT_DIR$/config.js" />
+        <option value="$PROJECT_DIR$/server.js" />
       </list>
     </option>
   </component>
@@ -362,12 +335,14 @@
       <workItem from="1536670952416" duration="688000" />
       <workItem from="1536752126272" duration="7220000" />
       <workItem from="1554444353925" duration="19546000" />
-      <workItem from="1555130347884" duration="28670000" />
+      <workItem from="1555130347884" duration="29114000" />
+      <workItem from="1555686139415" duration="76000" />
+      <workItem from="1557036289673" duration="8038000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="122618000" />
+    <option name="totallyTimeSpent" value="131176000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -383,7 +358,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.21570013" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.21570013" />
       <window_info id="Structure" order="2" weight="0.24946997" />
       <window_info anchor="bottom" id="Event Log" order="0" sideWeight="0.5024665" side_tool="true" weight="0.6691542" />
       <window_info anchor="bottom" id="Version Control" order="1" weight="0.32883435" />
@@ -489,38 +464,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/html/QuestionEdit.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="48" lean-forward="true" selection-start-line="18" selection-start-column="48" selection-end-line="18" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/html/Login.ejs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
           <caret line="23" column="13" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/html/QuestionList.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/html/Voting.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="21" column="6" lean-forward="true" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config_template.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="35" column="25" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -545,13 +492,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/html/VotingCreate.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/js/VotingCreate.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -566,31 +506,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/js/DashBoard.js">
+    <entry file="file://$PROJECT_DIR$/web/html/AdminQuestionList.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="46" selection-start-line="7" selection-start-column="46" selection-end-line="7" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dan2.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2098">
-          <caret line="157" column="14" selection-start-line="157" selection-start-column="6" selection-end-line="157" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/response.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="37" column="61" selection-start-line="37" selection-start-column="56" selection-end-line="37" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="20" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="20" />
+        <state relative-caret-position="684">
+          <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -601,13 +520,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/html/DashBoard.ejs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-72">
-          <caret line="21" column="33" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/css/DashBoard.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
@@ -615,45 +527,111 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server.js">
+    <entry file="file://$PROJECT_DIR$/dan2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="420" column="34" selection-start-line="420" selection-start-column="34" selection-end-line="420" selection-end-column="34" />
-          <folding>
-            <element signature="e#2919#3062#0" />
-            <element signature="e#2617#3067#0" />
-            <element signature="e#3124#3381#0" />
-            <element signature="e#2951#3454#0" />
-            <element signature="e#3139#3621#0" />
-            <element signature="e#3642#4333#0" />
-            <element signature="e#5915#6799#0" />
-            <element signature="e#6831#8981#0" />
-            <element signature="e#7664#9338#0" />
-            <element signature="e#8969#9161#0" />
-            <element signature="e#9328#9336#0" />
-            <element signature="e#10459#10501#0" />
-            <element signature="e#10535#11234#0" />
-            <element signature="e#11559#11594#0" />
-            <element signature="e#11633#15505#0" />
-            <element signature="e#16304#16438#0" />
-            <element signature="e#15383#16438#0" />
-            <element signature="e#12154#12249#0" />
-            <element signature="e#12191#12286#0" />
-          </folding>
+        <state relative-caret-position="2983">
+          <caret line="157" column="14" selection-start-line="157" selection-start-column="6" selection-end-line="157" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/html/DashBoard.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="21" column="33" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/js/DashBoard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="46" selection-start-line="7" selection-start-column="46" selection-end-line="7" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/html/Voting.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="23" column="21" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/js/AdminQuestionList.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
-          <caret line="27" column="15" lean-forward="true" selection-start-line="27" selection-start-column="15" selection-end-line="27" selection-end-column="15" />
+          <caret line="27" column="15" selection-start-line="27" selection-start-column="15" selection-end-line="27" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/html/AdminQuestionList.ejs">
+    <entry file="file://$PROJECT_DIR$/web/html/VotingCreate.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="443">
-          <caret line="36" column="32" lean-forward="true" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
+        <state relative-caret-position="647">
+          <caret line="53" column="66" lean-forward="true" selection-start-line="53" selection-start-column="66" selection-end-line="53" selection-end-column="66" />
+          <folding>
+            <element signature="n#style#0;n#div#3;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#div#5;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config_template.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/html/QuestionList.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="17" column="22" lean-forward="true" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/html/QuestionEdit.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="68" column="66" lean-forward="true" selection-start-line="68" selection-start-column="66" selection-end-line="68" selection-end-column="66" />
+          <folding>
+            <element signature="n#div#0;n#div#4;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#div#4;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#div#6;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/response.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="90" column="24" lean-forward="true" selection-start-line="90" selection-start-column="24" selection-end-line="90" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="17" column="56" lean-forward="true" selection-start-line="17" selection-start-column="56" selection-end-line="17" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="562">
+          <caret line="251" column="12" selection-start-line="251" selection-start-column="12" selection-end-line="251" selection-end-column="12" />
+          <folding>
+            <element signature="e#3642#4514#0" />
+            <element signature="e#4546#5539#0" />
+            <element signature="e#4514#5394#0" />
+            <element signature="e#4822#5045#0" />
+            <element signature="e#5219#5442#0" />
+            <element signature="e#5497#7934#0" />
+            <element signature="e#5738#6161#0" />
+            <element signature="e#6056#6778#0" />
+            <element signature="e#6510#6699#0" />
+            <element signature="e#7605#7910#0" />
+            <element signature="e#9209#9349#0" />
+            <element signature="e#9474#9643#0" />
+            <element signature="e#9615#9818#0" />
+          </folding>
         </state>
       </provider>
     </entry>
