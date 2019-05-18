@@ -7,26 +7,23 @@ let express = require('express'),
     expressSession = require('express-session'),
     response = require('./response').response,
     basicAuth = require('basic-auth'),
-    models = require('./model').models,
-    dai = require('./dai').dai,
+    models = require('./db_model').models,
+    dai = require('./iottalk_api/dai').dai,
     daList = [],
-    passport = require('passport'),
-    googleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    facebookStrategy = require('passport-facebook').Strategy,
-    genUUID = require('./uuid');
+    genUUID = require('./iottalk_api/uuid');
 
 http.listen((process.env.PORT || config.port), '0.0.0.0');
 
-//create tables
+// Create tables
 models.answer.sync({force: false}).then(function(){});
 models.question.sync({force: false}).then(function(){});
 models.user.sync({force: false}).then(function(){});
 models.vote.sync({force: false}).then(function(){});
 
-//to-do
-//register all questions in the DB
+// To-Do
+// Register questions in the DB
 
-
+// Express middleware
 app.use(express.static('./web'));
 app.use(cookieParser());
 app.use(bodyParser.json({}));
@@ -35,68 +32,13 @@ app.use(expressSession({
     resave: true,
     saveUninitialized: true
 }));
-app.use(passport.initialize());
-app.use(passport.session());
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});
-// Google user create
-passport.use(new googleStrategy({
-        clientID: config.googleClientID,
-        clientSecret: config.googleClientSecret,
-        callbackURL: config.googleCallbackURL
-    },
-    function (accessToken, refreshToken, profile, done){
-        models.user.findById(profile.id).then(function(u){
-            if(u == null){
-                u = {
-                    id: profile.id,
-                    name: profile.displayName,
-                    photo: profile._json.image.url,
-                    provider: profile.provider
-                };
-                models.user.create(u).then(function(){
-                    return done(null, u);
-                });
-            }
-            else
-                return done(null, u);
-        });
-    }
-));
-// Facebook user create
-passport.use(new facebookStrategy({
-        clientID: config.facebookAPPID,
-        clientSecret: config.facebookAPPSecret,
-        callbackURL: config.facebookCallbackURL,
-        profileFields: ['id', 'name', 'displayName', 
-            'photos', 'hometown', 'profileUrl', 'friends']
-    },
-    function (accessToken, refreshToken, profile, done){
-        models.user.findById(profile.id).then(function(u){
-            if(u == null){
-                u = {
-                    id: profile.id,
-                    name: profile.displayName,
-                    photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
-                    provider: profile.provider
-                };
-                models.user.create(u).then(function(){
-                    return done(null, u);
-                });
-            }
-            else
-                return done(null, u);
-        });
-    }
-));
 
-// admin API/Page basic auth
+// OAuth
+require('./oauth.js')(app, config);
+
+// Admin API/Page basic auth
 let bAuth = function(req, res, next){
-    var user = basicAuth(req);
+    let user = basicAuth(req);
     if(!user || !user.name || !user.pass){
         res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
         res.sendStatus(401);
@@ -218,13 +160,13 @@ let getR = function(req, res){
                     return Promise.reject(409);
             })
             .catch(function(code){
-                if(code == 200)
+                if(code === 200)
                     response.getSuccess(res);
-                else if(code == 401)
+                else if(code === 401)
                     response.getPermissionDenied(res);
-                else if(code == 404)
+                else if(code === 404)
                     response.getBadRequest(res);
-                else if(code == 409)
+                else if(code === 409)
                     response.getConflict(res);
             });
     },
@@ -239,7 +181,7 @@ let getR = function(req, res){
                 if (q != null && //check id is not exist
                     id.trim().length !== 0 && //check id is not empty
                     req.body.options.length !== 0) { // check options is not empty
-                    for (var i = 0; i < req.body.options.length; i++)
+                    for (let i = 0; i < req.body.options.length; i++)
                         answers.push({
                             option: req.body.options[i].description,
                             color: req.body.options[i].color,
@@ -454,6 +396,7 @@ let index = function(req, res){
                 response.getPageNotFound(res);
         });
     };
+
 app.get('^/index(/){0,1}$|^/$', index);
 app.get('^/create(/){0,1}$', create);
 app.get('^/dashboard/:id([0-9]+)(/){0,1}$', dashboard);
@@ -461,24 +404,3 @@ app.get('^/login(/){0,1}$', login);
 app.get('^/vote/:id([0-9]+)(/){0,1}$', vote);
 app.get('^/admin(/){0,1}$', bAuth, admin);
 app.get('^/admin/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
-
-//OAuth
-app.get('/auth/google', passport.authenticate('google',
-    { scope: ['profile', 'email'] })
-);
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    function(req, res) {
-        res.redirect(req.session.returnTo || '/');
-        delete req.session.returnTo;
-    }
-);
-app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: '/login' }),
-    function(req, res) {
-        res.redirect(req.session.returnTo || '/');
-        delete req.session.returnTo;
-    }
-);
-

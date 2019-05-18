@@ -10,7 +10,7 @@ var dan2 = (function () {
 
   var _uuid = _interopRequireDefault(require("./uuid.js"));
 
-  var _mqtt = _interopRequireDefault(require("mqtt"));
+  var _mqtt = _interopRequireDefault(require("mqtt/types"));
 
   var _superagent = _interopRequireDefault(require("superagent"));
 

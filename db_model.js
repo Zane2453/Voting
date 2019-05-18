@@ -2,8 +2,8 @@
  * Created by kuan on 2018/8/25.
  */
 // http://docs.sequelizejs.com/manual/tutorial/querying.html
-var Sequelize = require('sequelize'),
-    sequelize = new Sequelize('questionaire', null, null, {
+let Sequelize = require('sequelize'),
+    sequelize = new Sequelize('questionnaire', null, null, {
         define: {
             charset: 'utf8',
             dialectOptions: {
@@ -80,7 +80,7 @@ vote.belongsTo(user);
 vote.belongsTo(question);
 vote.belongsTo(answer);
 
-var models = {
+let models = {
     orm: sequelize,
     question: question,
     answer: answer,

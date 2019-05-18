@@ -4,15 +4,11 @@
 $(document).ready(function() {
 
     //create QRcode
-    var qrcode = new QRCode("qrcode", {
-        text: location.href.replace(/dashboard/i,'vote'),
+    $("#qrcode").qrcode({
         width: 256,
         height: 256,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+        text: location.href.replace(/dashboard/i,'vote'),
     });
-
     //show voting image
     //console.log(image);
     if(image != "none"){

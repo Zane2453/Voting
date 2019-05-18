@@ -21,7 +21,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (!err && res.statusCode == 200) {
+                if (!err && res.statusCode === 200) {
                     callback(true, body.password);
                     //console.log(mac_addr, ' registed: ', body.password);
                 }
@@ -42,7 +42,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode == 200) {
+                if (res.statusCode === 200) {
                     if(callback)
                         callback(true);
                 }
@@ -65,7 +65,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode == 200) {
+                if (res.statusCode === 200) {
                     if(callback){
                         body = JSON.parse(body);
                         callback(body['samples']);
@@ -91,7 +91,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode == 200) {
+                if (res.statusCode === 200) {
                     callback(true);
                 }
                 else{
@@ -112,7 +112,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode == 200) {
+                if (res.statusCode === 200) {
                     if(callback){
                         body = JSON.parse(body);
                         callback(body['alias_name']);
@@ -135,7 +135,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode == 200)
+                if (res.statusCode === 200)
                     callback(true);
                 else {
                     callback(false);

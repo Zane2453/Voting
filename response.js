@@ -1,15 +1,15 @@
-var fs = require('fs'),
+let fs = require('fs'),
     ejs = require('ejs'),
     config = require('./config'),
     votingPagePath = __dirname + "/web/html/Voting.ejs",
-    votingCreatePagePath = __dirname + "/web/html/VotingCreate.ejs",
+    votingCreatePagePath = __dirname + "/web/html/QuestionCreate.ejs",
     dashBoardPagePath = __dirname + "/web/html/DashBoard.ejs",
     loginPagePath = __dirname + "/web/html/Login.ejs",
     questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
     adminQuestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
     questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs";
 
-var Response = function () {};
+let Response = function () {};
 
 Response.prototype = {
     

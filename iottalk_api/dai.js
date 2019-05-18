@@ -3,7 +3,7 @@
  */
 
 var dai = function (no, mac, answers) {
-    var config = require('./config');
+    var config = require('../config');
     if(config.IoTtalkVersion == 1) {
         var dan = require('./dan').dan(),
             IDFList = [];
