@@ -159,7 +159,7 @@ let getR = function(req, res){
                 else
                     return Promise.reject(409);
             })
-            .catch(function(code){
+            .catch((code) => {
                 if(code === 200)
                     response.getSuccess(res);
                 else if(code === 401)
@@ -213,7 +213,7 @@ let getR = function(req, res){
                 response.getSuccess(res);
             })
             .catch(() => {
-                    response.getBadRequest(res);
+                response.getBadRequest(res);
             });
     },
     deleteQ = function(req, res){
@@ -232,169 +232,189 @@ app.post('/admin/deleteQ', bAuth, deleteQ);
 
 // Page route
 let index = function(req, res){
-        models.question.findAll().then(function(qList){
-            response.getQuestionListPage(res, qList);
-        });
+        models.question.findAll()
+            .then((qList) => {
+                response.getQuestionListPage(res, qList);
+            });
     },
     create = function(req, res){
         response.getVotingCreatePage(res);
     },
     dashboard = function(req, res){
-        models.question.findById(req.params.id).then(function(q) {
-            if(q != null){
-                models.answer.findAll({
-                    where:{
-                        questionId: req.params.id
-                    }
-                }).then(function(a){
-                    var options = [];
-                    a.forEach(function(answer){
-                        options.push(answer.option);
-                    });
-                    response.getDashBoardPage(res, {
-                        id: req.params.id,
-                        q: q.description,
-                        image: q.image,
-                        a: options
-                    });
+        let question,
+            queryObj;
+        models.question.findById(req.params.id)
+            .then((q) => {
+                question = q;
+                if(q != null) {
+                    queryObj = {questionId: req.params.id};
+                    return models.answer.findAll({where: queryObj});
+                }
+                else
+                    return Promise.reject(404);
+            })
+            .then((a) => {
+                let options = [];
+                a.forEach(function(answer){
+                    options.push(answer.option);
                 });
-            }
-            else
-                response.getPageNotFound(res);
-        });
+                response.getDashBoardPage(res, {
+                    id: req.params.id,
+                    q: question.description,
+                    image: question.image,
+                    a: options
+                });
+            })
+            .catch((code) => {
+                if(code === 404)
+                    response.getPageNotFound(res);
+            });
     },
     login = function(req, res){
         response.getLoginPage(res);
     },
     vote = function(req, res) {
-        var id = req.params.id,
-            login = (req.user !== undefined);
-        models.question.findById(id).then(function(q){
-            if(q != null){
-                if(q.anonymous){
-                    models.answer.findAll({
-                        where: {
-                            questionId: id
-                        }
-                    }).then(function (a) {
-                        var options = [];
-                        a.forEach(function (answer) {
-                            options.push({
-                                description: answer.option,
-                                color: answer.color
-                            });
-                        });
+        let id = req.params.id,
+            login = (req.user !== undefined),
+            options,
+            question,
+            answer,
+            vote = null,
+            voteAnswer,
+            queryObj;
+        models.question.findById(id)
+            .then( (q) => {
+                question = q;
+                queryObj = {questionId: id};
+                if(0){}
+                else if(q == null)
+                    return Promise.reject(404);
+                else if(q.anonymous && !login)
+                    return models.answer.findAll({where: queryObj} );
+                else if(q.anonymous && login)
+                    return models.answer.findAll({where: queryObj} );
+                else if(!q.anonymous && login)
+                    return models.answer.findAll( {where: queryObj} );
+                else if(!q.anonymous && !login)
+                    return Promise.reject(200);
+            })
+            .then( (a) => {
+                options = [];
+                answer = a;
+                a.forEach((answer) => {
+                    options.push({description: answer.option, color: answer.color});
+                });
+                if(question.anonymous && !login) {
+                    return Promise.reject(200);
+                }
+                else if(question.anonymous && login){
+                    return Promise.reject(200);
+                }
+                else if(!question.anonymous && login){
+                    queryObj = { questionId: id, userId: req.user.id};
+                    return models.vote.findOne({ where: queryObj });
+                }
+            })
+            .then( (v) => {
+                vote = v;
+                if(v != null)
+                    return models.answer.findById(v.answerId);
+                else
+                    return Promise.reject(200);
+            })
+            .then( (va) => {
+                voteAnswer = va;
+                return Promise.reject(200);
+            })
+            .catch( (code) => {
+                if(code === 404)
+                    response.getPageNotFound(res);
+                if(code === 200){
+                    if(0){}
+                    else if(question.anonymous && !login){
                         response.getVotingPage(res, {
-                            q: q.description,
-                            anonymous: q.anonymous,
+                            q: question.description,
+                            anonymous: question.anonymous,
                             o: options,
                             useDisqus: config.useDisqus
                         });
-                    });
-                }
-                else{
-                    if(login){
-                        models.answer.findAll({
-                            where: {
-                                questionId: id
-                            }
-                        }).then(function (a) {
-                            var options = [];
-                            a.forEach(function (answer) {
-                                options.push({
-                                    description: answer.option,
-                                    color: answer.color
-                                });
-                            });
-
-                            if(!q.anonymous) {
-                                models.vote.findOne({
-                                    where: {
-                                        questionId: id,
-                                        userId: req.user.id
-                                    }
-                                }).then(function (v) {
-                                    if(v) {
-                                        models.answer.findById(v.answerId).then(function (va) {
-                                            response.getVotingPage(res, {
-                                                q: q.description,
-                                                anonymous: q.anonymous,
-                                                o: options,
-                                                va: va.option,
-                                                n: req.user.name,
-                                                p: req.user.photo,
-                                                useDisqus: config.useDisqus
-                                            })
-                                        });
-                                    }
-                                    else{
-                                        response.getVotingPage(res, {
-                                            q: q.description,
-                                            anonymous: q.anonymous,
-                                            o: options,
-                                            n: req.user.name,
-                                            p: req.user.photo,
-                                            useDisqus: config.useDisqus
-                                        });
-                                    }
-                                });
-                            }
-                            else {
-                                response.getVotingPage(res, {
-                                    q: q.description,
-                                    anonymous: q.anonymous,
-                                    o: options,
-                                    n: req.user.name,
-                                    p: req.user.photo,
-                                    useDisqus: config.useDisqus
-                                });
-                            }
+                    }
+                    else if(question.anonymous && login){
+                        response.getVotingPage(res, {
+                            q: question.description,
+                            anonymous: question.anonymous,
+                            o: options,
+                            useDisqus: config.useDisqus
                         });
                     }
-                    else{
+                    else if(!question.anonymous && login && !vote){
+                        response.getVotingPage(res, {
+                            q: question.description,
+                            anonymous: question.anonymous,
+                            o: options,
+                            n: req.user.name,
+                            p: req.user.photo,
+                            useDisqus: config.useDisqus
+                        });
+                    }
+                    else if(!question.anonymous && login && vote){
+                        response.getVotingPage(res, {
+                            q: question.description,
+                            anonymous: question.anonymous,
+                            o: options,
+                            va: voteAnswer.option,
+                            n: req.user.name,
+                            p: req.user.photo,
+                            useDisqus: config.useDisqus
+                        });
+                    }
+                    else if(!question.anonymous && !login){
                         req.session.returnTo = req.path;
                         res.redirect('/login');
                     }
                 }
-            }
-            else
-                response.getPageNotFound(res);
-        });
+            });
     },
     admin = function(req, res){
-        models.question.findAll().then(function(qList){
-            response.getAdminQuestionListPage(res, qList);
-        });
+        models.question.findAll()
+            .then((qList) => {
+                response.getAdminQuestionListPage(res, qList);
+            });
     },
     adminEdit = function(req, res){
-        models.question.findById(req.params.id).then(function(q) {
-            if(q != null){
-                models.answer.findAll({
-                    where:{
-                        questionId: req.params.id
-                    }
-                }).then(function(a){
-                    var options = new Array(10);
-                    options.fill(null);
-                    a.forEach(function(answer){
-                        var color = Object.values(config.color);
-                        color.forEach(function(c, idx){
-                            if(c === answer.color){
-                                options[idx] = answer.option;
-                            }
-                        });
-                    });
-                    response.getQuestionEditPage(res, {
-                        q: q.description,
-                        image: q.image,
-                        a: options,
-                        anonymous: q.anonymous
+        let queryObj,
+            question;
+        models.question.findById(req.params.id)
+            .then((q) => {
+                question = q;
+                if(q != null){
+                    queryObj = { questionId: req.params.id };
+                    return models.answer.findAll({ where: queryObj });
+                }
+                else
+                    return Promise.reject(404);
+            })
+            .then((a) => {
+                let options = new Array(10);
+                options.fill(null);
+                a.forEach( (answer) => {
+                    let color = Object.values(config.color);
+                    color.forEach( (c, idx) => {
+                        if(c === answer.color)
+                            options[idx] = answer.option;
                     });
                 });
-            }
-            else
-                response.getPageNotFound(res);
-        });
+                response.getQuestionEditPage(res, {
+                    q: question.description,
+                    image: question.image,
+                    a: options,
+                    anonymous: question.anonymous
+                });
+            })
+            .catch( (code) => {
+                if(code === 404)
+                    response.getPageNotFound(res);
+            })
     };
 
 app.get('^/index(/){0,1}$|^/$', index);

@@ -23,21 +23,22 @@ module.exports = function (app, config) {
             callbackURL: config.googleCallbackURL
         },
         function (accessToken, refreshToken, profile, done){
-            models.user.findById(profile.id).then(function(u){
-                if(u == null){
-                    u = {
-                        id: profile.id,
-                        name: profile.displayName,
-                        photo: profile._json.image.url,
-                        provider: profile.provider
-                    };
-                    models.user.create(u).then(function(){
+            models.user.findById(profile.id)
+                .then(function(u){
+                    if(u == null){
+                        u = {
+                            id: profile.id,
+                            name: profile.displayName,
+                            photo: profile._json.image.url,
+                            provider: profile.provider
+                        };
+                        models.user.create(u).then(function(){
+                            return done(null, u);
+                        });
+                    }
+                    else
                         return done(null, u);
-                    });
-                }
-                else
-                    return done(null, u);
-            });
+                });
         }
     ));
     // Facebook user create
@@ -49,21 +50,22 @@ module.exports = function (app, config) {
                 'photos', 'hometown', 'profileUrl', 'friends']
         },
         function (accessToken, refreshToken, profile, done){
-            models.user.findById(profile.id).then(function(u){
-                if(u == null){
-                    u = {
-                        id: profile.id,
-                        name: profile.displayName,
-                        photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
-                        provider: profile.provider
-                    };
-                    models.user.create(u).then(function(){
+            models.user.findById(profile.id)
+                .then(function(u){
+                    if(u == null){
+                        u = {
+                            id: profile.id,
+                            name: profile.displayName,
+                            photo: profile.photos ? profile.photos[0].value : '/img/faces/unknown-user-pic.jpg',
+                            provider: profile.provider
+                        };
+                        models.user.create(u).then(function(){
+                            return done(null, u);
+                        });
+                    }
+                    else
                         return done(null, u);
-                    });
-                }
-                else
-                    return done(null, u);
-            });
+                });
         }
     ));
 
