@@ -37,7 +37,7 @@ $(document).ready(function(){
                 var base64ImgStr = $('#base64TextArea').val() || $('#previewImage').attr('src');
                 if(base64ImgStr == "" || base64ImgStr === undefined){
                     base64ImgStr = "none";
-                    console.log("img none");
+                    //console.log("img none");
                 }
 
                 $.ajax({
@@ -59,7 +59,6 @@ $(document).ready(function(){
                         console.log(e);
                     },
                     success: function () {
-
                         window.location = "/dashboard/" + getQuestionId();
                     }
                 });

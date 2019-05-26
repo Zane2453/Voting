@@ -178,12 +178,14 @@ let getR = function(req, res){
             description = req.body.question,
             anonymous = req.body.anonymous,
             image = req.body.image,
-            answers = [];
+            question,
+            answers = []
         models.question.findById(id)
             .then((q) => {
                 if (q != null && //check id is not exist
                     id.trim().length !== 0 && //check id is not empty
                     req.body.options.length !== 0) { // check options is not empty
+                    question = q;
                     for (let i = 0; i < req.body.options.length; i++)
                         answers.push({
                             option: req.body.options[i].description,
@@ -191,12 +193,10 @@ let getR = function(req, res){
                             count: 0,
                             questionId: id
                         });
+                    return models.answer.destroy({ where: { questionId: id}, force: true});
                 }
                 else
-                    Promise.reject(403);
-            })
-            .then(() => {
-                return models.answer.destroy({ where: { questionId: id}, force: true});
+                    Promise.reject(404);
             })
             .then(() => {
                 return models.answer.bulkCreate(answers);
@@ -210,13 +210,14 @@ let getR = function(req, res){
                 return models.question.update(updateInfo, { where: {id: id} });
             })
             .then(() => {
-                let d = dai(id, q.uuid, answers);
+                let d = dai(id, question.uuid, answers);
                 daList.push(d);
                 d.register();
                 response.getSuccess(res);
             })
-            .catch(() => {
-                response.getBadRequest(res);
+            .catch((code) => {
+                if(code === 404)
+                    response.getPageNotFound(res);
             });
     },
     deleteQ = function(req, res){
