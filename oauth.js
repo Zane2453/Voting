@@ -4,7 +4,8 @@
 
 let passport = require('passport'),
     googleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    facebookStrategy = require('passport-facebook').Strategy;
+    facebookStrategy = require('passport-facebook').Strategy,
+    models = require('./db_model').models;
 
 module.exports = function (app, config) {
     app.use(passport.initialize());
@@ -17,7 +18,8 @@ module.exports = function (app, config) {
         done(null, user);
     });
     // Google user create
-    passport.use(new googleStrategy({
+    passport.use(
+        new googleStrategy({
             clientID: config.googleClientID,
             clientSecret: config.googleClientSecret,
             callbackURL: config.googleCallbackURL
@@ -38,7 +40,7 @@ module.exports = function (app, config) {
                     }
                     else
                         return done(null, u);
-                });
+                })
         }
     ));
     // Facebook user create

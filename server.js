@@ -1,7 +1,9 @@
-let express = require('express'),
+let config = require('./config'),
+    express = require('express'),
     app = express(),
-    http = require('http').createServer(app),
-    config = require('./config'),
+    httpServer =  (config.https) ?
+        require('https').createServer(config.httpServerOptions,app) :
+        require('http').createServer(app),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
@@ -12,7 +14,8 @@ let express = require('express'),
     daList = [],
     genUUID = require('./iottalk_api/uuid');
 
-http.listen((process.env.PORT || config.port), '0.0.0.0');
+
+httpServer.listen((process.env.PORT || config.port), '0.0.0.0');
 
 // Create tables
 models.answer.sync({force: false}).then(function(){});

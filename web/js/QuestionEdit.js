@@ -55,7 +55,7 @@ $(document).ready(function(){
                     }),
                     contentType: "application/json",
                     error: function(e){
-                        location.reload();
+                        //location.reload();
                         console.log(e);
                     },
                     success: function () {
