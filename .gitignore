@@ -2,3 +2,4 @@
 node_modules
 questionnaire.sqlite
 config.js
+.idea/workspace.xml
