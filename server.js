@@ -1,9 +1,11 @@
 let config = require('./config'),
     express = require('express'),
     app = express(),
-    httpServer =  (config.https) ?
-        require('https').createServer(config.httpServerOptions,app) :
+    redirectApp = express(),
+    server =  (config.https) ?
+        require('https').createServer(config.httpServerOptions, app) :
         require('http').createServer(app),
+    httpRedirectServer = (config.https) ? require('http').createServer(redirectApp) : null;
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
@@ -14,8 +16,15 @@ let config = require('./config'),
     daList = [],
     genUUID = require('./iottalk_api/uuid');
 
-
-httpServer.listen((process.env.PORT || config.port), '0.0.0.0');
+if(config.https) {
+    server.listen(config.httpsPort, '0.0.0.0');
+    httpRedirectServer.listen(config.httpPort, '0.0.0.0');
+    redirectApp.get('*', function(req, res) {
+        res.redirect('https://' + req.headers.host + req.url);
+    });
+}
+else
+    server.listen(config.httpPort, '0.0.0.0');
 
 // Create tables
 models.answer.sync({force: false}).then(function(){});

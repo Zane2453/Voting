@@ -1,13 +1,12 @@
 exports.https = false;
 if(exports.https){
     exports.httpServerOptions = {
-        key:'',
-        cert:''
+        key:require('fs').readFileSync(''),
+        cert:require('fs').readFileSync(''),
     };
-    exports.port = 443;
 }
-else
-    exports.port = 80;
+exports.httpsPort = 443;
+exports.httpPort = 80;
 exports.color = {
     option1Color: "rgb(255, 0, 0)",
     option2Color: "rgb(255, 165, 0)",
