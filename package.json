@@ -1,6 +1,12 @@
 {
 	"name": "Voting",
-	"version": "1.0",
+	"version": "1.0.0",
+	"description": "Website voting plugin",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/IoTtalk/Vote.git"
+	},
+	"license" : "",
 	"private": true,
 	"dependencies": {
 		"express": "*",
