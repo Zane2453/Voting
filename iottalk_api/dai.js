@@ -2,31 +2,33 @@
  * Created by kuan on 2018/8/27.
  */
 
-var dai = function (no, mac, answers) {
-    var config = require('../config');
-    if(config.IoTtalkVersion == 1) {
-        var dan = require('./dan').dan(),
+let dai = function (no, mac, answers) {
+    let config = require('../config'),
+        register = null,
+        deregister = null,
+        push = null;
+
+    if(config.IoTtalkVersion === 1) {
+        let dan = require('./dan').dan(),
             IDFList = [];
 
-        for (var i = 1; i <= answers.length; i++)
+        for (let i = 1; i <= answers.length; i++)
             IDFList.push('Option' + i.toString());
 
-        var deregister = function () {
-            dan.deregister();
+        deregister = function (callback) {
+            dan.deregister(callback);
         };
 
-        var register = function () {
-            var setAliases = function () {
-                for (var i = 0; i < IDFList.length; i++) {
+        register = function () {
+            let setAliases = function () {
+                for (let i = 0; i < IDFList.length; i++) {
                     dan.set_alias(IDFList[i], answers[i].option);
                     console.log(mac, ' set alias : ' + answers[i].option);
                 }
             };
-            var pull = function (ODFName, data) {
-                if (ODFName == 'Control' && data[0] == 'SET_DF_STATUS')
+            let pull = function (ODFName, data) {
+                if (ODFName === 'Control' && data[0] === 'SET_DF_STATUS')
                     setTimeout(setAliases, 2000);
-                    pushRaw();
-                }
             };
             dan.init(pull, config.IoTtalkURL, mac, {
                 'dm_name': 'VotingMachine',
@@ -37,45 +39,50 @@ var dai = function (no, mac, answers) {
             }, function (result) {
                 console.log('register:', result);
                 //deregister when app is closing
-                process.on('exit', dan.deregister);
-                //catches ctrl+c event
-                process.on('SIGINT', function () {
-                    dan.deregister(function () {
+                process.on('exit', () => {
+                    dan.deregister(() => {
                         process.exit(1);
-                    });
+                    })
+                });
+                //catches ctrl+c event
+                process.on('SIGINT', () => {
+                    process.exit(1);
                 });
                 //catches uncaught exceptions
-                process.on('uncaughtException', dan.deregister);
+                process.on('uncaughtException', () => {
+                    process.exit(1);
+                });
             });
 
-        var push = function (answer) {
-            for (var i = 0; i < answers.length; i++)
-                if (answers[i].option == answer.option)
-                    dan.push(IDFList[i], [1]);
-        };
+            push = function (answer) {
+                for (let i = 0; i < answers.length; i++)
+                    if (answers[i].option === answer.option)
+                        dan.push(IDFList[i], [1]);
+            };
+        }
     }
-    else if(config.IoTtalkVersion == 2){
-        var dan2 = require('./dan2').dan2(),
+    else if(config.IoTtalkVersion === 2){
+        let dan2 = require('./dan2').dan2(),
             IDFList = [];
 
-        for (var i = 1; i <= answers.length; i++) {
+        for (let i = 1; i <= answers.length; i++) {
             IDFList.push(['Option' + i.toString(),['int']]);
         }
 
-        var deregister = function () {
-            dan2.deregister();
+        deregister = function (callback) {
+            dan2.deregister(callback);
         };
 
-        var on_signal = function(cmd, param){
+        let on_signal = function(cmd, param){
             console.log('[cmd]', cmd, param);
             return true;
         };
 
-        var on_data = function(odf_name, data){
+        let on_data = function(odf_name, data){
             console.log('[data]', odf_name, data);
         };
 
-        var register = function () {
+        register = function () {
             dan2.register(config.IoTtalkURL,{
                 'id': mac,
                 'on_signal': on_signal,
@@ -89,21 +96,25 @@ var dai = function (no, mac, answers) {
             }, function(result){
                 console.log('register:', result);
                 //deregister when app is closing
-                process.on('exit', dan2.deregister);
-                //catches ctrl+c event
-                process.on('SIGINT', function () {
-                    dan2.deregister(function () {
+                process.on('exit', () => {
+                    dan2.deregister( () => {
                         process.exit(1);
-                    });
+                    })
+                });
+                //catches ctrl+c event
+                process.on('SIGINT', () => {
+                    process.exit(1);
                 });
                 //catches uncaught exceptions
-                process.on('uncaughtException', dan2.deregister);
+                process.on('uncaughtException', () => {
+                    process.exit(1);
+                });
             });
         };
 
-        var push = function (answer) {
-            for (var i = 0; i < answers.length; i++)
-                if (answers[i].option == answer.option)
+        push = function (answer) {
+            for (let i = 0; i < answers.length; i++)
+                if (answers[i].option === answer.option)
                     dan2.push(IDFList[i][0], [1]);
         };
     }
@@ -115,11 +126,4 @@ var dai = function (no, mac, answers) {
     }
 };
 
-
 exports.dai = dai;
-
-
-
-
-
-

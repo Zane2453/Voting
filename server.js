@@ -39,7 +39,7 @@ models.question.findAll({ include: [models.answer] })
             let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
             daList.push(d);
             d.register();
-            console.log("Registed ID:" + q.dataValues.id + ", " +
+            console.log("Register ID:" + q.dataValues.uuid + ", " +
                         "Description:" + q.dataValues.description);
         });
     });

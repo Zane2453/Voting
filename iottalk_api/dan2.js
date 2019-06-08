@@ -155,7 +155,7 @@ var dan2 = (function () {
       }
 
       var metadata = res.body;
-      console.debug('register metadata', metadata);
+      //console.debug('register metadata', metadata);
 
       if (typeof metadata === 'string') {
         metadata = JSON.parse(metadata);
@@ -169,7 +169,7 @@ var dan2 = (function () {
       _mqtt_scheme = metadata.url['ws_scheme'];
 
       function on_connect() {
-        console.info('mqtt_connect');
+        //console.info('mqtt_connect');
 
         _i_chans.remove_all_df();
 
