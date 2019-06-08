@@ -32,8 +32,17 @@ models.question.sync({force: false}).then(function(){});
 models.user.sync({force: false}).then(function(){});
 models.vote.sync({force: false}).then(function(){});
 
-// To-Do
-// Register questions in the DB
+// Register all questions in the DB
+models.question.findAll({ include: [models.answer] })
+    .then((question) => {
+        question.forEach( function (q) {
+            let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+            daList.push(d);
+            d.register();
+            console.log("Registed ID:" + q.dataValues.id + ", " +
+                        "Description:" + q.dataValues.description);
+        });
+    });
 
 // Express middleware
 app.use(express.static('./web'));

@@ -21,7 +21,6 @@ Response.prototype = {
                 else {
                     contents = contents.toString('utf8');
                     res.writeHead(200, {"Content-Type": "text/html"});
-                    console.log(data);
                     res.end(ejs.render(contents, data));
                 }
             }
