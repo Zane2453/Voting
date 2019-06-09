@@ -6,7 +6,7 @@
 		"type": "git",
 		"url": "http://github.com/IoTtalk/Vote.git"
 	},
-	"license" : "",
+	"license": "",
 	"private": true,
 	"dependencies": {
 		"express": "*",
@@ -20,6 +20,7 @@
 		"express-session": "",
 		"cookie-parser": "",
 		"mqtt": "^2.18.8",
-		"superagent": "^4.1.0"
+		"superagent": "^4.1.0",
+		"serve-favicon": ""
 	}
 }

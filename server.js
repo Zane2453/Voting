@@ -14,7 +14,9 @@ let config = require('./config'),
     models = require('./db_model').models,
     dai = require('./iottalk_api/dai').dai,
     daList = [],
-    genUUID = require('./iottalk_api/uuid');
+    genUUID = require('./iottalk_api/uuid'),
+    favicon = require('serve-favicon');
+
 
 if(config.https) {
     server.listen(config.httpsPort, '0.0.0.0');
@@ -46,6 +48,7 @@ models.question.findAll({ include: [models.answer] })
 
 // Express middleware
 app.use(express.static('./web'));
+app.use(favicon('./web/images/favicon.ico'));
 app.use(cookieParser());
 app.use(bodyParser.json({}));
 app.use(expressSession({
@@ -53,7 +56,6 @@ app.use(expressSession({
     resave: true,
     saveUninitialized: true
 }));
-
 // OAuth
 require('./oauth.js')(app, config);
 
