@@ -33,7 +33,7 @@ $(document).ready(function() {
                 for(var i = 0; i < data.ratio.length; i++){
                     if(data.total != 0) {
                         str += "<p class='a'>" + data.ratio[i].a + ": " +
-                            (Math.round(parseFloat(data.ratio[i].count / data.total) * 100)).toString() + "\%</p>";
+                            (Math.round(parseFloat(data.ratio[i].count) / parseFloat(data.total)*1000)/10).toString() + "\%</p>";
                     }
                     else{
                         str += "<p class='a'>" + data.ratio[i].a + ": 0" + "\%</p>";

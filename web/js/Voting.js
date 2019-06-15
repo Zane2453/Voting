@@ -41,7 +41,7 @@ var setRatio = function(id){
                 (function(index){
                     $("button").each(function () {
                         if ($(this).css("background-color") == data.ratio[index].color) {
-                            var r = Math.round((data.ratio[i].count / data.total) * 100, 1);
+                            var r = Math.round(data.ratio[i].count / data.total*1000)/10;
                             $(this).find("span").html(r.toString() + "%");
                         }
                     });
