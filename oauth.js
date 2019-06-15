@@ -25,7 +25,7 @@ module.exports = function (app, config) {
             callbackURL: config.googleCallbackURL
         },
         function (accessToken, refreshToken, profile, done){
-            models.user.findById(profile.id)
+            models.user.findByPk(profile.id)
                 .then(function(u){
                     if(u == null){
                         u = {
@@ -52,7 +52,7 @@ module.exports = function (app, config) {
                 'photos', 'hometown', 'profileUrl', 'friends']
         },
         function (accessToken, refreshToken, profile, done){
-            models.user.findById(profile.id)
+            models.user.findByPk(profile.id)
                 .then(function(u){
                     if(u == null){
                         u = {
