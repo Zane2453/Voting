@@ -137,7 +137,7 @@ let getR = function(req, res){
             queryObj,
             question,
             answer;
-        models.question.findById(id)
+        models.question.findByPk(id)
             .then((q) => {
                 question = q;
                 if (q){
@@ -200,7 +200,7 @@ let getR = function(req, res){
             image = req.body.image,
             question,
             answers = []
-        models.question.findById(id)
+        models.question.findByPk(id)
             .then((q) => {
                 if (q != null && //check id is not exist
                     id.trim().length !== 0 && //check id is not empty
@@ -267,7 +267,7 @@ let index = function(req, res){
     dashboard = function(req, res){
         let question,
             queryObj;
-        models.question.findById(req.params.id)
+        models.question.findByPk(req.params.id)
             .then((q) => {
                 question = q;
                 if(q != null) {
@@ -306,7 +306,7 @@ let index = function(req, res){
             vote = null,
             voteAnswer,
             queryObj;
-        models.question.findById(id)
+        models.question.findByPk(id)
             .then( (q) => {
                 question = q;
                 queryObj = {questionId: id};
@@ -342,7 +342,7 @@ let index = function(req, res){
             .then( (v) => {
                 vote = v;
                 if(v != null)
-                    return models.answer.findById(v.answerId);
+                    return models.answer.findByPk(v.answerId);
                 else
                     return Promise.reject(200);
             })
@@ -408,7 +408,7 @@ let index = function(req, res){
     adminEdit = function(req, res){
         let queryObj,
             question;
-        models.question.findById(req.params.id)
+        models.question.findByPk(req.params.id)
             .then((q) => {
                 question = q;
                 if(q != null){

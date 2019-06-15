@@ -21,7 +21,6 @@ let Sequelize = require('sequelize'),
         },
         // SQLite only
         storage: './questionnaire.sqlite',
-        operatorsAliases: false
     });
 const question = sequelize.define('question', {
     id:{

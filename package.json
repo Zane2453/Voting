@@ -12,7 +12,7 @@
 		"express": "*",
 		"ejs": "",
 		"sqlite3": "",
-		"sequelize": "4.38",
+		"sequelize": ">=5.3.0",
 		"basic-auth": "",
 		"passport": "",
 		"passport-google-oauth": "",
