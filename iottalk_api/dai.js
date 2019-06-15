@@ -49,17 +49,17 @@ let dai = function (no, mac, answers) {
                     process.exit(1);
                 });
                 //catches uncaught exceptions
-                process.on('uncaughtException', () => {
+                process.on('uncaughtException', (e) => {
                     process.exit(1);
                 });
             });
+        };
 
-            push = function (answer) {
-                for (let i = 0; i < answers.length; i++)
-                    if (answers[i].option === answer.option)
-                        dan.push(IDFList[i], [1]);
-            };
-        }
+        push = function (answer) {
+            for (let i = 0; i < answers.length; i++)
+                if (answers[i].option === answer.option)
+                    dan.push(IDFList[i], [1]);
+        };
     }
     else if(config.IoTtalkVersion === 2){
         let dan2 = require('./dan2').dan2(),
