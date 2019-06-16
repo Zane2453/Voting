@@ -1,7 +1,7 @@
 {
 	"name": "Voting",
 	"version": "1.0.0",
-	"description": "Website voting plugin",
+	"description": "Web voting plugin",
 	"repository": {
 		"type": "git",
 		"url": "http://github.com/IoTtalk/Vote.git"
@@ -9,7 +9,7 @@
 	"license": "",
 	"private": true,
 	"dependencies": {
-		"express": "*",
+		"express": "",
 		"ejs": "",
 		"sqlite3": "",
 		"sequelize": ">=5.3.0",
@@ -19,8 +19,8 @@
 		"passport-facebook": "",
 		"express-session": "",
 		"cookie-parser": "",
-		"mqtt": "^2.18.8",
-		"superagent": "^4.1.0",
+		"mqtt": "",
+		"superagent": "",
 		"serve-favicon": ""
 	}
 }
