@@ -65,7 +65,7 @@ var csmapi = (function () {
         };
         request(options, function(err, res, body){
             if(callback){
-                if (res.statusCode === 200) {
+                if (res.statusCode && res.statusCode === 200) {
                     if(callback){
                         body = JSON.parse(body);
                         callback(body['samples']);
