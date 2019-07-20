@@ -2,7 +2,10 @@
  * Created by kuan on 2018/8/25.
  */
 // http://docs.sequelizejs.com/manual/tutorial/querying.html
-let Sequelize = require('sequelize'),
+let config = require('./config'),
+    Sequelize = require('sequelize'),
+    sequelize;
+if(config.db === 'sqlite'){
     sequelize = new Sequelize('questionnaire', null, null, {
         define: {
             charset: 'utf8',
@@ -14,14 +17,34 @@ let Sequelize = require('sequelize'),
         host: 'localhost',
         dialect: 'sqlite',
         pool: {
-            max: 5,
-            min: 0,
+            max: 100,
+            min: 10,
             acquire: 30000,
             idle: 10000
         },
         // SQLite only
         storage: './questionnaire.sqlite',
     });
+}
+else if(config.db === 'mysql'){
+    sequelize = new Sequelize('questionnaire', config.dbUser, config.dbPassword, {
+        define: {
+            charset: 'utf8',
+            dialectOptions: {
+                collate: 'utf8_general_ci'
+            }
+        },
+        logging: false,
+        host: config.dbHost,
+        dialect: 'mysql',
+        pool: {
+            max: 5,
+            min: 0,
+            acquire: 30000,
+            idle: 10000
+        },
+    });
+}
 const question = sequelize.define('question', {
     id:{
         type: Sequelize.INTEGER,

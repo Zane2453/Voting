@@ -1,12 +1,18 @@
 exports.https = false;
 if(exports.https){
     exports.httpServerOptions = {
-        key:require('fs').readFileSync(''),
-        cert:require('fs').readFileSync(''),
+        key:require("fs").readFileSync(""),
+        cert:require("fs").readFileSync(""),
     };
 }
 exports.httpsPort = 443;
 exports.httpPort = 80;
+exports.db = ""; //mysql or sqlite
+if(exports.db === "mysql") {
+    exports.dbHost = "";
+    exports.dbUser = "";
+    exports.dbPassword = "";
+}
 exports.color = {
     option1Color: "rgb(255, 0, 0)",
     option2Color: "rgb(255, 165, 0)",
