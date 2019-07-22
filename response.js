@@ -7,109 +7,53 @@ let fs = require('fs'),
     loginPagePath = __dirname + "/web/html/Login.ejs",
     questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
     adminQuestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
-    questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs";
+    questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs",
+    votingPage = fs.readFileSync(votingPagePath, 'utf8'),
+    votingCreatePage = fs.readFileSync(votingCreatePagePath, 'utf8'),
+    dashBoardPage = fs.readFileSync(dashBoardPagePath, 'utf8'),
+    loginPage = fs.readFileSync(loginPagePath, 'utf8'),
+    questionListPage = fs.readFileSync(questionListPagePath, 'utf8'),
+    adminQuestionListPage = fs.readFileSync(adminQuestionListPagePath, 'utf8'),
+    questionEditPage = fs.readFileSync(questionEditPagePath, 'utf8');
 
 let Response = function () {};
 
 Response.prototype = {
     
     getVotingPage : function (res, data) {
-        fs.readFile(votingPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, data));
-                }
-            }
-        );
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(votingPage, data));
     },
     getVotingCreatePage : function (res) {
-        fs.readFile(votingCreatePagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, config.color));
-                }
-            }
-        );   
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(votingCreatePage, config.color));
     },
     getDashBoardPage : function (res, question, isadmin=false) {
-        fs.readFile(dashBoardPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, {
-                        id: question.id,
-                        q: question.q,
-                        image: question.image,
-                        a: question.a,
-                        isadmin: isadmin
-                    }));
-                }
-            }
-        );
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(dashBoardPage, {
+            id: question.id,
+            q: question.q,
+            image: question.image,
+            a: question.a,
+            isadmin: isadmin
+        }));
     },
     getLoginPage : function (res) {
-        fs.readFile(loginPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(contents);
-                }
-            }
-        );
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(loginPage);
     },
     getQuestionListPage : function (res, qList) {
-        fs.readFile(questionListPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, {qList: qList}));
-                }
-            }
-        );
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(questionListPage, {qList: qList}));
     },
     getAdminQuestionListPage : function (res, qList) {
-        fs.readFile(adminQuestionListPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, {qList: qList}));
-                }
-            }
-        );
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(adminQuestionListPage, {qList: qList}));
     },
     getQuestionEditPage : function (res, question) {
-        var obj = Object.assign({},config.color, question);
-        fs.readFile(questionEditPagePath,
-            function (err, contents) {
-                if (err)
-                    console.log(err);
-                else {
-                    contents = contents.toString('utf8');
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.end(ejs.render(contents, obj));
-                }
-            }
-        );
+        let obj = Object.assign({},config.color, question);
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(questionEditPage, obj));
     },
     getSuccess: function(res){
         res.writeHead(200, {"Content-Type": "text/html"});
