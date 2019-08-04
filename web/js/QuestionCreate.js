@@ -13,39 +13,31 @@ $(document).ready(function(){
        var question = $("#question").val(),
            anonymous = !$('#anonymous').is(":checked");
        if(question.trim().length != 0){
-           var options = [];
+           var answers = [];
            $(".option").each(function(){
                var temp = $(this).val().trim();
                if (temp.length == 0)
                    return;
                else
-                   options.push({
+                   answers.push({
                        description: $(this).val(),
                        color: $(this).css("color")
                    });
            });
-           question = $("#question").val();
-           if(options.length > 1){
+           if(answers.length > 1){
                 $('#submit').prop('disabled', true);
-
-                //get base64str
-                var base64ImgStr = $('#base64TextArea').val();
-                if(base64ImgStr == ""){
-                    base64ImgStr = "none";
-                }
-
+                var qObj = {
+                    description: $("#question").val(),
+                    image: ($('#base64TextArea').val() == "") ? "none" : $('#base64TextArea').val(),
+                    anonymous : anonymous,
+                    answers: answers
+                };
                 $.ajax({
                     type: "POST",
                     url: "/postQ",
                     cache: false,
                     // dataType: 'json',
-                    data: JSON.stringify(
-                    {
-                        question : question, 
-                        options : options, 
-                        anonymous : anonymous, 
-                        image: base64ImgStr
-                    }),
+                    data: JSON.stringify(qObj),
                     contentType: "application/json",
                     error: function(e){
                         //location.reload();

@@ -18,41 +18,33 @@ $(document).ready(function(){
        var question = $("#question").val(),
            anonymous = !$('#anonymous').is(":checked");
        if(question.trim().length != 0){
-           var options = [];
+           var answers = [];
            $(".option").each(function(){
                var temp = $(this).val().trim();
                if (temp.length == 0)
                    return;
                else
-                   options.push({
+                   answers.push({
                        description: $(this).val(),
                        color: $(this).css("color")
                    });
            });
-           question = $("#question").val();
-           if(options.length > 1){
+           if(answers.length > 1){
                 $('#submit').prop('disabled', true);
-
-                //get base64str
-                var base64ImgStr = $('#base64TextArea').val() || $('#previewImage').attr('src');
-                if(base64ImgStr == "" || base64ImgStr === undefined){
-                    base64ImgStr = "none";
-                    //console.log("img none");
-                }
-
+                var base64ImgStr = $('#base64TextArea').val() || $('#previewImage').attr('src'),
+                    qObj = {
+                        id : getQuestionId(),
+                        description: $("#question").val(),
+                        answers: answers,
+                        anonymous: anonymous,
+                        image: (base64ImgStr == "") ? "none": base64ImgStr
+                    };
                 $.ajax({
                     type: "POST",
                     url: "/admin/updateQ",
                     cache: false,
                     // dataType: 'json',
-                    data: JSON.stringify(
-                    {
-                        id : getQuestionId(),
-                        question : question, 
-                        options : options, 
-                        anonymous : anonymous, 
-                        image: base64ImgStr
-                    }),
+                    data: JSON.stringify(qObj),
                     contentType: "application/json",
                     error: function(e){
                         //location.reload();

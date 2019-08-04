@@ -23,11 +23,11 @@ if(config.db === 'sqlite'){
             idle: 10000
         },
         // SQLite only
-        storage: './questionnaire.sqlite',
+        storage: './voting.sqlite',
     });
 }
 else if(config.db === 'mysql'){
-    sequelize = new Sequelize('questionnaire', config.dbUser, config.dbPassword, {
+    sequelize = new Sequelize('voting', config.dbUser, config.dbPassword, {
         define: {
             charset: 'utf8',
             dialectOptions: {
@@ -45,7 +45,7 @@ else if(config.db === 'mysql'){
         },
     });
 }
-const question = sequelize.define('question', {
+const questionnaire = sequelize.define('questionnaire', {
     id:{
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -64,8 +64,17 @@ const question = sequelize.define('question', {
         type: Sequelize.STRING
     }
 });
+
+const question = sequelize.define('question', {
+    description: {
+        type: Sequelize.STRING
+    },
+    image: {
+        type: Sequelize.STRING
+    }
+});
 const answer = sequelize.define('answer', {
-    option: {
+    description: {
         type: Sequelize.STRING
     },
     count: {
@@ -97,6 +106,7 @@ const vote = sequelize.define('vote', {
     }
 });
 
+questionnaire.hasMany(question);
 question.hasMany(answer);
 vote.belongsTo(user);
 vote.belongsTo(question);
@@ -104,6 +114,7 @@ vote.belongsTo(answer);
 
 let models = {
     orm: sequelize,
+    questionnaire: questionnaire,
     question: question,
     answer: answer,
     user: user,

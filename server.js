@@ -29,13 +29,14 @@ else
     server.listen(config.httpPort, '0.0.0.0');
 
 // Create tables
+models.questionnaire.sync({force: false}).then(function(){});
 models.answer.sync({force: false}).then(function(){});
 models.question.sync({force: false}).then(function(){});
 models.user.sync({force: false}).then(function(){});
 models.vote.sync({force: false}).then(function(){});
 
 // Register all questions in the DB
-models.question.findAll({ include: [models.answer] })
+/*models.question.findAll({ include: [models.answer] })
     .then((question) => {
         question.forEach( function (q) {
             let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
@@ -45,6 +46,37 @@ models.question.findAll({ include: [models.answer] })
                         "Description:" + q.dataValues.description);
         });
     });
+*/
+
+
+/*let answers = [
+    {option: 'option1', color: 'rgb(255, 0, 0)', count: 0},
+    {option: 'option2', color: 'rgb(255, 0, 0)', count: 1},
+    {option: 'option3', color: 'rgb(255, 0, 0)', count: 2},
+    {option: 'option4', color: 'rgb(255, 0, 0)', count: 3},
+];
+let q = [{
+    description: 'q1',
+    image: '',
+    answers: answers
+}];
+let qn = {
+    description: 'qn1',
+    anonymous: false,
+    uuid: genUUID.default(),
+    image: '',
+    questions: q
+};
+
+models.questionnaire.create(qn,
+    {
+        include:[
+        {
+            model: models.question,
+            include: [models.answer]
+        }]
+    });
+*/
 
 // Express middleware
 app.use(express.static('./web'));
@@ -88,7 +120,7 @@ let getR = function(req, res){
                     a.forEach(function (answer) {
                         total += answer.count;
                         ratio.push({
-                            a: answer.option,
+                            a: answer.description,
                             color: answer.color,
                             count: answer.count
                         });
@@ -104,27 +136,32 @@ let getR = function(req, res){
         });
     },
     postQ = function(req, res){
-        if(req.body.options.length !== 0){
-            let answers = [];
-            for(let i = 0; i < req.body.options.length; i++)
-                answers.push({
-                    option: req.body.options[i].description,
-                    color: req.body.options[i].color,
-                    count: 0
-                });
-            let q = {
-                description: req.body.question,
-                anonymous: req.body.anonymous,
-                uuid: genUUID.default(),
-                image: req.body.image,
-                answers: answers
-            };
-            models.question.create(q, { include: [models.answer] })
+        if(req.body.answers.length !== 0){ //Todo: json schema
+            req.body.uuid = genUUID.default();
+            models.question.create(req.body, { include: [models.answer] })
                 .then((q) => {
-                    let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
-                    daList.push(d);
-                    d.register();
+                   // let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+                    //daList.push(d);
+                    //d.register();
                     response.getCreated(res, q.dataValues.id);
+                });
+        }
+        else
+            response.getBadRequest(res);
+    },
+    postQN = function(req, res){
+        if(req.body.questions.length !== 0){ //Todo: json schema
+            req.body.uuid = genUUID.default();
+            models.questionnaire.create(req.body, {
+                    include:[
+                        {   model: models.question,
+                            include: [models.answer]}]})
+                .then((qn) => {
+                    console.log('create');
+                    /*let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+                    daList.push(d);
+                    d.register();*/
+                    response.getCreated(res, qn.dataValues.id);
                 });
         }
         else
@@ -195,39 +232,34 @@ let getR = function(req, res){
     },
     updateQ = function(req, res){
         let id = req.body.id,
-            description = req.body.question,
+            description = req.body.description,
             anonymous = req.body.anonymous,
             image = req.body.image,
             question,
-            answers = []
+            answers = req.body.answers;
+        console.log(req.body);
         models.question.findByPk(id)
             .then((q) => {
-                if (q != null && //check id is not exist
+                if (q != null && //check id is exist
                     id.trim().length !== 0 && //check id is not empty
-                    req.body.options.length !== 0) { // check options is not empty
+                    req.body.answers.length !== 0) { // check options is not empty
                     question = q;
-                    for (let i = 0; i < req.body.options.length; i++)
-                        answers.push({
-                            option: req.body.options[i].description,
-                            color: req.body.options[i].color,
-                            count: 0,
-                            questionId: id
-                        });
                     return models.answer.destroy({ where: { questionId: id}, force: true});
                 }
                 else
                     Promise.reject(404);
             })
             .then(() => {
+                answers.map(answer => answer.questionId = id)
                 return models.answer.bulkCreate(answers);
             })
             .then(() => {
                 let updateInfo = {
                     description: description,
                     anonymous: anonymous,
-                    image: image
+                    image: image,
                 };
-                return models.question.update(updateInfo, { where: {id: id} });
+                return models.question.update(updateInfo, { where: {id: id}});
             })
             .then(() => {
                 let d = dai(id, question.uuid, answers);
@@ -251,6 +283,7 @@ let getR = function(req, res){
 app.get('/getR/:id([0-9]+)', getR);
 app.post('/postQ', postQ);
 app.post('/postA', postA);
+app.post('/postQN', postQN);
 app.post('/admin/updateQ', bAuth, updateQ);
 app.post('/admin/deleteQ', bAuth, deleteQ);
 
@@ -425,7 +458,7 @@ let index = function(req, res){
                     let color = Object.values(config.color);
                     color.forEach( (c, idx) => {
                         if(c === answer.color)
-                            options[idx] = answer.option;
+                            options[idx] = answer.description;
                     });
                 });
                 response.getQuestionEditPage(res, {
