@@ -1,5 +1,5 @@
 .DS_Store
 node_modules
-questionnaire.sqlite
+*.sqlite
 config.js
 .idea/workspace.xml
