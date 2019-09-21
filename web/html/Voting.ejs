@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/css/Voting.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="/js/ejs.min.js"></script>
     <script src="/js/Utilities.js"></script>
     <script src="/js/Voting.js"></script>
     <script>
@@ -14,7 +15,8 @@
         <% } else { %>
             var va = undefined;
         <% } %>
-        var anonymous = ("<%= anonymous %>" === "true");
+        var anonymous = ("<%= anonymous %>" === "true"),
+            useDisqus = ("<%= useDisqus %>" === "true");
     </script>
     <title>Voting</title>
 </head>
@@ -50,25 +52,33 @@
                     </div>
                 </div>
                 <div>
-                    <h4>題目: <%= q %></h4>
+                    <h4 id="question">題目: <%= q %></h4>
                     <% if (typeof n != 'undefined') { %>
                         <h6 id="name"><%= n %></h6>
                     <% } %>
-                    <% if (typeof va != 'undefined') { %>
-                        <h5 id="chooseAswer">你的答案: <%= va %></h5>
-                    <% } else { %>
-                        <h5 id="chooseAswer">你的答案: 尚未選擇</h5>
-                    <% } %>
+
+                        <h5 id="chooseAswer">
+                            <% if (typeof va != 'undefined') { %>
+                            你的答案: <%= va %>
+                            <% } else { %>
+                            你的答案: 尚未選擇
+                            <% } %>
+                        </h5>
                 </div>
+                <div id="options">
                 <% for(var i = 0; i < o.length; i++){ %>
                     <div>
-                        <button type="button" class="btn" style="background-color: <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>
+                        <button type="button" class="option btn" style="background-color: <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>
                             <%= o[i].description %>
-                            <span class="badge badge-light" style="display:none">52%</span>
+                            <span class="badge badge-light" style="display:none"></span>
                         </button>
                     </div>
                 <% } %>
-                <% if (useDisqus == true) { %>
+                </div>
+                <div class="col-xs-4">
+                    <button id="next" type="button" class="btn btn-dark btn-sm" style="width: 30%; border-color: black"> next </button>
+                </div>
+            <% if (useDisqus == true) { %>
                 <div id="disqus_thread"></div>
                 <% } %>
             </div>

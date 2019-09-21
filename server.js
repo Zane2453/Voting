@@ -48,36 +48,6 @@ models.vote.sync({force: false}).then(function(){});
     });
 */
 
-
-/*let answers = [
-    {option: 'option1', color: 'rgb(255, 0, 0)', count: 0},
-    {option: 'option2', color: 'rgb(255, 0, 0)', count: 1},
-    {option: 'option3', color: 'rgb(255, 0, 0)', count: 2},
-    {option: 'option4', color: 'rgb(255, 0, 0)', count: 3},
-];
-let q = [{
-    description: 'q1',
-    image: '',
-    answers: answers
-}];
-let qn = {
-    description: 'qn1',
-    anonymous: false,
-    uuid: genUUID.default(),
-    image: '',
-    questions: q
-};
-
-models.questionnaire.create(qn,
-    {
-        include:[
-        {
-            model: models.question,
-            include: [models.answer]
-        }]
-    });
-*/
-
 // Express middleware
 app.use(express.static('./web'));
 app.use(favicon('./web/images/favicon.ico'));
@@ -110,12 +80,34 @@ let bAuth = function(req, res, next){
 
 // RESTful API
 let getR = function(req, res){
-        let queryObj = { questionId: req.params.id };
-        models.answer.findAll({ where: queryObj })
+        let login = (req.user !== undefined),
+            id = req.params.id,
+            questionIdx = req.params.questionIdx,
+            queryObj = {},
+            qRatio = {};
+        models.questionnaire.findByPk(id)
+            .then( (qn) => {
+                if(qn != null) {
+                    if(!qn.anonymous && !login)
+                        return Promise.reject(403);
+                    queryObj = {questionnaireId: id};
+                    return models.question.findAll({where: queryObj});
+                }
+                else
+                    return Promise.reject(404);
+            })
+            .then( (q) => {
+                if( q != null){
+                    if(q.length > questionIdx) {
+                        queryObj = {questionId: q[questionIdx].id};
+                        return models.answer.findAll({where: queryObj});
+                    }
+                }
+                return Promise.reject(404);
+            })
             .then((a) => {
                 let ratio = [],
-                    total = 0,
-                    qRatio;
+                    total = 0;
                 if(a != null) {
                     a.forEach(function (answer) {
                         total += answer.count;
@@ -129,35 +121,86 @@ let getR = function(req, res){
                         ratio: ratio,
                         total: total
                     };
-                    response.getRatio(res, qRatio);
+                    return Promise.reject(200);
                 }
                 else
-                    response.getBadRequest(res);
-        });
+                    return Promise.reject(404);
+            })
+            .catch((code) => {
+                if(code == 404)
+                    response.getPageNotFound(res);
+                else if(code == 403)
+                    response.getPermissionDenied(res);
+                else if(code == 200)
+                    response.getRatio(res, qRatio);
+            });
     },
-    postQ = function(req, res){
-        if(req.body.answers.length !== 0){ //Todo: json schema
-            req.body.uuid = genUUID.default();
-            models.question.create(req.body, { include: [models.answer] })
-                .then((q) => {
-                   // let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
-                    //daList.push(d);
-                    //d.register();
-                    response.getCreated(res, q.dataValues.id);
-                });
-        }
-        else
-            response.getBadRequest(res);
+    getNxtQ = function(req, res){
+        let login = (req.user !== undefined),
+            id = req.params.id,
+            questionIdx = req.params.questionIdx,
+            queryObj = {},
+            nextQ = {};
+        models.questionnaire.findByPk(id)
+            .then( (qn) => {
+                if(qn != null) {
+                    if(!qn.anonymous && !login)
+                        return Promise.reject(403);
+                    queryObj = {questionnaireId: id};
+                    return models.question.findAll({where: queryObj});
+                }
+                else
+                    return Promise.reject(404);
+            })
+            .then( (q) => {
+                if( q != null){
+                    if(q.length > questionIdx) {
+                        nextQ["question"] = {
+                            description: q[questionIdx].description,
+                            questionIdx: questionIdx
+                        };
+                        queryObj = {questionId: q[questionIdx].id};
+                        return models.answer.findAll({where: queryObj});
+                    }
+                    else{
+                        nextQ["question"] = {
+                            questionIdx: questionIdx-1
+                        };
+                        return Promise.reject(200);
+                    }
+                }
+                return Promise.reject(404);
+            })
+            .then((a) => {
+                if(a != null) {
+                    nextQ["options"] = [];
+                    a.forEach(function(o){
+                        nextQ["options"].push({
+                            description: o.description,
+                            color: o.color
+                        });
+                    });
+                    return Promise.reject(200);
+                }
+                return Promise.reject(404);
+            })
+            .catch( (code) => {
+                if(code == 404)
+                    response.getPageNotFound(res);
+                else if(code == 403)
+                    response.getPermissionDenied(res);
+                else if(code == 200)
+                    response.getNextQuestion(res, nextQ);
+            })
     },
     postQN = function(req, res){
         if(req.body.questions.length !== 0){ //Todo: json schema
             req.body.uuid = genUUID.default();
             models.questionnaire.create(req.body, {
-                    include:[
-                        {   model: models.question,
-                            include: [models.answer]}]})
+                include:[
+                    {   model: models.question,
+                        include: [models.answer]}]})
                 .then((qn) => {
-                    console.log('create');
                     /*let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
                     daList.push(d);
                     d.register();*/
@@ -169,123 +212,146 @@ let getR = function(req, res){
     },
     postA = function (req, res) {
         let id = req.body.id,
+            questionIdx = req.body.questionIdx,
             color = req.body.color,
             login = (req.user !== undefined),
             queryObj,
+            questionnaire,
             question,
             answer;
-        models.question.findByPk(id)
+        models.questionnaire.findByPk(id)
+            .then((qn) => {
+                questionnaire = qn;
+                if(qn){
+                    queryObj = { questionnaireId: id };
+                    return models.question.findAll({
+                        where: queryObj,
+                        order: [['id', 'ASC']]
+                    });
+                }
+                return Promise.reject(404);
+            })
             .then((q) => {
                 question = q;
-                if (q){
-                    queryObj = { color: color, questionId: id };
+                if((q != null) && (q.length > questionIdx)) {
+                    queryObj = { questionId: q[questionIdx].id , color: color};
                     return models.answer.findOne({ where: queryObj });
                 }
-                else
-                    return Promise.reject(400);
+                return Promise.reject(404);
             })
-            .then((a) => {
-                if (a) {
-                    answer = a;
-                    if (!question.anonymous && login) {
-                        queryObj = { questionId: id, userId: req.user.id };
-                        return models.vote.findOne({ where: queryObj });
-                    } else if (!question.anonymous && !login) {
-                        return Promise.reject(401);
-                    } else if (question.anonymous) {
-                        a.increment(['count'], {by: 1});
-                        for (let i = 0; i < daList.length; i++)
-                            if (daList[i].mac === question.uuid)
-                                daList[i].push(a);
-                        return Promise.reject(200);
-                    }
+            .then( (a) => {
+                answer = a;
+                if (!questionnaire.anonymous && login) {
+                    queryObj = { question: question.id, userId: req.user.id };
+                    return models.vote.findOne({ where: queryObj });
                 }
-                else
-                    return Promise.reject(400);
+                else if (!questionnaire.anonymous && !login)
+                    return Promise.reject(401);
+                else if (questionnaire.anonymous) {
+                    a.increment(['count'], {by: 1});
+                    return Promise.reject(200);
+                }
             })
             .then((v) => {
                 if (v == null){
                     answer.increment(['count'],{ by :1});
-                    for(var i = 0; i < daList.length; i++)
-                        if(daList[i].mac === question.uuid)
-                            daList[i].push(answer);
                     models.vote.create({
                         userId: req.user.id,
                         questionId: id,
                         answerId: answer.id
                     });
-                    response.getSuccess(res);
+                    return Promise.reject(200);
                 }
-                else
-                    return Promise.reject(409);
+                return Promise.reject(409);
             })
             .catch((code) => {
-                if(code === 200)
+                if(code === 200) {
+                    /*for (let i = 0; i < daList.length; i++)
+                       if (daList[i].mac === questionnaire.uuid)
+                           daList[i].push(a);
+                    */
                     response.getSuccess(res);
+                }
                 else if(code === 401)
                     response.getPermissionDenied(res);
                 else if(code === 404)
-                    response.getBadRequest(res);
+                    response.getPageNotFound(res);
                 else if(code === 409)
                     response.getConflict(res);
             });
-    },
-    updateQ = function(req, res){
-        let id = req.body.id,
-            description = req.body.description,
-            anonymous = req.body.anonymous,
-            image = req.body.image,
-            question,
-            answers = req.body.answers;
-        console.log(req.body);
-        models.question.findByPk(id)
-            .then((q) => {
-                if (q != null && //check id is exist
-                    id.trim().length !== 0 && //check id is not empty
-                    req.body.answers.length !== 0) { // check options is not empty
-                    question = q;
-                    return models.answer.destroy({ where: { questionId: id}, force: true});
-                }
-                else
-                    Promise.reject(404);
-            })
-            .then(() => {
-                answers.map(answer => answer.questionId = id)
-                return models.answer.bulkCreate(answers);
-            })
-            .then(() => {
-                let updateInfo = {
-                    description: description,
-                    anonymous: anonymous,
-                    image: image,
-                };
-                return models.question.update(updateInfo, { where: {id: id}});
-            })
-            .then(() => {
-                let d = dai(id, question.uuid, answers);
-                daList.push(d);
-                d.register();
-                response.getSuccess(res);
-            })
-            .catch((code) => {
-                if(code === 404)
-                    response.getPageNotFound(res);
-            });
-    },
-    deleteQ = function(req, res){
-        let id = req.body.id;
-        models.question.destroy({ where: { id: id }, force:true })
-            .then(() => {
-                response.getSuccess(res);
-            });
     };
+    // postQ = function(req, res){
+    //     if(req.body.answers.length !== 0){ //Todo: json schema
+    //         req.body.uuid = genUUID.default();
+    //         console.log(req.body.anonymous);
+    //         models.question.create(req.body, { include: [models.answer] })
+    //             .then((q) => {
+    //                // let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+    //                 //daList.push(d);
+    //                 //d.register();
+    //                 response.getCreated(res, q.dataValues.id);
+    //             });
+    //     }
+    //     else
+    //         response.getBadRequest(res);
+    // },
+    // updateQ = function(req, res){
+    //     let id = req.body.id,
+    //         description = req.body.description,
+    //         anonymous = req.body.anonymous,
+    //         image = req.body.image,
+    //         question,
+    //         answers = req.body.answers;
+    //     console.log(req.body);
+    //     models.question.findByPk(id)
+    //         .then((q) => {
+    //             if (q != null && //check id is exist
+    //                 id.trim().length !== 0 && //check id is not empty
+    //                 req.body.answers.length !== 0) { // check options is not empty
+    //                 question = q;
+    //                 return models.answer.destroy({ where: { questionId: id}, force: true});
+    //             }
+    //             else
+    //                 Promise.reject(404);
+    //         })
+    //         .then(() => {
+    //             answers.map(answer => answer.questionId = id)
+    //             return models.answer.bulkCreate(answers);
+    //         })
+    //         .then(() => {
+    //             let updateInfo = {
+    //                 description: description,
+    //                 anonymous: anonymous,
+    //                 image: image,
+    //             };
+    //             return models.question.update(updateInfo, { where: {id: id}});
+    //         })
+    //         .then(() => {
+    //             let d = dai(id, question.uuid, answers);
+    //             daList.push(d);
+    //             d.register();
+    //             response.getSuccess(res);
+    //         })
+    //         .catch((code) => {
+    //             if(code === 404)
+    //                 response.getPageNotFound(res);
+    //         });
+    // },
+    // deleteQ = function(req, res){
+    //     let id = req.body.id;
+    //     models.question.destroy({ where: { id: id }, force:true })
+    //         .then(() => {
+    //             response.getSuccess(res);
+    //         });
+    // };
 
-app.get('/getR/:id([0-9]+)', getR);
-app.post('/postQ', postQ);
+app.get('/getR/:id([0-9]+)/:questionIdx([0-9]+)', getR);
+app.get('/getNxtQ/:id([0-9]+)/:questionIdx([0-9]+)', getNxtQ);
 app.post('/postA', postA);
 app.post('/postQN', postQN);
-app.post('/admin/updateQ', bAuth, updateQ);
-app.post('/admin/deleteQ', bAuth, deleteQ);
+// app.post('/postQ', postQ);
+// app.post('/admin/updateQ', bAuth, updateQ);
+// app.post('/admin/deleteQ', bAuth, deleteQ);
 
 // Page route
 let index = function(req, res){
@@ -334,41 +400,50 @@ let index = function(req, res){
         let id = req.params.id,
             login = (req.user !== undefined),
             options,
+            questionnaire,
             question,
             answer,
             vote = null,
             voteAnswer,
             queryObj;
-        models.question.findByPk(id)
-            .then( (q) => {
-                question = q;
-                queryObj = {questionId: id};
-                if(0){}
-                else if(q == null)
+        models.questionnaire.findByPk(id)
+            .then( (qn) => {
+                questionnaire = qn;
+                queryObj = {questionnaireId: id};
+                if(qn == null)
                     return Promise.reject(404);
-                else if(q.anonymous && !login)
-                    return models.answer.findAll({where: queryObj} );
-                else if(q.anonymous && login)
-                    return models.answer.findAll({where: queryObj} );
-                else if(!q.anonymous && login)
-                    return models.answer.findAll( {where: queryObj} );
-                else if(!q.anonymous && !login)
-                    return Promise.reject(200);
+                else if(!qn.anonymous && !login)
+                     return Promise.reject(200);
+                else {
+                    return models.question.findAll({
+                        where: queryObj,
+                        order: [['id', 'ASC']]
+                    });
+                }
+            })
+            .then( (q) => {
+                if(q == null)
+                    return Promise.reject(404);
+                else{
+                    question = q[0];
+                    queryObj = {questionId: q[0].id};
+                    return models.answer.findAll({where: queryObj});
+                }
             })
             .then( (a) => {
                 options = [];
                 answer = a;
                 a.forEach((answer) => {
-                    options.push({description: answer.option, color: answer.color});
+                    options.push({description: answer.description, color: answer.color});
                 });
-                if(question.anonymous && !login) {
+                if(questionnaire.anonymous && !login) {
                     return Promise.reject(200);
                 }
-                else if(question.anonymous && login){
+                else if(questionnaire.anonymous && login){
                     return Promise.reject(200);
                 }
-                else if(!question.anonymous && login){
-                    queryObj = { questionId: id, userId: req.user.id};
+                else if(!questionnaire.anonymous && login){
+                    queryObj = { questionId: question.id, userId: req.user.id};
                     return models.vote.findOne({ where: queryObj });
                 }
             })
@@ -387,48 +462,47 @@ let index = function(req, res){
                 if(code === 404)
                     response.getPageNotFound(res);
                 if(code === 200){
-                    if(0){}
-                    else if(question.anonymous && !login){
+                   if(questionnaire.anonymous && !login){
                         response.getVotingPage(res, {
                             q: question.description,
-                            anonymous: question.anonymous,
+                            anonymous: questionnaire.anonymous,
                             o: options,
                             useDisqus: config.useDisqus
                         });
+                   }
+                   else if(questionnaire.anonymous && login){
+                       response.getVotingPage(res, {
+                           q: question.description,
+                           anonymous: questionnaire.anonymous,
+                           o: options,
+                           useDisqus: config.useDisqus
+                       });
+                   }
+                   else if(!questionnaire.anonymous && login && !vote){
+                       response.getVotingPage(res, {
+                           q: question.description,
+                           anonymous: questionnaire.anonymous,
+                           o: options,
+                           n: req.user.name,
+                           p: req.user.photo,
+                           useDisqus: config.useDisqus
+                       });
                     }
-                    else if(question.anonymous && login){
-                        response.getVotingPage(res, {
-                            q: question.description,
-                            anonymous: question.anonymous,
-                            o: options,
-                            useDisqus: config.useDisqus
-                        });
-                    }
-                    else if(!question.anonymous && login && !vote){
-                        response.getVotingPage(res, {
-                            q: question.description,
-                            anonymous: question.anonymous,
-                            o: options,
-                            n: req.user.name,
-                            p: req.user.photo,
-                            useDisqus: config.useDisqus
-                        });
-                    }
-                    else if(!question.anonymous && login && vote){
-                        response.getVotingPage(res, {
-                            q: question.description,
-                            anonymous: question.anonymous,
-                            o: options,
-                            va: voteAnswer.option,
-                            n: req.user.name,
-                            p: req.user.photo,
-                            useDisqus: config.useDisqus
-                        });
-                    }
-                    else if(!question.anonymous && !login){
-                        req.session.returnTo = req.path;
-                        res.redirect('/login');
-                    }
+                   else if(!questionnaire.anonymous && login && vote){
+                       response.getVotingPage(res, {
+                           q: question.description,
+                           anonymous: questionnaire.anonymous,
+                           o: options,
+                           va: voteAnswer.description,
+                           n: req.user.name,
+                           p: req.user.photo,
+                           useDisqus: config.useDisqus
+                       });
+                   }
+                   else if(!questionnaire.anonymous && !login){
+                       req.session.returnTo = req.path;
+                       res.redirect('/login');
+                   }
                 }
             });
     },

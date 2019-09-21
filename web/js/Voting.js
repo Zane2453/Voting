@@ -2,6 +2,16 @@
  * Created by kuan on 2018/8/26.
  */
 
+var id = getQuestionnaireId(),
+    questionIdx = 0,
+    cookieId,
+    question = '題目: <%= q %>',
+    options = '<% for(var i = 0; i < o.length; i++){ %> <div>\
+               <button type="button" class="option btn" style="background-color: \
+               <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>\
+               <%= o[i].description %>\
+               <span class="badge badge-light" style="display:none"></span>\
+               </button></div> <% } %>';
 
 var setCookie = function(cname, cvalue, exdays) {
     // cookie example: "question1=answer1;expires=Thu, 01 Jan 1970 00:00:00 UTC"
@@ -25,11 +35,28 @@ var getCookie = function(cname) {
     }
     return "";
 };
+var checkVoted = function(){
+    cookieId = id + "_" + questionIdx;
 
+    var answer = getCookie(cookieId);
+    if((answer != "" && (anonymous == true)) ||
+        (va != undefined && (anonymous == false)) ) {
+        if(anonymous)
+            $("#chooseAswer").text("你的答案: " + answer);
+        else
+            $("#chooseAswer").text("你的答案: " + va);
+        $(".option").prop('disabled', true);
+        setRatio(id);
+        return;
+    }
+    else if((answer == "" && (anonymous == true)) ||
+        (va == undefined && (anonymous == false)) )
+        $(".option").prop('disabled', false);
+};
 var setRatio = function(id){
     $.ajax({
         type: "GET",
-        url: location.origin + "/getR/" + id,
+        url: location.origin + "/getR/" + id + "/" + questionIdx,
         cache: false,
         dataType: 'json',
         contentType: "application/json",
@@ -39,7 +66,7 @@ var setRatio = function(id){
         success: function (data) {
             for(var i = 0; i < data.ratio.length; i++){
                 (function(index){
-                    $("button").each(function () {
+                    $(".option").each(function () {
                         if ($(this).css("background-color") == data.ratio[index].color) {
                             var r = Math.round(data.ratio[i].count / data.total*1000)/10;
                             $(this).find("span").html(r.toString() + "%");
@@ -52,48 +79,79 @@ var setRatio = function(id){
     });
 };
 
-$(document).ready(function(){
-    var id = getQuestionId();
-        answer = getCookie(id);
-    if((answer != "" && (anonymous == true)) ||
-        (va != undefined && (anonymous == false)) ) {
-        if(anonymous)
-            $("#chooseAswer").text("你的答案: " + answer);
-        else
-            $("#chooseAswer").text("你的答案: " + va);
-        setRatio(id);
-        return ;
-    }
-    else if((answer == "" && (anonymous == true)) ||
-        (va == undefined && (anonymous == false)) )
-        $("button").prop('disabled', false);
-
-    $("button").click(function(){
-        //store user answer
-        var text = $(this).data('datac');
-        $("#chooseAswer").text("你的答案: " + text);
-        if(anonymous)
-            setCookie(id, encodeURIComponent(text), 30);
-        $("button").prop('disabled', true);
-        $.ajax({
-            type: "POST",
-            url: location.origin + "/postA",
-            cache: false,
-            // dataType: 'json',
-            data: JSON.stringify({
-                id: id,
-                color: $(this).css("background-color")
-            }),
-            contentType: "application/json",
-            error: function(e) {
-                console.log(e);
-            },
-            success: function () {
-                setRatio(id);
+var getNextQuestion = function(){
+    questionIdx++;
+    $.ajax({
+        type: "GET",
+        url: location.origin + "/getNxtQ/" + id + "/" + questionIdx,
+        cache: false,
+        dataType: 'json',
+        contentType: "application/json",
+        error: function(e) {
+            console.log(e);
+        },
+        success: function (nxtQ) {
+            if(nxtQ.question.questionIdx == questionIdx-1)
+                return alert("last!");
+            else{
+                jQuery.fn.slideLeftHide = function(speed, callback) {
+                    $("#options").animate({
+                        width: "hide",
+                        paddingLeft: "hide",
+                        paddingRight: "hide",
+                        marginLeft: "hide",
+                        marginRight: "hide"
+                    }, speed, callback);
+                }(200, function(){
+                    $("#question").html(ejs.render(question, {q: nxtQ.question.description}));
+                    $("#options").html(ejs.render(options, {o: nxtQ.options}));
+                    checkVoted();
+                    $(".option").click(voteAnswer);
+                    jQuery.fn.slideLeftShow = function(speed, callback) {
+                        $("#options").animate({
+                            width: "show",
+                            paddingLeft: "show",
+                            paddingRight: "show",
+                            marginLeft: "show",
+                            marginRight: "show"
+                        }, speed, callback);
+                    }(200);
+                });
             }
-        });
-
+        }
     });
-
+};
+var voteAnswer = function(){
+    //store user answer
+    var text = $(this).data('datac');
+    $("#chooseAswer").text("你的答案: " + text);
+    if(anonymous) {
+        cookieId = id + '_' + questionIdx;
+        setCookie(cookieId, encodeURIComponent(text), 30);
+    }
+    $(".option").prop('disabled', true);
+    $.ajax({
+        type: "POST",
+        url: location.origin + "/postA",
+        cache: false,
+        // dataType: 'json',
+        data: JSON.stringify({
+            id: id,
+            questionIdx: questionIdx,
+            color: $(this).css("background-color")
+        }),
+        contentType: "application/json",
+        error: function(e) {
+            console.log(e);
+        },
+        success: function () {
+            setRatio(id);
+        }
+    });
+};
+$(document).ready(function(){
+    checkVoted();
+    $(".option").click(voteAnswer);
+    $("#next").click(getNextQuestion);
 });
 

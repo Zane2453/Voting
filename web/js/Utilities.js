@@ -1,4 +1,4 @@
-var getQuestionId = function (){
+var getQuestionnaireId = function (){
     var component = location.pathname.split("/");
     for(var i = component.length-1; i >= 0 ; i--)
         if(component[i] != "")

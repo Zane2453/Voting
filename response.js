@@ -67,6 +67,10 @@ Response.prototype = {
         res.writeHead(200, {"Content-Type": "application/json"});
         res.end(JSON.stringify(data));
     },
+    getNextQuestion: function(res, nextQ){
+        res.writeHead(200, {"Content-Type": "application/json"});
+        res.end(JSON.stringify(nextQ));
+    },
     getPageNotFound: function (res) {
         res.writeHead(404, {"Content-Type": "text/html"});
         res.end("page not found!");
