@@ -5,7 +5,8 @@ let config = require('./config'),
     server =  (config.https) ?
         require('https').createServer(config.httpServerOptions, app) :
         require('http').createServer(app),
-    httpRedirectServer = (config.https) ? require('http').createServer(redirectApp) : null,
+    httpRedirectServer = (config.https) ?
+        require('http').createServer(redirectApp) : null,
     socketIo = require('socket.io')(server),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
@@ -562,7 +563,7 @@ app.get('^/admin/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
 app.get('^/admin/polling(/){0,1}$|^/$', bAuth, adminPolling);
 
 /*--------------------------------------------------------------------------------*/
-/* The Socket.io API for the show */
+/* Socket.io API for the show */
 let curQuestionnaireIdx,
     curQuestionIdx;
 socketIo.on('connection', function(socket) {
@@ -588,18 +589,3 @@ socketIo.on('connection', function(socket) {
         });
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

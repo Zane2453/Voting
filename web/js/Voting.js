@@ -2,45 +2,46 @@
  * Created by kuan on 2018/8/26.
  */
 
-var id = getQuestionnaireId(),
+let id = getQuestionnaireId(),
     questionIdx = 0,
     cookieId,
     question = '題目: <%= q %>',
-    options = '<% for(var i = 0; i < o.length; i++){ %> <div>\
+    options = '<% for(let i = 0; i < o.length; i++){ %> <div>\
                <button type="button" class="option btn" style="background-color: \
                <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>\
                <%= o[i].description %>\
                <span class="badge badge-light" style="display:none"></span>\
                </button></div> <% } %>';
 
-var setCookie = function(cname, cvalue, exdays) {
+let setCookie = function(cname, cvalue, exdays) {
     // cookie example: "question1=answer1;expires=Thu, 01 Jan 1970 00:00:00 UTC"
-    var d = new Date();
+    let d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    var expires = "expires="+d.toUTCString();
+    let expires = "expires="+d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires;
 };
 
-var getCookie = function(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
+let getCookie = function(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') {
             c = c.substring(1);
         }
-        if (c.indexOf(name) == 0) {
+        if (c.indexOf(name) === 0) {
             return decodeURIComponent(c.substring(name.length, c.length));
         }
     }
     return "";
 };
-var checkVoted = function(){
+
+let checkVoted = function(){
     cookieId = id + "_" + questionIdx;
 
-    var answer = getCookie(cookieId);
-    if((answer != "" && (anonymous == true)) ||
-        (va != undefined && (anonymous == false)) ) {
+    let answer = getCookie(cookieId);
+    if((answer !== "" && (anonymous === true)) ||
+        (va !== undefined && (anonymous === false)) ) {
         if(anonymous)
             $("#chooseAswer").text("你的答案: " + answer);
         else
@@ -49,13 +50,14 @@ var checkVoted = function(){
         setRatio(id);
         return;
     }
-    else if((answer == "" && (anonymous == true)) ||
-        (va == undefined && (anonymous == false)) ){
+    else if((answer === "" && (anonymous === true)) ||
+        (va === undefined && (anonymous === false)) ){
         $(".option").prop('disabled', false);
         $("#chooseAswer").text("你的答案:  尚未選擇");
     }
 };
-var setRatio = function(id){
+
+let setRatio = function(id){
     $.ajax({
         type: "GET",
         url: location.origin + "/getR/" + id + "/" + questionIdx,
@@ -66,11 +68,11 @@ var setRatio = function(id){
             console.log(e);
         },
         success: function (data) {
-            for(var i = 0; i < data.ratio.length; i++){
+            for(let i = 0; i < data.ratio.length; i++){
                 (function(index){
                     $(".option").each(function () {
-                        if ($(this).css("background-color") == data.ratio[index].color) {
-                            var r = Math.round(data.ratio[i].count / data.total*1000)/10;
+                        if ($(this).css("background-color") === data.ratio[index].color) {
+                            let r = Math.round(data.ratio[i].count / data.total*1000)/10;
                             $(this).find("span").html(r.toString() + "%");
                         }
                     });
@@ -81,7 +83,7 @@ var setRatio = function(id){
     });
 };
 
-var getNextQuestion = function(){
+let getNextQuestion = function(){
     $("#next").css('visibility', 'hidden');
     $.ajax({
         type: "GET",
@@ -93,7 +95,7 @@ var getNextQuestion = function(){
             console.log(e);
         },
         success: function (nxtQ) {
-            if(nxtQ.question.questionIdx == questionIdx-1){
+            if(nxtQ.question.questionIdx === questionIdx-1){
                 $("#interact").css('visibility', 'hidden');
                 $("#end").css('visibility', 'visible');
             }
@@ -125,9 +127,10 @@ var getNextQuestion = function(){
         }
     });
 };
-var voteAnswer = function(){
+
+let voteAnswer = function(){
     //store user answer
-    var text = $(this).data('datac');
+    let text = $(this).data('datac');
     $("#chooseAswer").text("你的答案: " + text);
     if(anonymous) {
         cookieId = id + '_' + questionIdx;
@@ -153,8 +156,9 @@ var voteAnswer = function(){
         }
     });
 };
+
 $(document).ready(function(){
-    var socketIo = io();
+    let socketIo = io();
     $(".option").click(voteAnswer);
     $("#next").click(getNextQuestion);
 
