@@ -5,7 +5,8 @@ let config = require('./config'),
     server =  (config.https) ?
         require('https').createServer(config.httpServerOptions, app) :
         require('http').createServer(app),
-    httpRedirectServer = (config.https) ? require('http').createServer(redirectApp) : null;
+    httpRedirectServer = (config.https) ? require('http').createServer(redirectApp) : null,
+    socketIo = require('socket.io')(server),
     bodyParser = require('body-parser'),
     cookieParser = require('cookie-parser'),
     expressSession = require('express-session'),
@@ -546,6 +547,9 @@ let index = function(req, res){
                 if(code === 404)
                     response.getPageNotFound(res);
             })
+    },
+    adminPolling = function(req, res){
+        response.getAdminPollingPage(res);
     };
 
 app.get('^/index(/){0,1}$|^/$', index);
@@ -555,3 +559,47 @@ app.get('^/login(/){0,1}$', login);
 app.get('^/vote/:id([0-9]+)(/){0,1}$', vote);
 app.get('^/admin(/){0,1}$', bAuth, admin);
 app.get('^/admin/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
+app.get('^/admin/polling(/){0,1}$|^/$', bAuth, adminPolling);
+
+/*--------------------------------------------------------------------------------*/
+/* The Socket.io API for the show */
+let curQuestionnaireIdx,
+    curQuestionIdx;
+socketIo.on('connection', function(socket) {
+    // admin page API
+    socket.on('START', (questionnaireIdx) => {
+        curQuestionnaireIdx = questionnaireIdx;
+        curQuestionIdx = 0;
+    });
+
+    socket.on('NEXT', () => {
+        curQuestionIdx++;
+        socketIo.emit('NEXT', {
+            questionnaireIdx: curQuestionnaireIdx,
+            questionIdx: curQuestionIdx
+        });
+    });
+
+    // audience page API
+    socket.on('CUR_Q', () => {
+        socketIo.emit('CUR_Q', {
+            questionnaireIdx: curQuestionnaireIdx,
+            questionIdx: curQuestionIdx
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

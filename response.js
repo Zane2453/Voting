@@ -8,13 +8,15 @@ let fs = require('fs'),
     questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
     adminQuestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
     questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs",
+    AdminPollingPagePath = __dirname + "/web/html/AdminPolling.html",
     votingPage = fs.readFileSync(votingPagePath, 'utf8'),
     votingCreatePage = fs.readFileSync(votingCreatePagePath, 'utf8'),
     dashBoardPage = fs.readFileSync(dashBoardPagePath, 'utf8'),
     loginPage = fs.readFileSync(loginPagePath, 'utf8'),
     questionListPage = fs.readFileSync(questionListPagePath, 'utf8'),
     adminQuestionListPage = fs.readFileSync(adminQuestionListPagePath, 'utf8'),
-    questionEditPage = fs.readFileSync(questionEditPagePath, 'utf8');
+    questionEditPage = fs.readFileSync(questionEditPagePath, 'utf8'),
+    adminPollingPage = fs.readFileSync(AdminPollingPagePath, 'utf8');
 
 let Response = function () {};
 
@@ -54,6 +56,10 @@ Response.prototype = {
         let obj = Object.assign({},config.color, question);
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end(ejs.render(questionEditPage, obj));
+    },
+    getAdminPollingPage : function(res){
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(adminPollingPage);
     },
     getSuccess: function(res){
         res.writeHead(200, {"Content-Type": "text/html"});

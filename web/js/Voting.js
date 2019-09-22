@@ -80,7 +80,7 @@ var setRatio = function(id){
 };
 
 var getNextQuestion = function(){
-    questionIdx++;
+    $("#next").css('visibility', 'hidden');
     $.ajax({
         type: "GET",
         url: location.origin + "/getNxtQ/" + id + "/" + questionIdx,
@@ -91,11 +91,13 @@ var getNextQuestion = function(){
             console.log(e);
         },
         success: function (nxtQ) {
-            if(nxtQ.question.questionIdx == questionIdx-1)
-                return alert("last!");
+            if(nxtQ.question.questionIdx == questionIdx-1){
+                $("#interact").css('visibility', 'hidden');
+                $("#end").css('visibility', 'visible');
+            }
             else{
                 jQuery.fn.slideLeftHide = function(speed, callback) {
-                    $("#options").animate({
+                    $("#interact").animate({
                         width: "hide",
                         paddingLeft: "hide",
                         paddingRight: "hide",
@@ -108,7 +110,7 @@ var getNextQuestion = function(){
                     checkVoted();
                     $(".option").click(voteAnswer);
                     jQuery.fn.slideLeftShow = function(speed, callback) {
-                        $("#options").animate({
+                        $("#interact").animate({
                             width: "show",
                             paddingLeft: "show",
                             paddingRight: "show",
@@ -150,8 +152,29 @@ var voteAnswer = function(){
     });
 };
 $(document).ready(function(){
-    checkVoted();
+    var socketIo = io();
     $(".option").click(voteAnswer);
     $("#next").click(getNextQuestion);
+
+    socketIo.emit('CUR_Q');
+    socketIo.on('CUR_Q', (curQ)=>{
+        if( (id !== curQ.questionnaireIdx) ||
+            (questionIdx === curQ.questionIdx && questionIdx !== 0))
+            return;
+        questionIdx = curQ.questionIdx;
+        getNextQuestion();
+    });
+
+    socketIo.on('NEXT', (curQ)=>{
+        if(id !== curQ.questionnaireIdx)
+            return;
+        questionIdx++;
+        $("#next").css('visibility', 'visible');
+    });
+
 });
+
+
+
+
 

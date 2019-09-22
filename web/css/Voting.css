@@ -12,3 +12,15 @@ body{
 #disqus_thread{
 	margin-top: 50px;
 }
+#end{
+    visibility: hidden;
+    width:500px;
+    height:200px;
+    left:50%;
+    top:50%;
+    margin:-100px 0 0 -100px;
+    font-weight: bold;
+}
+#next{
+    visibility: hidden;
+}
