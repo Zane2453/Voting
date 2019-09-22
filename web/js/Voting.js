@@ -50,8 +50,10 @@ var checkVoted = function(){
         return;
     }
     else if((answer == "" && (anonymous == true)) ||
-        (va == undefined && (anonymous == false)) )
+        (va == undefined && (anonymous == false)) ){
         $(".option").prop('disabled', false);
+        $("#chooseAswer").text("你的答案:  尚未選擇");
+    }
 };
 var setRatio = function(id){
     $.ajax({
