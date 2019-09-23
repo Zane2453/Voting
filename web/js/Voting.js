@@ -11,7 +11,9 @@ let id = getQuestionnaireId(),
                <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>\
                <%= o[i].description %>\
                <span class="badge badge-light" style="display:none"></span>\
-               </button></div> <% } %>';
+               </button></div> <% } %>',
+    isStart = false,
+    isEnd = false;
 
 let setCookie = function(cname, cvalue, exdays) {
     // cookie example: "question1=answer1;expires=Thu, 01 Jan 1970 00:00:00 UTC"
@@ -98,6 +100,7 @@ let getNextQuestion = function(){
             if(nxtQ.question.questionIdx === questionIdx-1){
                 $("#interact").css('visibility', 'hidden');
                 $("#end").css('visibility', 'visible');
+                isEnd = true;
             }
             else{
                 jQuery.fn.slideLeftHide = function(speed, callback) {
@@ -157,25 +160,39 @@ let voteAnswer = function(){
     });
 };
 
+let startPoll = function(){
+    isStart = true;
+    $("#welcome").css('visibility', 'hidden');
+    $("#interact").css('visibility', 'visible');
+    getNextQuestion();
+};
+
 $(document).ready(function(){
     let socketIo = io();
     $(".option").click(voteAnswer);
     $("#next").click(getNextQuestion);
-
+    $("#startBtn").click(startPoll);
     socketIo.emit('CUR_Q');
+    socketIo.on('START', (curQ)=>{
+        if(id !== curQ.questionnaireIdx)
+            return;
+        $("#promptText").text("請按下Start 進行投票！");
+        $("#startBtn").html("Start");
+        $("#startBtn").prop('disabled', false);
+    });
     socketIo.on('CUR_Q', (curQ)=>{
         if( (id !== curQ.questionnaireIdx) ||
             (questionIdx === curQ.questionIdx && questionIdx !== 0))
             return;
         questionIdx = curQ.questionIdx;
-        getNextQuestion();
+        startPoll();
     });
-
     socketIo.on('NEXT', (curQ)=>{
         if(id !== curQ.questionnaireIdx)
             return;
         questionIdx++;
-        $("#next").css('visibility', 'visible');
+        if(isStart && !(isEnd))
+            $("#next").css('visibility', 'visible');
     });
 
 });

@@ -567,12 +567,14 @@ app.get('^/admin/polling(/){0,1}$|^/$', bAuth, adminPolling);
 let curQuestionnaireIdx,
     curQuestionIdx;
 socketIo.on('connection', function(socket) {
-    // admin page API
     socket.on('START', (questionnaireIdx) => {
         curQuestionnaireIdx = questionnaireIdx;
         curQuestionIdx = 0;
+        socketIo.emit('START', {
+            questionnaireIdx: curQuestionnaireIdx,
+                questionIdx: curQuestionIdx
+        });
     });
-
     socket.on('NEXT', () => {
         curQuestionIdx++;
         socketIo.emit('NEXT', {
@@ -580,8 +582,6 @@ socketIo.on('connection', function(socket) {
             questionIdx: curQuestionIdx
         });
     });
-
-    // audience page API
     socket.on('CUR_Q', () => {
         socketIo.emit('CUR_Q', {
             questionnaireIdx: curQuestionnaireIdx,

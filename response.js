@@ -8,7 +8,7 @@ let fs = require('fs'),
     questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
     adminQuestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
     questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs",
-    AdminPollingPagePath = __dirname + "/web/html/AdminPolling.html",
+    adminPollingPagePath = __dirname + "/web/html/AdminPolling.html",
     votingPage = fs.readFileSync(votingPagePath, 'utf8'),
     votingCreatePage = fs.readFileSync(votingCreatePagePath, 'utf8'),
     dashBoardPage = fs.readFileSync(dashBoardPagePath, 'utf8'),
@@ -16,7 +16,7 @@ let fs = require('fs'),
     questionListPage = fs.readFileSync(questionListPagePath, 'utf8'),
     adminQuestionListPage = fs.readFileSync(adminQuestionListPagePath, 'utf8'),
     questionEditPage = fs.readFileSync(questionEditPagePath, 'utf8'),
-    adminPollingPage = fs.readFileSync(AdminPollingPagePath, 'utf8');
+    adminPollingPage = fs.readFileSync(adminPollingPagePath, 'utf8');
 
 let Response = function () {};
 
