@@ -33,76 +33,78 @@
     </script>
     <% } %>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                <div id="welcome">
-                    <div class="text-center">
-                        <h2 id="welcomeText">歡迎來到 AiPolling，</h2>
-                    </div>
-                    <div class="text-center">
-                        <h4 id="promptText">投票準備中</h4>
-                    </div>
-                    <div class="text-center">
-                        <button type="button" id="startBtn" class="btn btn-info btn-lg" disabled>等待開放</button>
-                    </div>
-                </div>
-                <div id="interact">
-                    <div class="onl_login">
-                        <div class="row onl_row-sm-offset-4 onl_socialButtons">
-                            <div class="col-xs-4 col-sm-6">
-                                <a href="#" class="btn btn-lg btn-block onl_btn-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
-                                    <i class="fa fa-facebook fa-2x"></i>
-                                    <span class="hidden-xs"></span>
-                                </a>
-                            </div>
-                            <div class="col-xs-4 col-sm-6">
-                                <a href="#" class="btn btn-lg btn-block onl_btn-google-plus" data-toggle="tooltip" data-placement="top" title="Google Plus">
-                                    <i class="fa fa-google-plus fa-2x"></i>
-                                    <span class="hidden-xs"></span>
-                                </a>
-                            </div>
+        <div class="row justify-content-center">
+            <div class="col-md-4 col-1 col-sm-3"></div>
+            <div class="col-md-4 col-10 col-sm-6">
+                <div class="row justify-content-center">
+                    <div id="welcome">
+                        <div class="text-center">
+                            <h2 id="welcomeText">歡迎來到 AiPolling，</h2>
+                        </div>
+                        <div class="text-center">
+                            <h4 id="promptText">投票準備中</h4>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" id="startBtn" class="btn btn-info btn-lg" disabled>等待開放</button>
                         </div>
                     </div>
-                    <div>
-                        <h4 id="question">題目: <%= q %></h4>
-                        <% if (typeof n != 'undefined') { %>
-                            <h6 id="name"><%= n %></h6>
-                        <% } %>
-
-                            <h5 id="chooseAswer">
-                                <% if (typeof va != 'undefined') { %>
-                                你的答案: <%= va %>
-                                <% } else { %>
-                                你的答案: 尚未選擇
-                                <% } %>
-                            </h5>
-                    </div>
-                    <div id="options">
-                    <% for(var i = 0; i < o.length; i++){ %>
+                    <div id="interact">
+                        <div class="onl_login">
+                            <div class="row onl_row-sm-offset-4 onl_socialButtons">
+                                <div class="col-xs-4 col-sm-6">
+                                    <a href="#" class="btn btn-lg btn-block onl_btn-facebook" data-toggle="tooltip" data-placement="top" title="Facebook">
+                                        <i class="fa fa-facebook fa-2x"></i>
+                                        <span class="hidden-xs"></span>
+                                    </a>
+                                </div>
+                                <div class="col-xs-4 col-sm-6">
+                                    <a href="#" class="btn btn-lg btn-block onl_btn-google-plus" data-toggle="tooltip" data-placement="top" title="Google Plus">
+                                        <i class="fa fa-google-plus fa-2x"></i>
+                                        <span class="hidden-xs"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         <div>
-                            <button type="button" class="option btn" style="background-color: <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>
-                                <%= o[i].description %>
-                                <span class="badge badge-light" style="display:none"></span>
-                            </button>
+                            <h4 id="question">題目: <%= q %></h4>
+                            <% if (typeof n != 'undefined') { %>
+                                <h6 id="name"><%= n %></h6>
+                            <% } %>
+
+                                <h5 id="chooseAswer">
+                                    <% if (typeof va != 'undefined') { %>
+                                    你的答案: <%= va %>
+                                    <% } else { %>
+                                    你的答案: 尚未選擇
+                                    <% } %>
+                                </h5>
                         </div>
-                    <% } %>
+                        <div id="options">
+                        <% for(var i = 0; i < o.length; i++){ %>
+                            <div>
+                                <button type="button" class="option btn" style="background-color: <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>
+                                    <%= o[i].description %>
+                                    <span class="badge badge-light" style="display:none"></span>
+                                </button>
+                            </div>
+                        <% } %>
+                        </div>
+                        <div class="col-xs-4">
+                            <button id="next" type="button" class="btn btn-dark btn-sm" style="width: 30%; border-color: black"> next </button>
+                        </div>
+                    <% if (useDisqus == true) { %>
+                        <div id="disqus_thread"></div>
+                        <% } %>
                     </div>
-                    <div class="col-xs-4">
-                        <button id="next" type="button" class="btn btn-dark btn-sm" style="width: 30%; border-color: black"> next </button>
+                    <div id="end">
+                        <pre>
+                            謝謝參與 Nonuments!
+                            祝你有美好的一天!
+                        </pre>
                     </div>
-                <% if (useDisqus == true) { %>
-                    <div id="disqus_thread"></div>
-                    <% } %>
-                </div>
-                <div id="end">
-                    <pre>
-                        謝謝參與 Nonuments!
-                        祝你有美好的一天!
-                    </pre>
                 </div>
             </div>
-            <div class="col-md-4"></div>
+            <div class="col-md-4 col-1 col-sm-3"></div>
         </div>
     </div>
 </body>
