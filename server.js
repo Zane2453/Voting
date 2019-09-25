@@ -589,3 +589,21 @@ socketIo.on('connection', function(socket) {
         });
     });
 });
+
+if(config.https) {
+    var socketclient = require('socket.io-client')('https://localhost',{secure:true});
+}
+else
+    var socketclient = require('socket.io-client')('http://localhost');
+
+let pollStart = function(req, res){
+    socketclient.emit('START', "1");
+    res.send({"curQuestion": curQuestionIdx});
+}
+let pollNext = function(req, res){
+    socketclient.emit('NEXT');
+    res.send({"curQuestion": curQuestionIdx});
+}
+
+app.get('/pollstart', pollStart);
+app.get('/pollnext', pollNext);
