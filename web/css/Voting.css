@@ -7,7 +7,7 @@ button{
     float: right;
 }
 body{
-    background-color: #fff8dc;
+    background-color: #f2f1f3;
 }
 #disqus_thread{
 	margin-top: 50px;
@@ -23,9 +23,6 @@ body{
 }
 #next{
     visibility: hidden;
-}
-body{
-    background-color: antiquewhite;
 }
 #interact{
     visibility: hidden;
