@@ -590,8 +590,14 @@ socketIo.on('connection', function(socket) {
     });
 });
 
+opt = {
+    secure:true,
+    reconnect: true,
+    rejectUnauthorized : false
+    };
+
 if(config.https) {
-    var socketclient = require('socket.io-client')('https://localhost',{secure:true});
+    var socketclient = require('socket.io-client')('https://localhost',opt);
 }
 else
     var socketclient = require('socket.io-client')('http://localhost');
