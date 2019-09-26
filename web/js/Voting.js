@@ -8,8 +8,8 @@ let id = getQuestionnaireId(),
     question = '<%= q %>',
     options = '<% for(let i = 0; i < o.length; i++){ %> \
                <button type="button" class="option btn" \
-               aid="<%= o[i].aid %>" data-datac="<%= o[i].description %>" disabled>\
-               <%= o[i].description %>\
+               aid="<%= o[i].aid %>" data-datac="<%= o[i].description %>" onclick=voteAnswer(this)>\
+               <%= o[i].description %> \
                <span class="badge badge-light" style="display:none"></span>\
                </button> <% } %>',
     isStart = false,
@@ -44,7 +44,17 @@ let checkVoted = function(){
     let answer = getCookie(cookieId);
     if((answer !== "" && (anonymous === true)) ||
         (va !== undefined && (anonymous === false)) ) {
-        $(".option").prop('disabled', true);
+        //Keep the chosen answer bright
+        $("#options").children('button').each(function() {
+            if(answer == $(this).data('datac')){
+                $(this).prop('disabled', false);
+                $(this).removeAttr('onclick');
+            }else{
+                $(this).prop('disabled', true);
+            }
+        });
+        
+        
         setRatio(id);
         return;
     }
@@ -100,8 +110,8 @@ let getNextQuestion = function(){
                 }(200, function(){
                     $("#question").html(ejs.render(question, {q: nxtQ.question.description}));
                     $("#options").html(ejs.render(options, {o: nxtQ.options}));
+                    $("#options").prop('disabled', false);
                     checkVoted();
-                    $(".option").click(voteAnswer);
                     jQuery.fn.slideLeftShow = function(speed, callback) {
                         $("#interact").animate({
                             width: "show",
@@ -117,15 +127,23 @@ let getNextQuestion = function(){
     });
 };
 
-let voteAnswer = function(){
+let voteAnswer = function(obj){
     //store user answer
-    let text = $(this).data('datac');
+    let text= $(obj).data('datac');
     //$("#chooseAswer").text("你的答案: " + text);
     if(anonymous) {
         cookieId = id + '_' + questionIdx;
         setCookie(cookieId, encodeURIComponent(text), 30);
     }
-    $(".option").prop('disabled', true);
+    $("#options").children('button').each(function() {
+        if(text == $(this).data('datac')){
+            $(this).prop('disabled', false);
+            $(this).removeAttr('onclick');
+        }else{
+            $(this).prop('disabled', true);
+        }
+    });
+
     $.ajax({
         type: "POST",
         url: location.origin + "/postA",
@@ -156,7 +174,6 @@ let startPoll = function(){
 
 $(document).ready(function(){
     let socketIo = io();
-    $(".option").click(voteAnswer);
     $("#next").click(getNextQuestion);
     $("#startBtn").click(startPoll);
     socketIo.emit('CUR_Q');
