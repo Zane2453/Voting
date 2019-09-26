@@ -196,7 +196,8 @@ $(document).ready(function(){
             return;
         questionIdx++;
         if(isStart && !(isEnd))
-            $("#next").css('visibility', 'visible');
+            // $("#next").css('visibility', 'visible');
+            location.reload();
     });
 
 });
