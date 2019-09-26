@@ -40,6 +40,9 @@ body{
 #promptText {
     color: darkcyan;
 }
+#question_div{
+    text-align:center;
+}
 
 
 /* the button's color */

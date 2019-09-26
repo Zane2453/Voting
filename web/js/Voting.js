@@ -5,7 +5,7 @@
 let id = getQuestionnaireId(),
     questionIdx = 0,
     cookieId,
-    question = '題目: <%= q %>',
+    question = '<%= q %>',
     options = '<% for(let i = 0; i < o.length; i++){ %> \
                <button type="button" class="option btn" \
                aid="<%= o[i].aid %>" data-datac="<%= o[i].description %>" disabled>\
@@ -44,10 +44,6 @@ let checkVoted = function(){
     let answer = getCookie(cookieId);
     if((answer !== "" && (anonymous === true)) ||
         (va !== undefined && (anonymous === false)) ) {
-        if(anonymous)
-            $("#chooseAswer").text("你的答案: " + answer);
-        else
-            $("#chooseAswer").text("你的答案: " + va);
         $(".option").prop('disabled', true);
         setRatio(id);
         return;
@@ -55,7 +51,7 @@ let checkVoted = function(){
     else if((answer === "" && (anonymous === true)) ||
         (va === undefined && (anonymous === false)) ){
         $(".option").prop('disabled', false);
-        $("#chooseAswer").text("你的答案:  尚未選擇");
+        //$("#chooseAswer").text("你的答案:  尚未選擇");
     }
 };
 
@@ -124,7 +120,7 @@ let getNextQuestion = function(){
 let voteAnswer = function(){
     //store user answer
     let text = $(this).data('datac');
-    $("#chooseAswer").text("你的答案: " + text);
+    //$("#chooseAswer").text("你的答案: " + text);
     if(anonymous) {
         cookieId = id + '_' + questionIdx;
         setCookie(cookieId, encodeURIComponent(text), 30);

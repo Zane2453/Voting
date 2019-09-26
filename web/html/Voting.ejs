@@ -65,19 +65,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div id="question_div">
                             <h4 id="question">題目: <%= q %></h4>
                             <% if (typeof n != 'undefined') { %>
                                 <h6 id="name"><%= n %></h6>
                             <% } %>
-
-                                <h5 id="chooseAswer">
-                                    <% if (typeof va != 'undefined') { %>
-                                    你的答案: <%= va %>
-                                    <% } else { %>
-                                    你的答案: 尚未選擇
-                                    <% } %>
-                                </h5>
                         </div>
                         <div id="options">
                         </div>
