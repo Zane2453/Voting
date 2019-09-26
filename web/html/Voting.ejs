@@ -80,14 +80,6 @@
                                 </h5>
                         </div>
                         <div id="options">
-                        <% for(var i = 0; i < o.length; i++){ %>
-                            <div>
-                                <button type="button" class="option btn" style="background-color: <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>
-                                    <%= o[i].description %>
-                                    <span class="badge badge-light" style="display:none"></span>
-                                </button>
-                            </div>
-                        <% } %>
                         </div>
                         <div class="col-xs-4">
                             <button id="next" type="button" class="btn btn-dark btn-sm" style="width: 30%; border-color: black"> next </button>
@@ -97,10 +89,10 @@
                         <% } %>
                     </div>
                     <div id="end">
-                        <pre>
-                            謝謝參與 Nonuments!
-                            祝你有美好的一天!
-                        </pre>
+                        <div class="text-center">
+                            <pre>謝謝參與 Nonuments!</pre>
+                            <pre>祝你有美好的一天!</pre>
+                        </div>
                     </div>
                 </div>
             </div>

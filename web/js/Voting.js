@@ -6,12 +6,12 @@ let id = getQuestionnaireId(),
     questionIdx = 0,
     cookieId,
     question = '題目: <%= q %>',
-    options = '<% for(let i = 0; i < o.length; i++){ %> <div>\
-               <button type="button" class="option btn" style="background-color: \
-               <%= o[i].color %>" data-datac="<%= o[i].description %>" disabled>\
+    options = '<% for(let i = 0; i < o.length; i++){ %> \
+               <button type="button" class="option btn" \
+               aid="<%= o[i].aid %>" data-datac="<%= o[i].description %>" disabled>\
                <%= o[i].description %>\
                <span class="badge badge-light" style="display:none"></span>\
-               </button></div> <% } %>',
+               </button> <% } %>',
     isStart = false,
     isEnd = false;
 
@@ -70,17 +70,7 @@ let setRatio = function(id){
             console.log(e);
         },
         success: function (data) {
-            for(let i = 0; i < data.ratio.length; i++){
-                (function(index){
-                    $(".option").each(function () {
-                        if ($(this).css("background-color") === data.ratio[index].color) {
-                            let r = Math.round(data.ratio[i].count / data.total*1000)/10;
-                            $(this).find("span").html(r.toString() + "%");
-                        }
-                    });
-                }(i));
-            }
-            $(".badge").css("display", "block");
+            // remove percentage
         }
     });
 };
@@ -148,7 +138,8 @@ let voteAnswer = function(){
         data: JSON.stringify({
             id: id,
             questionIdx: questionIdx,
-            color: $(this).css("background-color")
+            // send answer's id
+            aid: $(this).attr('aid')
         }),
         contentType: "application/json",
         error: function(e) {

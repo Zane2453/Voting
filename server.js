@@ -115,7 +115,8 @@ let getR = function(req, res){
                         total += answer.count;
                         ratio.push({
                             a: answer.description,
-                            color: answer.color,
+                            // reply answer's id
+                            aid: answer.id,
                             count: answer.count
                         });
                     });
@@ -179,7 +180,9 @@ let getR = function(req, res){
                     a.forEach(function(o){
                         nextQ["options"].push({
                             description: o.description,
-                            color: o.color
+                            color: o.color, 
+                            //reply answer's id
+                            aid: o.id
                         });
                     });
                     return Promise.reject(200);
@@ -215,7 +218,8 @@ let getR = function(req, res){
     postA = function (req, res) {
         let id = req.body.id,
             questionIdx = req.body.questionIdx,
-            color = req.body.color,
+            aid = req.body.aid,
+            //color = req.body.color,
             login = (req.user !== undefined),
             queryObj,
             questionnaire,
@@ -236,7 +240,7 @@ let getR = function(req, res){
             .then((q) => {
                 question = q;
                 if((q != null) && (q.length > questionIdx)) {
-                    queryObj = { questionId: q[questionIdx].id , color: color};
+                    queryObj = { questionId: q[questionIdx].id , id: aid};
                     return models.answer.findOne({ where: queryObj });
                 }
                 return Promise.reject(404);
