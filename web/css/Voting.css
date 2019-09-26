@@ -18,7 +18,7 @@ body{
     height:200px;
     left:50%;
     top:50%;
-    margin:-100px 0 0 -100px;
+    margin:-100px 0 0 0px;
     font-weight: bold;
 }
 #next{

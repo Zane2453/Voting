@@ -603,7 +603,7 @@ else
     var socketclient = require('socket.io-client')('http://localhost');
 
 let pollStart = function(req, res){
-    socketclient.emit('START', "1");
+    socketclient.emit('START', req.params.id);
     res.send({"curQuestion": curQuestionIdx});
 }
 let pollNext = function(req, res){
@@ -611,5 +611,5 @@ let pollNext = function(req, res){
     res.send({"curQuestion": curQuestionIdx});
 }
 
-app.get('/pollstart', pollStart);
+app.get('/pollstart/:id([0-9]+)(/){0,1}', pollStart);
 app.get('/pollnext', pollNext);
