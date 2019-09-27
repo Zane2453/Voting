@@ -1,0 +1,553 @@
+{
+  "description": "poll 1",
+  "anonymous": true,
+  "image": "",
+  "questions": [
+    {
+      "description": "設計紀念碑的目的？",
+      "image": "",
+      "answers": [
+        {
+          "description": "譴責日本太平洋戰爭",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "紀念台灣作為二戰基地",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "紀念日本殖民剝削台灣",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "紀念日本殖民恩威並施",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑具備的功能？",
+      "image": "",
+      "answers": [
+        {
+          "description": "封閉性的紀念碑",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "可攀爬或穿越的紀念碑",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "可深入探訪的紀念碑",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "可互動的紀念碑",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑主體形狀？",
+      "image": "",
+      "answers": [
+        {
+          "description": "大煙囪",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "煤斗",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "短圓筒",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "球",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的建築風格？",
+      "image": "",
+      "answers": [
+        {
+          "description": "東亞傳統建築",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "歐洲新古典主義",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "現代主義",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "後現代主義/普普",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的材料？",
+      "image": "",
+      "answers": [
+        {
+          "description": "水泥",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "紅磚",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "波浪鐵皮",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "竹子",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑具象程度？",
+      "image": "",
+      "answers": [
+        {
+          "description": "抽象幾何形狀",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "據暗示性的物件",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "從表面浮現出浮雕",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "突出的立體雕塑",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑具象概念為？",
+      "image": "",
+      "answers": [
+        {
+          "description": "在燃料廠工作的員工們",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "台灣如日軍的航空母艦",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "台灣日本兩手緊握",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "蝙蝠飛出新竹六燃建築",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的致謝對象？",
+      "image": "",
+      "answers": [
+        {
+          "description": "日本人民",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "二戰侵略的日軍後代",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "現在愛好和平的日本人",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "受二戰苦難的岡山朋友",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑上使用的文字語言？",
+      "image": "",
+      "answers": [
+        {
+          "description": "日文",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "日文、中文",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "日文、中文、英文",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "日、中、英、台、客、點字",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑上的簽名標記為?",
+      "image": "",
+      "answers": [
+        {
+          "description": "來自台灣人民",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "來自中華民國的人民",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "來自新竹六燃的老鄰居",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "來自六燃的台灣和平者",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑產生聲音的方式?",
+      "image": "",
+      "answers": [
+        {
+          "description": "起風時會反應的管鐘",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "長型風管，如管風琴",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "經由敲擊紀念碑而發聲",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "碑內喇叭發出電音",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的燈光效果?",
+      "image": "",
+      "answers": [
+        {
+          "description": "像燈塔般射出光束",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "會隨節日而變色",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "紀念碑也是投影幕",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "LED展示圖像文字",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的開幕儀式？",
+      "image": "",
+      "answers": [
+        {
+          "description": "用起重機揭開布幕",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "倖存者進行演講",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "台日聯合雷射音樂會",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "打開紀念碑的包裝紙",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "設計紀念碑的目的？",
+      "image": "",
+      "answers": [
+        {
+          "description": "遺憾日本太平洋戰爭",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "紀念台灣為日(本)二戰基礎",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "紀念日本對台殖民剝削",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "紀念日本殖民恩威並施",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑上的簽名標記?",
+      "image": "",
+      "answers": [
+        {
+          "description": "來自日本人民",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "來自岡山的人們",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "來自接受紀念碑的岡山市民",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "來自岡山和平愛好者",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑要獻給誰?",
+      "image": "",
+      "answers": [
+        {
+          "description": "台灣人民",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "日戰台灣受難者後裔",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "長期受外國統治的亞洲人",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "二戰時受難的新竹朋友",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑主體形狀？",
+      "image": "",
+      "answers": [
+        {
+          "description": "立方體",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "球體",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "大煙囪",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "煤斗",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的建築風格？",
+      "image": "",
+      "answers": [
+        {
+          "description": "東亞傳統建築",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "歐洲新古典主義",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "現代主義",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "後現代主義",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的材料？",
+      "image": "",
+      "answers": [
+        {
+          "description": "柏木",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "玻璃和鋼",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "岡山的石灰岩",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "混凝土",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑產生聲音的方式?",
+      "image": "",
+      "answers": [
+        {
+          "description": "回應風和地震的聲音",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "觀眾擊打發聲",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "紀念碑有降低噪音設備",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "揚聲器放大訪客心跳聲",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "description": "紀念碑的開幕儀式？",
+      "image": "",
+      "answers": [
+        {
+          "description": "無人機吊起布幕",
+          "color": "rgb(255, 0, 0)",
+          "count": 0
+        },
+        {
+          "description": "倖存者演講直播",
+          "color": "rgb(255, 165, 0)",
+          "count": 0
+        },
+        {
+          "description": "台日聯合煙花音樂會",
+          "color": "rgb(102, 205, 170)",
+          "count": 0
+        },
+        {
+          "description": "打開紀念碑的摺紙包裝",
+          "color": "rgb(0, 0, 205)",
+          "count": 0
+        }
+      ]
+    }
+  ]
+}
