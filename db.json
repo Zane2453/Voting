@@ -212,7 +212,7 @@
       ]
     },
     {
-      "description": "紀念碑上使用的文字語言？",
+      "description": "紀念碑上的文字語言？",
       "image": "",
       "answers": [
         {
@@ -351,7 +351,7 @@
           "count": 0
         },
         {
-          "description": "紀念台灣為日(本)二戰基礎",
+          "description": "紀念台灣為日本二戰基礎",
           "color": "rgb(255, 165, 0)",
           "count": 0
         },
