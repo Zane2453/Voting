@@ -49,6 +49,7 @@ let checkVoted = function(){
             if(answer == $(this).data('datac')){
                 $(this).prop('disabled', false);
                 $(this).removeAttr('onclick');
+                $(this).css('font-weight', 'bold');
             }else{
                 $(this).prop('disabled', true);
             }

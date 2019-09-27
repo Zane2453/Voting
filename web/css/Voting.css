@@ -45,17 +45,30 @@ body{
     text-align:center;
 }
 
-
 /* the button's color */
 #options>button:first-child {
-    background-color: red;
+    background-color: rgb(175,7,7);
 }
 #options>button:nth-child(2) {
-    background-color: #FFA500;
+    background-color: rgb(74,7,134);
 }
 #options>button:nth-child(3) {
-    background-color: rgb(102, 205, 170);
+    background-color: rgb(60,121,4);
 }
 #options>button:nth-child(4) {
-    background-color: rgb(0, 0, 205);
+    background-color: rgb(1,27,118);
+}
+
+/* the disabled button's color */
+#options>button:first-child[disabled] {
+    background-color: rgb(211,158,158);
+}
+#options>button:nth-child(2)[disabled] {
+    background-color: rgb(181,173,191);
+}
+#options>button:nth-child(3)[disabled] {
+    background-color: rgb(160,185,137);
+}
+#options>button:nth-child(4)[disabled] {
+    background-color: rgb(146,155,185);
 }
