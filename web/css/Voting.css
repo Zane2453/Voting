@@ -44,9 +44,6 @@ body{
 #question_div{
     text-align:center;
 }
-#btn{
-    font-size: 1.5rem!important;
-}
 
 /* the button's color */
 #options>button:first-child {

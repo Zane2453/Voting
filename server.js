@@ -361,10 +361,12 @@ app.post('/postQN', postQN);
 
 // Page route
 let index = function(req, res){
-        models.question.findAll()
+        // auto to do redirect
+        res.redirect('/vote/1');
+        /*models.question.findAll()
             .then((qList) => {
                 response.getQuestionListPage(res, qList);
-            });
+            });*/
     },
     create = function(req, res){
         response.getVotingCreatePage(res);
