@@ -82,7 +82,6 @@ let setRatio = function(id){
 };
 
 let getNextQuestion = function(){
-    $("#next").css('visibility', 'hidden');
     $.ajax({
         type: "GET",
         url: location.origin + "/getNxtQ/" + id + "/" + questionIdx,
@@ -196,8 +195,7 @@ $(document).ready(function(){
             return;
         questionIdx++;
         if(isStart && !(isEnd))
-            // $("#next").css('visibility', 'visible');
-            location.reload();
+            getNextQuestion();
     });
 
 });
