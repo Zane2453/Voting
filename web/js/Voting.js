@@ -94,7 +94,10 @@ let getNextQuestion = function(){
         },
         success: function (nxtQ) {
             if(nxtQ.question.questionIdx === questionIdx-1){
+                $("#question").html(ejs.render(question, {q: ""}));
+                $("#options").html(ejs.render(options, {o: []}));
                 $("#interact").css('visibility', 'hidden');
+                $("#end").css('margin', '100px 0 0 0');
                 $("#end").css('visibility', 'visible');
                 isEnd = true;
             }
@@ -185,8 +188,11 @@ $(document).ready(function(){
         $("#startBtn").prop('disabled', false);
     });
     socketIo.on('CUR_Q', (curQ)=>{
-        if( (id !== curQ.questionnaireIdx) ||
-            (questionIdx === curQ.questionIdx && questionIdx !== 0))
+        if(id !== curQ.questionnaireIdx){
+            $("#welcome").css('visibility', 'visible');
+            return;
+        }
+        if(questionIdx === curQ.questionIdx && questionIdx !== 0)
             return;
         questionIdx = curQ.questionIdx;
         startPoll();
