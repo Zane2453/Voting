@@ -31,8 +31,8 @@ body{
 #welcome{
     /* margin: 0;
     position: absolute;
-    top: 50%;
-    visibility: hidden; */
+    top: 50%; */
+    visibility: hidden;
     /*-ms-transform: translateY(-50%);*/
     /*transform: translateY(-50%);*/
 }
