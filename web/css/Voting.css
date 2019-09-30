@@ -15,12 +15,12 @@ body{
 }
 #end{
     visibility: hidden;
-    width:500px;
+    /* width:500px;
     height:200px;
     left:50%;
     top:50%;
     margin:-100px 0 0 0px;
-    font-weight: bold;
+    font-weight: bold; */
 }
 #next{
     visibility: hidden;
@@ -29,10 +29,10 @@ body{
     visibility: hidden;
 }
 #welcome{
-    margin: 0;
+    /* margin: 0;
     position: absolute;
     top: 50%;
-    visibility: hidden;
+    visibility: hidden; */
     /*-ms-transform: translateY(-50%);*/
     /*transform: translateY(-50%);*/
 }
@@ -44,6 +44,19 @@ body{
 }
 #question_div{
     text-align:center;
+}
+.page_vertical_center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+.element_vertical_center{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* the button's color */

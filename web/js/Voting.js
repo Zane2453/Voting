@@ -97,7 +97,6 @@ let getNextQuestion = function(){
                 $("#question").html(ejs.render(question, {q: ""}));
                 $("#options").html(ejs.render(options, {o: []}));
                 $("#interact").css('visibility', 'hidden');
-                $("#end").css('margin', '100px 0 0 0');
                 $("#end").css('visibility', 'visible');
                 isEnd = true;
             }
