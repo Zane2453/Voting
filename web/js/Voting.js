@@ -131,7 +131,8 @@ let getNextQuestion = function(){
 
 let voteAnswer = function(obj){
     //store user answer
-    let text= $(obj).data('datac');
+    let text= $(obj).data('datac'),
+        aid = $(obj).attr('aid');
     //$("#chooseAswer").text("你的答案: " + text);
     if(anonymous) {
         cookieId = id + '_' + questionIdx;
@@ -155,14 +156,14 @@ let voteAnswer = function(obj){
             id: id,
             questionIdx: questionIdx,
             // send answer's id
-            aid: $(this).attr('aid')
+            aid: aid
         }),
         contentType: "application/json",
         error: function(e) {
             console.log(e);
         },
         success: function () {
-            setRatio(id);
+            //setRatio(id);
         }
     });
 };
