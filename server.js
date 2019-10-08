@@ -582,7 +582,11 @@ socketIo.on('connection', function(socket) {
         });
     });
     socket.on('NEXT', (qIdx) => {
-        curQuestionIdx = qIdx;
+        if(!qIdx){
+            curQuestionIdx++;
+        }else{
+            curQuestionIdx = qIdx;
+        }
         socketIo.emit('NEXT', {
             questionnaireIdx: curQuestionnaireIdx,
             questionIdx: curQuestionIdx
