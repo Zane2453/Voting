@@ -180,7 +180,7 @@ let getR = function(req, res){
                     a.forEach(function(o){
                         nextQ["options"].push({
                             description: o.description,
-                            color: o.color, 
+                            color: o.color,
                             //reply answer's id
                             aid: o.id
                         });
@@ -581,8 +581,8 @@ socketIo.on('connection', function(socket) {
                 questionIdx: curQuestionIdx
         });
     });
-    socket.on('NEXT', () => {
-        curQuestionIdx++;
+    socket.on('NEXT', (qIdx) => {
+        curQuestionIdx = qIdx;
         socketIo.emit('NEXT', {
             questionnaireIdx: curQuestionnaireIdx,
             questionIdx: curQuestionIdx

@@ -6,7 +6,13 @@ $(document).ready(function(){
         socketIo.emit('START', $("#questionnaireIdx").val());
     });
     $("#next").click(()=>{
-        $('#qIdx').text(++qIdx);
-        socketIo.emit('NEXT');
+        if(!$("#qIdxInput").val()){
+            $('#qIdx').text(++qIdx);
+            socketIo.emit('NEXT');
+        }else{
+            qIdx = $("#qIdxInput").val();
+            $('#qIdx').text($("#qIdxInput").val());
+            socketIo.emit('NEXT', $("#qIdxInput").val());
+        }
     });
 });

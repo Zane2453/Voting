@@ -54,8 +54,8 @@ let checkVoted = function(){
                 $(this).prop('disabled', true);
             }
         });
-        
-        
+
+
         setRatio(id);
         return;
     }
@@ -200,7 +200,7 @@ $(document).ready(function(){
     socketIo.on('NEXT', (curQ)=>{
         if(id !== curQ.questionnaireIdx)
             return;
-        questionIdx++;
+        questionIdx = curQ.questionIdx;
         if(isStart && !(isEnd))
             getNextQuestion();
     });
