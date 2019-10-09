@@ -14,8 +14,9 @@ let config = require('./config'),
     response = require('./response').response,
     basicAuth = require('basic-auth'),
     models = require('./db_model').models,
-    dai = require('./iottalk_api/dai').dai,
-    daList = [],
+    /*dai = require('./iottalk_api/dai').dai,
+    daList = [],*/
+    dan2 = require('./iottalk_api/dan2').dan2(),
     genUUID = require('./iottalk_api/uuid'),
     favicon = require('serve-favicon');
 
@@ -86,7 +87,8 @@ let getR = function(req, res){
             id = req.params.id,
             questionIdx = req.params.questionIdx,
             queryObj = {},
-            qRatio = {};
+            qRatio = {},
+            IoT_json = {questionId: -1, percentage:[]};
         models.questionnaire.findByPk(id)
             .then( (qn) => {
                 if(qn != null) {
@@ -102,6 +104,7 @@ let getR = function(req, res){
                 if( q != null){
                     if(q.length > questionIdx) {
                         queryObj = {questionId: q[questionIdx].id};
+                        IoT_json.questionId = parseInt(questionIdx)+1;
                         return models.answer.findAll({where: queryObj});
                     }
                 }
@@ -113,6 +116,7 @@ let getR = function(req, res){
                 if(a != null) {
                     a.forEach(function (answer) {
                         total += answer.count;
+                        IoT_json.percentage.push(answer.count);
                         ratio.push({
                             a: answer.description,
                             // reply answer's id
@@ -124,6 +128,10 @@ let getR = function(req, res){
                         ratio: ratio,
                         total: total
                     };
+                    if (total!=0){
+                        for(i=0; i<IoT_json.percentage.length; i++)
+                            IoT_json.percentage[i] = Math.round(IoT_json.percentage[i] * 100 / total);
+                    }
                     return Promise.reject(200);
                 }
                 else
@@ -134,8 +142,10 @@ let getR = function(req, res){
                     response.getPageNotFound(res);
                 else if(code == 403)
                     response.getPermissionDenied(res);
-                else if(code == 200)
+                else if(code == 200){
+                    dan2.push('Result-I', JSON.stringify(IoT_json));
                     response.getRatio(res, qRatio);
+                }
             });
     },
     getNxtQ = function(req, res){
@@ -623,3 +633,32 @@ let pollNext = function(req, res){
 
 app.get('/pollstart/:id([0-9]+)(/){0,1}', pollStart);
 app.get('/pollnext', pollNext);
+
+/* IoTtalk Setting */
+let IDFList = [
+        ['Result-I', ['json']]
+    ];
+    
+function on_signal(cmd, param){
+    console.log('[cmd]', cmd, param);
+    return true;
+}
+
+function on_data(odf_name, data){
+    console.log('[data]', odf_name, data);
+}
+
+function init_callback(result) {
+    console.log('[da] register:', result);
+}
+
+dan2.register(config.IoTtalkURL, {
+    'name': "1.Voting",
+    'on_signal': on_signal,
+    'on_data': on_data,
+    'idf_list': IDFList,
+    'profile': {
+        'model': 'VotingMachine',
+    },
+    'accept_protos': ['mqtt'],
+}, init_callback);

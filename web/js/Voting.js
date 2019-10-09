@@ -55,8 +55,7 @@ let checkVoted = function(){
             }
         });
 
-
-        setRatio(id);
+        //setRatio(id);
         return;
     }
     else if((answer === "" && (anonymous === true)) ||
@@ -163,7 +162,7 @@ let voteAnswer = function(obj){
             console.log(e);
         },
         success: function () {
-            //setRatio(id);
+            setRatio(id);
         }
     });
 };
