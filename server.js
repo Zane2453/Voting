@@ -81,6 +81,14 @@ let bAuth = function(req, res, next){
     }
 };
 
+// default Questionnaire ID (first one)
+var QusetionnaireID_def = undefined;
+models.questionnaire.findAll()
+    .then( (qn) => {
+        if(qn != null)
+            QusetionnaireID_def = (qn[0].id).toString();
+    });
+
 // RESTful API
 let getR = function(req, res){
         let login = (req.user !== undefined),
@@ -143,7 +151,8 @@ let getR = function(req, res){
                 else if(code == 403)
                     response.getPermissionDenied(res);
                 else if(code == 200){
-                    dan2.push('Result-I', JSON.stringify(IoT_json));
+                    dan2.push('Result-I', [JSON.stringify(IoT_json)]);
+                    console.log("[da] push Result-I", JSON.stringify(IoT_json));
                     response.getRatio(res, qRatio);
                 }
             });
@@ -371,12 +380,17 @@ app.post('/postQN', postQN);
 
 // Page route
 let index = function(req, res){
-        // auto to do redirect
-        res.redirect('/vote/1');
-        /*models.question.findAll()
-            .then((qList) => {
-                response.getQuestionListPage(res, qList);
-            });*/
+        if(QusetionnaireID_def != undefined){
+            // auto to do redirect
+            res.redirect('/vote/'+QusetionnaireID_def);
+        }
+        else{
+            // list all question
+            models.question.findAll()
+                .then((qList) => {
+                    response.getQuestionListPage(res, qList);
+                });
+        }
     },
     create = function(req, res){
         response.getVotingCreatePage(res);
@@ -636,7 +650,11 @@ app.get('/pollnext', pollNext);
 
 /* IoTtalk Setting */
 let IDFList = [
-        ['Result-I', ['json']]
+        ['Result-I', ['string']]
+    ],
+    ODFList = [
+        ['Start-O', ['int']],
+        ['Next-O', ['int']]
     ];
     
 function on_signal(cmd, param){
@@ -646,6 +664,19 @@ function on_signal(cmd, param){
 
 function on_data(odf_name, data){
     console.log('[data]', odf_name, data);
+
+    switch(odf_name){
+        case "Start-O":
+            if(data[0] == 1)
+                socketclient.emit('START', QusetionnaireID_def);
+            break;
+        case "Next-O":
+            if(data[0] == 1)
+                socketclient.emit('NEXT');
+            break;
+        default:
+            break;
+    }
 }
 
 function init_callback(result) {
@@ -657,6 +688,7 @@ dan2.register(config.IoTtalkURL, {
     'on_signal': on_signal,
     'on_data': on_data,
     'idf_list': IDFList,
+    'odf_list': ODFList,
     'profile': {
         'model': 'VotingMachine',
     },
