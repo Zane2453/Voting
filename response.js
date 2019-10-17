@@ -7,6 +7,7 @@ let fs = require('fs'),
     loginPagePath = __dirname + "/web/html/Login.ejs",
     questionListPagePath = __dirname + "/web/html/QuestionList.ejs",
     adminQuestionListPagePath = __dirname + "/web/html/AdminQuestionList.ejs",
+    adminQuestionnaireListPagePath = __dirname + "/web/html/AdminQuestionnaireList.ejs",
     questionEditPagePath = __dirname + "/web/html/QuestionEdit.ejs",
     adminPollingPagePath = __dirname + "/web/html/AdminPolling.html",
     votingPage = fs.readFileSync(votingPagePath, 'utf8'),
@@ -14,6 +15,7 @@ let fs = require('fs'),
     dashBoardPage = fs.readFileSync(dashBoardPagePath, 'utf8'),
     loginPage = fs.readFileSync(loginPagePath, 'utf8'),
     questionListPage = fs.readFileSync(questionListPagePath, 'utf8'),
+    adminQuestionnaireListPage = fs.readFileSync(adminQuestionnaireListPagePath, 'utf8'),
     adminQuestionListPage = fs.readFileSync(adminQuestionListPagePath, 'utf8'),
     questionEditPage = fs.readFileSync(questionEditPagePath, 'utf8'),
     adminPollingPage = fs.readFileSync(adminPollingPagePath, 'utf8');
@@ -51,6 +53,10 @@ Response.prototype = {
     getAdminQuestionListPage : function (res, qList) {
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end(ejs.render(adminQuestionListPage, {qList: qList}));
+    },
+    getAdminQuestionnaireListPage: function (res, qnList, QusetionnaireID_def) {
+        res.writeHead(200, {"Content-Type": "text/html"});
+        res.end(ejs.render(adminQuestionnaireListPage, {qnList: qnList, QusetionnaireID_def: QusetionnaireID_def}));
     },
     getQuestionEditPage : function (res, question) {
         let obj = Object.assign({},config.color, question);

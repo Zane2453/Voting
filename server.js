@@ -234,6 +234,11 @@ let getR = function(req, res){
         else
             response.getBadRequest(res);
     },
+    resetQN = function (req, res) {
+        let questionIdx = req.body.questionnaireId;
+        QusetionnaireID_def = questionIdx;
+        response.getSuccess(res);
+    },
     postA = function (req, res) {
         let id = req.body.id,
             questionIdx = req.body.questionIdx,
@@ -374,6 +379,7 @@ app.get('/getR/:id([0-9]+)/:questionIdx([0-9]+)', getR);
 app.get('/getNxtQ/:id([0-9]+)/:questionIdx([0-9]+)', getNxtQ);
 app.post('/postA', postA);
 app.post('/postQN', postQN);
+app.post('/resetQN', resetQN);
 // app.post('/postQ', postQ);
 // app.post('/admin/updateQ', bAuth, updateQ);
 // app.post('/admin/deleteQ', bAuth, deleteQ);
@@ -539,9 +545,13 @@ let index = function(req, res){
             });
     },
     admin = function(req, res){
-        models.question.findAll()
-            .then((qList) => {
-                response.getAdminQuestionListPage(res, qList);
+        // models.question.findAll()
+        //     .then((qList) => {
+        //         response.getAdminQuestionListPage(res, qList);
+        //     });
+        models.questionnaire.findAll()
+            .then((qnList) => {
+                response.getAdminQuestionnaireListPage(res, qnList, QusetionnaireID_def);
             });
     },
     adminEdit = function(req, res){
@@ -579,6 +589,14 @@ let index = function(req, res){
                     response.getPageNotFound(res);
             })
     },
+    adminquestion = function(req, res){
+        let questionnaireId = req.params.id,
+            queryObj = { questionnaireId: questionnaireId };
+        models.question.findAll({ where: queryObj })
+            .then((qList) => {
+                response.getAdminQuestionListPage(res, qList);
+            });
+    },
     adminPolling = function(req, res){
         response.getAdminPollingPage(res);
     };
@@ -589,6 +607,7 @@ app.get('^/dashboard/:id([0-9]+)(/){0,1}$', dashboard);
 app.get('^/login(/){0,1}$', login);
 app.get('^/vote/:id([0-9]+)(/){0,1}$', vote);
 app.get('^/admin(/){0,1}$', bAuth, admin);
+app.get('^/admin/questionnaire/:id([0-9]+)(/){0,1}$', bAuth, adminquestion);
 app.get('^/admin/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
 app.get('^/admin/polling(/){0,1}$|^/$', bAuth, adminPolling);
 
