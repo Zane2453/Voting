@@ -143,12 +143,12 @@
           "count": 0
         },
         {
-          "description": "據暗示性的物件",
+          "description": "具暗示性的物件",
           "color": "rgb(255, 165, 0)",
           "count": 0
         },
         {
-          "description": "從表面浮現出浮雕",
+          "description": "從表面現出浮雕",
           "color": "rgb(102, 205, 170)",
           "count": 0
         },
@@ -325,7 +325,7 @@
           "count": 0
         },
         {
-          "description": "倖存者進行演講",
+          "description": "二戰倖存者進行演講",
           "color": "rgb(255, 165, 0)",
           "count": 0
         },
@@ -351,7 +351,7 @@
           "count": 0
         },
         {
-          "description": "紀念台灣為日本二戰基礎",
+          "description": "紀念台灣為日本二戰基地",
           "color": "rgb(255, 165, 0)",
           "count": 0
         },
@@ -465,7 +465,7 @@
           "count": 0
         },
         {
-          "description": "後現代主義",
+          "description": "後現代主義/普普",
           "color": "rgb(0, 0, 205)",
           "count": 0
         }
@@ -512,7 +512,7 @@
           "count": 0
         },
         {
-          "description": "紀念碑有降低噪音設備",
+          "description": "紀念碑有抵銷噪音功能",
           "color": "rgb(102, 205, 170)",
           "count": 0
         },
