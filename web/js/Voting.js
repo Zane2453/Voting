@@ -3,7 +3,7 @@
  */
 
 let id = getQuestionnaireId(),
-    questionIdx = 0,
+    questionIdx = -1,
     cookieId,
     question = '<%= q %>',
     options = '<% for(let i = 0; i < o.length; i++){ %> \
@@ -182,16 +182,15 @@ $(document).ready(function(){
     socketIo.on('START', (curQ)=>{
         if(id !== curQ.questionnaireIdx)
             return;
-        $("#promptText").text("請按下Start 進行投票！");
-        $("#startBtn").html("Start");
-        $("#startBtn").prop('disabled', false);
+        questionIdx = 0;
+        startPoll();
     });
     socketIo.on('CUR_Q', (curQ)=>{
         if(id !== curQ.questionnaireIdx){
             $("#welcome").css('visibility', 'visible');
             return;
         }
-        if(questionIdx === curQ.questionIdx && questionIdx !== 0)
+        if(questionIdx === curQ.questionIdx)
             return;
         questionIdx = curQ.questionIdx;
         startPoll();
