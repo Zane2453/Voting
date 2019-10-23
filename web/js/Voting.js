@@ -44,6 +44,7 @@ let checkVoted = function(){
     let answer = getCookie(cookieId);
     if((answer !== "" && (anonymous === true)) ||
         (va !== undefined && (anonymous === false)) ) {
+        $("#next").css('visibility', 'visible');
         //Keep the chosen answer bright
         $("#options").children('button').each(function() {
             if(answer == $(this).data('datac')){
@@ -82,6 +83,7 @@ let setRatio = function(id){
 };
 
 let getNextQuestion = function(){
+    $("#next").css('visibility', 'hidden');
     $.ajax({
         type: "GET",
         url: location.origin + "/getNxtQ/" + id + "/" + questionIdx,
@@ -162,6 +164,7 @@ let voteAnswer = function(obj){
             console.log(e);
         },
         success: function () {
+            $("#next").css('visibility', 'visible');
             setRatio(id);
         }
     });

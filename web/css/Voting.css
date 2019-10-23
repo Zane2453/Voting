@@ -1,7 +1,7 @@
 button{
     color: white;
     width: 100%;
-    margin:1.5rem 0px 1.5rem 0px; 
+    margin:1rem 0px 1rem 0px; 
     font-size: 1.5rem!important;
 }
 .badge{
@@ -85,4 +85,20 @@ body{
 }
 #options>button:nth-child(4)[disabled] {
     background-color: rgb(146,155,185);
+}
+
+.btn-circle {
+    height: 80px;
+    width: 100%;
+    border-color: #f2f1f3;
+    background-color: #f2f1f3;
+    /* border: 10px solid #990000; */
+    /* box-shadow: 4px 4px 4px #999; */
+    /* font-weight: bold; */
+    margin:10px 0px;
+    
+    text-align: center;
+    vertical-align: middle;
+    color:rgb(255, 0, 0);
+    /* line-height: 200px; /*or you could use 4em*/ */
 }
