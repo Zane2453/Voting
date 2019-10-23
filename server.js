@@ -379,7 +379,7 @@ app.get('/getR/:id([0-9]+)/:questionIdx([0-9]+)', getR);
 app.get('/getNxtQ/:id([0-9]+)/:questionIdx([0-9]+)', getNxtQ);
 app.post('/postA', postA);
 app.post('/postQN', postQN);
-app.post('/resetQN', resetQN);
+app.post('/admin/resetQN', bAuth, resetQN);
 // app.post('/postQ', postQ);
 // app.post('/admin/updateQ', bAuth, updateQ);
 // app.post('/admin/deleteQ', bAuth, deleteQ);
@@ -660,13 +660,20 @@ let pollStart = function(req, res){
     res.send({"curQuestion": curQuestionIdx});
 }
 let pollNext = function(req, res){
-    socketclient.emit('NEXT');
-    res.send({"curQuestion": curQuestionIdx});
+    nextQId = (req.params.id == undefined) ? parseInt(curQuestionIdx)+1 : req.params.id;
+    if(req.params.id == undefined){
+        socketclient.emit('NEXT');
+    }
+    else{
+        socketclient.emit('NEXT', req.params.id);
+    }
+    res.send({"curQuestion": nextQId});
 }
 
 app.get('/pollstart/:id([0-9]+)(/){0,1}', pollStart);
-app.get('/pollnext', pollNext);
+app.get('/pollnext(/){0,1}(:id([0-9]+)(/){0,1})?', pollNext);
 
+/*--------------------------------------------------------------------------------*/
 /* IoTtalk Setting */
 let IDFList = [
         ['Result-I', ['string']]

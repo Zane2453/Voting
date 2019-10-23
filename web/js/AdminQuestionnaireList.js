@@ -5,7 +5,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: "POST",
-            url: location.origin + "/resetQN",
+            url: location.origin + "/admin/resetQN",
             cache: false,
             data: JSON.stringify({
                 questionnaireId: questionnaireId

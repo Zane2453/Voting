@@ -29,7 +29,7 @@
                         <tr>
                             <td width="80%">
                                 <div class="alert  alert-info" role="alert">
-                                    <a class="alert-link" href="##">
+                                    <a class="alert-link description" href="##">
                                         <%= i+1 %>. <%= qnList[i].description %>
                                     </a>
                                 </div>
@@ -41,13 +41,13 @@
                                     </div>
                                     <div class="alert  alert-secondary" role="alert">
                                         <% if(qnList[i].id == QusetionnaireID_def){ %>
-                                            <a class="alert-link register" qnid="<%= qnList[i].id %>" href="##">已連接 </a>
+                                            <a class="alert-link register" qnid="<%= qnList[i].id %>" href="##">已連接</a>
                                         <% } else{ %>
-                                            <a class="alert-link register" qnid="<%= qnList[i].id %>" href="##">連接 </a>
+                                            <a class="alert-link register" qnid="<%= qnList[i].id %>" href="##">連接</a>
                                         <% } %>
                                     </div>
                                     <div class="alert  alert-danger" role="alert">
-                                        <a class="alert-link delete" href="##">刪除</a>
+                                        <a class="alert-link delete" qnid="<%= qnList[i].id %>" href="##">刪除</a>
                                     </div>
                                 </div>
                             </td>
