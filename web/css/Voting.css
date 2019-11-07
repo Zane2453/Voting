@@ -8,7 +8,8 @@ button{
     float: right;
 }
 body{
-    background-color: #f2f1f3;
+    /* background-color: #f2f1f3; */
+    background-color: rgb(211,211,211);
 }
 #disqus_thread{
 	margin-top: 50px;
@@ -61,37 +62,37 @@ body{
 
 /* the button's color */
 #options>button:first-child {
-    background-color: rgb(175,7,7);
+    background-color: rgb(214,158,2);
 }
 #options>button:nth-child(2) {
-    background-color: rgb(74,7,134);
+    background-color: rgb(1,27,118);
 }
 #options>button:nth-child(3) {
-    background-color: rgb(60,121,4);
+    background-color: rgb(175,7,7);
 }
 #options>button:nth-child(4) {
-    background-color: rgb(1,27,118);
+    background-color: rgb(60,121,4);
 }
 
 /* the disabled button's color */
 #options>button:first-child[disabled] {
-    background-color: rgb(211,158,158);
+    background-color: rgb(242,203,95);
 }
 #options>button:nth-child(2)[disabled] {
-    background-color: rgb(181,173,191);
+    background-color: rgb(146,155,185);
 }
 #options>button:nth-child(3)[disabled] {
-    background-color: rgb(160,185,137);
+    background-color: rgb(211,158,158);
 }
 #options>button:nth-child(4)[disabled] {
-    background-color: rgb(146,155,185);
+    background-color: rgb(160,185,137);
 }
 
 .btn-circle {
     height: 80px;
     width: 100%;
-    border-color: #f2f1f3;
-    background-color: #f2f1f3;
+    border-color: rgb(211,211,211);
+    background-color: rgb(211,211,211);
     /* border: 10px solid #990000; */
     /* box-shadow: 4px 4px 4px #999; */
     /* font-weight: bold; */
@@ -99,6 +100,6 @@ body{
     
     text-align: center;
     vertical-align: middle;
-    color:rgb(255, 0, 0);
+    color:rgb(216, 50, 111);
     /* line-height: 200px; /*or you could use 4em*/ */
 }
