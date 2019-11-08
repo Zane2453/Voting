@@ -13,7 +13,8 @@ let id = getQuestionnaireId(),
                <span class="badge badge-light" style="display:none"></span>\
                </button> <% } %>',
     isStart = false,
-    isEnd = false;
+    isEnd = false,
+    pauseVoted = false;
 
 let setCookie = function(cname, cvalue, exdays) {
     // cookie example: "question1=answer1;expires=Thu, 01 Jan 1970 00:00:00 UTC"
@@ -44,13 +45,14 @@ let checkVoted = function(){
     let answer = getCookie(cookieId);
     if((answer !== "" && (anonymous === true)) ||
         (va !== undefined && (anonymous === false)) ) {
+        $("#next_msg").text("已收到您的投票");
         $("#next").css('visibility', 'visible');
         //Keep the chosen answer bright
         $("#options").children('button').each(function() {
             if(answer == $(this).data('datac')){
                 $(this).prop('disabled', false);
                 $(this).removeAttr('onclick');
-                $(this).css('font-weight', 'bold');
+                //$(this).css('font-weight', 'bold');
             }else{
                 $(this).prop('disabled', true);
             }
@@ -61,7 +63,13 @@ let checkVoted = function(){
     }
     else if((answer === "" && (anonymous === true)) ||
         (va === undefined && (anonymous === false)) ){
-        $(".option").prop('disabled', false);
+        if(pauseVoted){
+            $("#next_msg").text("投票時間終了");
+            $("#next").css('visibility', 'visible');
+            $(".option").prop('disabled', true);
+        }else{
+            $(".option").prop('disabled', false);
+        }
         //$("#chooseAswer").text("你的答案:  尚未選擇");
     }
 };
@@ -164,6 +172,7 @@ let voteAnswer = function(obj){
             console.log(e);
         },
         success: function () {
+            $("#next_msg").text("已收到您的投票");
             $("#next").css('visibility', 'visible');
             setRatio(id);
         }
@@ -179,7 +188,7 @@ let startPoll = function(){
 
 $(document).ready(function(){
     let socketIo = io();
-    $("#next").click(getNextQuestion);
+    //$("#next").click(getNextQuestion);
     $("#startBtn").click(startPoll);
     socketIo.emit('CUR_Q');
     socketIo.on('START', (curQ)=>{
@@ -195,15 +204,20 @@ $(document).ready(function(){
         }
         if(questionIdx === curQ.questionIdx)
             return;
+        pauseVoted = curQ.pauseVoted;
         questionIdx = curQ.questionIdx;
         startPoll();
     });
     socketIo.on('NEXT', (curQ)=>{
         if(id !== curQ.questionnaireIdx)
             return;
+        pauseVoted = curQ.pauseVoted;
         questionIdx = curQ.questionIdx;
         if(isStart && !(isEnd))
             getNextQuestion();
     });
-
+    socketIo.on('PAUSE', (curQ)=>{
+        pauseVoted=true;
+        checkVoted();
+    });
 });

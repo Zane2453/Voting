@@ -614,7 +614,8 @@ app.get('^/admin/polling(/){0,1}$|^/$', bAuth, adminPolling);
 /*--------------------------------------------------------------------------------*/
 /* Socket.io API for the show */
 let curQuestionnaireIdx,
-    curQuestionIdx;
+    curQuestionIdx,
+    pauseVoted=false;
 socketIo.on('connection', function(socket) {
     socket.on('START', (questionnaireIdx) => {
         curQuestionnaireIdx = questionnaireIdx;
@@ -625,6 +626,7 @@ socketIo.on('connection', function(socket) {
         });
     });
     socket.on('NEXT', (qIdx) => {
+        pauseVoted=false;
         if(!qIdx){
             curQuestionIdx++;
         }else{
@@ -632,11 +634,20 @@ socketIo.on('connection', function(socket) {
         }
         socketIo.emit('NEXT', {
             questionnaireIdx: curQuestionnaireIdx,
-            questionIdx: curQuestionIdx
+            questionIdx: curQuestionIdx,
+            pauseVoted: pauseVoted
         });
     });
     socket.on('CUR_Q', () => {
         socketIo.emit('CUR_Q', {
+            questionnaireIdx: curQuestionnaireIdx,
+            questionIdx: curQuestionIdx,
+            pauseVoted: pauseVoted 
+        });
+    });
+    socket.on('PAUSE', () => {
+        pauseVoted=true;
+        socketIo.emit('PAUSE', {
             questionnaireIdx: curQuestionnaireIdx,
             questionIdx: curQuestionIdx
         });
@@ -669,9 +680,14 @@ let pollNext = function(req, res){
     }
     res.send({"curQuestion": nextQId});
 }
+let pollPause = function(req, res){
+    socketclient.emit('PAUSE');
+    res.send({"curQuestion": curQuestionIdx});
+}
 
 app.get('/pollstart/:id([0-9]+)(/){0,1}', pollStart);
 app.get('/pollnext(/){0,1}(:id([0-9]+)(/){0,1})?', pollNext);
+app.get('/pollpause(/){0,1}', pollPause);
 
 /*--------------------------------------------------------------------------------*/
 /* IoTtalk Setting */
