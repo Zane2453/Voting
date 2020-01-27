@@ -4,11 +4,11 @@
 $(document).ready(function() {
 
     //create QRcode
-    $("#qrcode").qrcode({
-        width: 256,
-        height: 256,
-        text: location.href.replace(/dashboard/i,'vote'),
-    });
+    // $("#qrcode").qrcode({
+    //     width: 256,
+    //     height: 256,
+    //     text: location.href.replace(/dashboard/i,'vote'),
+    // });
     //show voting image
     //console.log(image);
     if(image != "none"){
@@ -20,7 +20,7 @@ $(document).ready(function() {
     setInterval(function(){
         $.ajax({
             type: "GET",
-            url: location.origin + "/getR/" + getQuestionId(),
+            url: location.origin + "/getQ_R/" + getQuestionId(),
             cache: false,
             dataType: 'json',
             contentType: "application/json",

@@ -129,6 +129,7 @@ let getR = function(req, res){
                             a: answer.description,
                             // reply answer's id
                             aid: answer.id,
+                            color: answer.color,
                             count: answer.count
                         });
                     });
@@ -151,7 +152,7 @@ let getR = function(req, res){
                 else if(code == 403)
                     response.getPermissionDenied(res);
                 else if(code == 200){
-                    dan2.push('Result-I', [JSON.stringify(IoT_json)]);
+                    dan2.push('Result-I', [JSON.stringify(IoT_json), 10, 10]);
                     console.log("[da] push Result-I", JSON.stringify(IoT_json));
                     response.getRatio(res, qRatio);
                 }
@@ -218,26 +219,70 @@ let getR = function(req, res){
             })
     },
     postQN = function(req, res){
-        if(req.body.questions.length !== 0){ //Todo: json schema
-            req.body.uuid = genUUID.default();
-            models.questionnaire.create(req.body, {
-                include:[
-                    {   model: models.question,
-                        include: [models.answer]}]})
-                .then((qn) => {
-                    /*let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
-                    daList.push(d);
-                    d.register();*/
-                    response.getCreated(res, qn.dataValues.id);
-                });
-        }
-        else
-            response.getBadRequest(res);
+        req.body.uuid = genUUID.default();
+        models.questionnaire.create(req.body, {
+            include:[
+                {   model: models.question,
+                    include: [models.answer]}]})
+            .then((qn) => {
+                /*let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+                daList.push(d);
+                d.register();*/
+                console.log("[sys] Create Questionnaire " + qn.dataValues.id);
+                response.getCreated(res, qn.dataValues.id);
+            });
     },
     resetQN = function (req, res) {
         let questionIdx = req.body.questionnaireId;
         QusetionnaireID_def = questionIdx;
+        console.log("[sys] Update Defaule Questionnaire_ID " + questionIdx);
         response.getSuccess(res);
+    },
+    getP = function(req, res){
+        let questionIdx = req.params.questionIdx,
+            qRatio = {},
+            queryObj = {questionId: questionIdx};
+        models.answer.findAll({where: queryObj})
+            .then((a) => {
+                let ratio = [],
+                    total = 0;
+                if(a != null) {
+                    a.forEach(function (answer) {
+                        total += answer.count;
+                        ratio.push({
+                            a: answer.description,
+                            // reply answer's id
+                            aid: answer.id,
+                            color: answer.color,
+                            count: answer.count
+                        });
+                    });
+                    qRatio = {
+                        ratio: ratio,
+                        total: total
+                    };
+                    return Promise.reject(200);
+                }
+                else
+                    return Promise.reject(404);
+            })
+            .catch((code) => {
+                if(code == 404)
+                    response.getPageNotFound(res);
+                else if(code == 403)
+                    response.getPermissionDenied(res);
+                else if(code == 200){
+                    response.getRatio(res, qRatio);
+                }
+            });
+    },
+    deleteQN = function (req, res) {
+        let id = req.body.questionnaireId;
+        models.questionnaire.destroy({ where: { id: id }, force:true })
+            .then(() => {
+                console.log("[sys] Delete Questionnaire " + id);
+                response.getSuccess(res);
+            });
     },
     postA = function (req, res) {
         let id = req.body.id,
@@ -309,80 +354,81 @@ let getR = function(req, res){
                 else if(code === 409)
                     response.getConflict(res);
             });
+    },
+    postQ = function(req, res){
+        if(req.body.answers.length !== 0){ //Todo: json schema
+            req.body.uuid = genUUID.default();
+            models.question.create(req.body, { include: [models.answer] })
+                .then((q) => {
+                   // let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
+                    //daList.push(d);
+                    //d.register();
+                    console.log("[sys] Create Question " + q.dataValues.id);
+                    response.getCreated(res, q.dataValues.id);
+                });
+        }
+        else
+            response.getBadRequest(res);
+    },
+    updateQ = function(req, res){
+        let id = req.body.id,
+            description = req.body.description,
+            anonymous = req.body.anonymous,
+            image = req.body.image,
+            question,
+            answers = req.body.answers;
+        //console.log(req.body);
+        models.question.findByPk(id)
+            .then((q) => {
+                if (q != null && //check id is exist
+                    id.trim().length !== 0 && //check id is not empty
+                    req.body.answers.length !== 0) { // check options is not empty
+                    question = q;
+                    return models.answer.destroy({ where: { questionId: id}, force: true});
+                }
+                else
+                    Promise.reject(404);
+            })
+            .then(() => {
+                answers.map(answer => answer.questionId = id)
+                return models.answer.bulkCreate(answers);
+            })
+            .then(() => {
+                let updateInfo = {
+                    description: description,
+                    anonymous: anonymous,
+                    image: image,
+                };
+                return models.question.update(updateInfo, { where: {id: id}});
+            })
+            .then(() => {
+                console.log("[sys] Update Question " + id);
+                response.getSuccess(res);
+            })
+            .catch((code) => {
+                if(code === 404)
+                    response.getPageNotFound(res);
+            });
+    },
+    deleteQ = function(req, res){
+        let id = req.body.id;
+        models.question.destroy({ where: { id: id }, force:true })
+            .then(() => {
+                console.log("[sys] Delete Question " + id);
+                response.getSuccess(res);
+            });
     };
-    // postQ = function(req, res){
-    //     if(req.body.answers.length !== 0){ //Todo: json schema
-    //         req.body.uuid = genUUID.default();
-    //         console.log(req.body.anonymous);
-    //         models.question.create(req.body, { include: [models.answer] })
-    //             .then((q) => {
-    //                // let d = dai(q.dataValues.id, q.dataValues.uuid, q.dataValues.answers);
-    //                 //daList.push(d);
-    //                 //d.register();
-    //                 response.getCreated(res, q.dataValues.id);
-    //             });
-    //     }
-    //     else
-    //         response.getBadRequest(res);
-    // },
-    // updateQ = function(req, res){
-    //     let id = req.body.id,
-    //         description = req.body.description,
-    //         anonymous = req.body.anonymous,
-    //         image = req.body.image,
-    //         question,
-    //         answers = req.body.answers;
-    //     console.log(req.body);
-    //     models.question.findByPk(id)
-    //         .then((q) => {
-    //             if (q != null && //check id is exist
-    //                 id.trim().length !== 0 && //check id is not empty
-    //                 req.body.answers.length !== 0) { // check options is not empty
-    //                 question = q;
-    //                 return models.answer.destroy({ where: { questionId: id}, force: true});
-    //             }
-    //             else
-    //                 Promise.reject(404);
-    //         })
-    //         .then(() => {
-    //             answers.map(answer => answer.questionId = id)
-    //             return models.answer.bulkCreate(answers);
-    //         })
-    //         .then(() => {
-    //             let updateInfo = {
-    //                 description: description,
-    //                 anonymous: anonymous,
-    //                 image: image,
-    //             };
-    //             return models.question.update(updateInfo, { where: {id: id}});
-    //         })
-    //         .then(() => {
-    //             let d = dai(id, question.uuid, answers);
-    //             daList.push(d);
-    //             d.register();
-    //             response.getSuccess(res);
-    //         })
-    //         .catch((code) => {
-    //             if(code === 404)
-    //                 response.getPageNotFound(res);
-    //         });
-    // },
-    // deleteQ = function(req, res){
-    //     let id = req.body.id;
-    //     models.question.destroy({ where: { id: id }, force:true })
-    //         .then(() => {
-    //             response.getSuccess(res);
-    //         });
-    // };
 
 app.get('/getR/:id([0-9]+)/:questionIdx([0-9]+)', getR);
 app.get('/getNxtQ/:id([0-9]+)/:questionIdx([0-9]+)', getNxtQ);
 app.post('/postA', postA);
 app.post('/postQN', postQN);
 app.post('/admin/resetQN', bAuth, resetQN);
-// app.post('/postQ', postQ);
-// app.post('/admin/updateQ', bAuth, updateQ);
-// app.post('/admin/deleteQ', bAuth, deleteQ);
+app.post('/admin/deleteQN', bAuth, deleteQN);
+app.get('/getP/:questionIdx([0-9]+)', getP);
+app.post('/admin/postQ', bAuth, postQ);
+app.post('/admin/updateQ', bAuth, updateQ);
+app.post('/admin/deleteQ', bAuth, deleteQ);
 
 // Page route
 let index = function(req, res){
@@ -581,7 +627,8 @@ let index = function(req, res){
                     q: question.description,
                     image: question.image,
                     a: options,
-                    anonymous: question.anonymous
+                    anonymous: question.anonymous,
+                    qnid: req.params.qnid
                 });
             })
             .catch( (code) => {
@@ -602,13 +649,13 @@ let index = function(req, res){
     };
 
 app.get('^/index(/){0,1}$|^/$', index);
-app.get('^/create(/){0,1}$', create);
+app.get('^/admin/questionnaire/:id([0-9]+)/create(/){0,1}$', bAuth ,create);
 app.get('^/dashboard/:id([0-9]+)(/){0,1}$', dashboard);
 app.get('^/login(/){0,1}$', login);
 app.get('^/vote/:id([0-9]+)(/){0,1}$', vote);
 app.get('^/admin(/){0,1}$', bAuth, admin);
 app.get('^/admin/questionnaire/:id([0-9]+)(/){0,1}$', bAuth, adminquestion);
-app.get('^/admin/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
+app.get('^/admin/questionnaire/:qnid([0-9]+)/edit/:id([0-9]+)(/){0,1}$', bAuth, adminEdit);
 app.get('^/admin/polling(/){0,1}$|^/$', bAuth, adminPolling);
 
 /*--------------------------------------------------------------------------------*/

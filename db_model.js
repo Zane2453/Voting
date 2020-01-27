@@ -106,8 +106,8 @@ const vote = sequelize.define('vote', {
     }
 });
 
-questionnaire.hasMany(question);
-question.hasMany(answer);
+questionnaire.hasMany(question, {onDelete: 'CASCADE'});
+question.hasMany(answer, {onDelete: 'CASCADE'});
 vote.belongsTo(user);
 vote.belongsTo(question);
 vote.belongsTo(answer);

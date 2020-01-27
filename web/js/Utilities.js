@@ -1,7 +1,15 @@
 var getQuestionnaireId = function (){
     var component = location.pathname.split("/");
     for(var i = component.length-1; i >= 0 ; i--)
-        if(component[i] != "")
+        if(/^[0-9]+$/.test(component[i]))
+            break;
+	return component[i];
+};
+
+var getQuestionId = function (){
+    var component = location.pathname.split("/");
+    for(var i = component.length-1; i >= 0 ; i--)
+        if(/^[0-9]+$/.test(component[i]))
             break;
 	return component[i];
 };

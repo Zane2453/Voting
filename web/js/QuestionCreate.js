@@ -1,6 +1,9 @@
 /**
  * Created by kuan on 2018/8/25.
  */
+
+let id = getQuestionnaireId();
+
 $(document).ready(function(){
     //initial value for base64TextArea
     $('#base64TextArea').val("");
@@ -21,7 +24,8 @@ $(document).ready(function(){
                else
                    answers.push({
                        description: $(this).val(),
-                       color: $(this).css("color")
+                       color: $(this).css("color"),
+                       count: 0
                    });
            });
            if(answers.length > 1){
@@ -30,11 +34,12 @@ $(document).ready(function(){
                     description: $("#question").val(),
                     image: ($('#base64TextArea').val() == "") ? "none" : $('#base64TextArea').val(),
                     anonymous : anonymous,
-                    answers: answers
+                    answers: answers,
+                    questionnaireId: id
                 };
                 $.ajax({
                     type: "POST",
-                    url: "/postQ",
+                    url: location.origin + "/admin/postQ",
                     cache: false,
                     // dataType: 'json',
                     data: JSON.stringify(qObj),
@@ -43,8 +48,8 @@ $(document).ready(function(){
                         //location.reload();
                         console.log(e);
                     },
-                    success: function (id) {
-                        window.location = "/dashboard/" + id;
+                    success: function (data) {
+                        window.location = location.origin + "/admin/questionnaire/" + id;
                     }
                 });
            }

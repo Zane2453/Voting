@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="/css/QuestionList.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+    <script src="/js/Utilities.js"></script>
     <script src="/js/AdminQuestionList.js"></script>
     <title>Voting</title>
 </head>
@@ -15,7 +17,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <div class="alert  alert-success" role="alert">
-                    <a class="alert-link" href="/create/">  &#43; 新增問題</a>
+                    <a class="alert-link create" href="javascript:void(0);">  &#43; 新增問題</a>
                 </div>
 
                 <% if(qList.length == 0){ %>
@@ -27,23 +29,22 @@
                 <table class="table">
                     <% for(var i = 0; i < qList.length; i++){ %>
                         <tr>
-                            <td width="80%">
+                            <td width="80%" style="vertical-align: middle;">
                                 <div class="alert  alert-info" role="alert">
-                                    <a class="alert-link" href="/dashboard/<%= qList[i].id %>">
+                                    <a class="alert-link edit" href="javascript:void(0);" qid="<%= qList[i].id %>">
                                         <%= i+1 %>. <%= qList[i].description %>
                                     </a>
                                 </div>
+                                <div class="options" qid="<%= qList[i].id %>"></div>
+                                <!-- <div class="options" qid="<%= i %>"></div> -->
                             </td>
-                            <td>
+                            <td style="vertical-align: middle;">
                                 <div style="display: inline-block;">
                                     <div class="alert  alert-primary" role="alert">
-                                        <a class="alert-link edit" href="/admin/edit/<%= qList[i].id %>">編輯</a>
-                                    </div>
-                                    <div class="alert  alert-secondary" role="alert">
-                                        <a class="alert-link register" href="">連接</a>
+                                        <a class="alert-link edit" href="javascript:void(0);" qid="<%= qList[i].id %>">編輯</a>
                                     </div>
                                     <div class="alert  alert-danger" role="alert">
-                                        <a class="alert-link delete" href="#">刪除</a>
+                                        <a class="alert-link delete" href="javascript:void(0);" qid="<%= qList[i].id %>">刪除</a>
                                     </div>
                                 </div>
                             </td>

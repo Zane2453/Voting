@@ -16,7 +16,8 @@ $(document).ready(function(){
     //submit btn
     $("#submit").click(function(){
        var question = $("#question").val(),
-           anonymous = !$('#anonymous').is(":checked");
+           anonymous = !$('#anonymous').is(":checked"),
+           qnid = $(this).attr("qnid");
        if(question.trim().length != 0){
            var answers = [];
            $(".option").each(function(){
@@ -26,7 +27,8 @@ $(document).ready(function(){
                else
                    answers.push({
                        description: $(this).val(),
-                       color: $(this).css("color")
+                       color: $(this).css("color"),
+                       count: 0
                    });
            });
            if(answers.length > 1){
@@ -51,7 +53,7 @@ $(document).ready(function(){
                         console.log(e);
                     },
                     success: function () {
-                        window.location = "/dashboard/" + getQuestionId();
+                        window.location = location.origin + "/admin/questionnaire/" + qnid;
                     }
                 });
            }
